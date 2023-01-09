@@ -1,0 +1,26 @@
+{
+  "name": "bufalo--nft-skulls",
+  "version": "1.0.0",
+  "description": "Codebase for Bufalo's NFT skulls collection",
+  "directories": {
+    "test": "test"
+  },
+  "type": "module",
+  "scripts": {
+    "wl-private-sale": "node scripts/wl-private-sale.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antho31/bufalo-nft-skulls"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "homepage": "https://github.com/antho31/bufalo-nft-skulls",
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.8.0",
+    "alchemy-sdk": "^2.2.5",
+    "dotenv": "^16.0.0",
+    "solc": "^0.8.13"
+  }
+}
