@@ -1,4 +1,4 @@
-# Bufalo NFT skulls
+# Bufalo's NFT Collection - BOTV Skulls (BOTV)
 
 [Bufalo](https://twitter.com/bufalomusic) is a DJ performing in the Decentraland metaverse, bringing "Futurtistic Western Music" to the people. 
 
@@ -10,24 +10,30 @@ The DJ / Producer / Visual Artist is launching an NFT collection for its communi
  
 ## Core information
 
+⛓️ Chain : Polygon PoS
+
 🔢 Supply : 1000 tokens 
 
-🖼️ A unique art skull with seven traits (several rarities) and a 🎵 loop. Reveal on March 2,2023.
+🖼️ A unique art skull with seven traits (several rarities) and a 🎵 loop. Reveal on March 16, 2023.
 
-📅 Private sale date : TBD, Public sale date : TBD
+📅 Private sale date (addresses on "Community allowlist" only) : March 2, 2023. Public sale date : March 9, 2023
 
-🔖 Private sale price : TBD, Public sale date : TBD
+🔖 Sale price : 0.05 WETH per token, 50 % discount on the second mint for addresses on the "Superfans allowlist". 
 
-🎁 A french coat (Decentraland wearable) offered on mint
+🎁 Hat & trench coat (Decentraland wearables) offered on mint
+
+🔢 2 tokens max par wallet on private sale, 10 tokens max per wallet on public sale
 
 👑 10 % royalties
 
-## Private sale
+🌐 More info on [bufalomusic.com](https://bufalomusic.com)
 
-All token owners from previous Bufalo collections are whitelisted to mint two tokens on private sale. 
-Those who supported with $100+ value of MANA will get a 50% discount on the second token. 
 
-### Whitelisted addresses
+## Allowlists
+
+All token owners from previous Bufalo collections are admissible on the "Community allowlist", to mint up to two tokens on private sale. Those who supported with $100+ value of MANA are also in another list ("Superfans allowlist"), and get a 50% discount on the second token. 
+
+
 
 Check `data/results/wl-private-sale-addresses.json` file to get the whole list. 
 
@@ -57,7 +63,7 @@ npm run wl-private-sale
 
 🔲 [NFT Contract] ERC721A base for skull NFT
 
-🔲 [NFT Contract] Mint : Private & public sale, transfer skull + french coat
+🔲 [NFT Contract] Mint : Private & public sale, transfer skull + hat & trench coat wearable NFTs
 
 🔲 [NFT Contract] Reveal : Random assignation with Chainlink
 
@@ -87,6 +93,7 @@ nano .env
 
 | Parameter         | Type     | Description                |
 | :-----------------| :------- | :------------------------- |
+| `ALCHEMY_API_KEY`        | `string` | **Required to regenerate allowlists scripts**. API key from Alchemy  |
 | `MNEMONIC`        | `string` | **Required to deploy**. Your seed phrase, HD wallet to use for deployment  |
 
 ## Deployment

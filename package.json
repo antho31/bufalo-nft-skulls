@@ -1,13 +1,13 @@
 {
-  "name": "bufalo--nft-skulls",
+  "name": "bufalo-nft-skulls",
   "version": "1.0.0",
-  "description": "Codebase for Bufalo's NFT skulls collection",
+  "description": "Codebase for Bufalo's NFT collection \"BOTV Skulls\"",
   "directories": {
     "test": "test"
   },
   "type": "module",
   "scripts": {
-    "wl-private-sale": "node scripts/wl-private-sale.js"
+    "private-sale-lists": "node scripts/privateSaleLists.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
     "@openzeppelin/contracts": "^4.8.0",
     "alchemy-sdk": "^2.2.5",
     "dotenv": "^16.0.0",
-    "solc": "^0.8.13"
+    "solc": "^0.8.13",
+    "superagent": "^8.0.8"
   }
 }
