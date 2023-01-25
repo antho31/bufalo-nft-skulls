@@ -1,0 +1,2482 @@
+[
+  {
+    "buyer_address": "0x2bd420f22c3d88439cc7713023267e5ead575630",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x30d1d0821a37784785f9c3ca04dd3da675291c28",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x5b394506b8ffa2b7a7eacedda1ca9f47bb75820f",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x73d4847fcb09856df592abd40c983e606cc782fc",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x725b089a542fc50c55bb02eaa547f4ce47328414",
+    "usdSpent": 26.739029647029668,
+    "txs": "https://polygonscan.com/tx/0x611210dfc4caef45e7c9fd629da495b0a1c67510f12c27c31b752e6bd28a20f9 , https://polygonscan.com/tx/0xdaca5e34073afb9b6650496d0b2b849276857b9c623c4577880732ae9408fbab"
+  },
+  {
+    "buyer_address": "0xce4759643f8eab3a4bcba3a4b8971f20bc9f4460",
+    "usdSpent": 844.2920497124643,
+    "txs": "https://polygonscan.com/tx/0xae884e9cf9ff8566b16faea424c47326853b93c8b7e8748b01a81e9e639217c2 , https://polygonscan.com/tx/0xfe7e26a43f3a77fa12447e8a847fc51816f50af61d8de12495740f4db74344cd , https://polygonscan.com/tx/0x8d3537ba2e5e4f0b0c2555e94165a76bf9981c92c4a0ac1849d2eb8df244a2e7 , https://polygonscan.com/tx/0x8d3537ba2e5e4f0b0c2555e94165a76bf9981c92c4a0ac1849d2eb8df244a2e7 , https://polygonscan.com/tx/0x9db056b868a2ff6bf4ebda854d503384e724b76404429af14a63ac97ce03ecac , https://polygonscan.com/tx/0x9db056b868a2ff6bf4ebda854d503384e724b76404429af14a63ac97ce03ecac , https://polygonscan.com/tx/0x73fa763757b63592d003ef336e7a5a902b9c206cee00113fa9165bf15bd444a2 , https://polygonscan.com/tx/0x73fa763757b63592d003ef336e7a5a902b9c206cee00113fa9165bf15bd444a2 , https://polygonscan.com/tx/0xeb3ce33219ea3b9e49ee27ab015a492b032ffc1cac301b56cb651c777ddfa9f5 , https://polygonscan.com/tx/0x01a72fb4be018ec4aca899eddf7709d516a8f05bd9a98774ccbf90d0b1ce5f9a"
+  },
+  {
+    "buyer_address": "0x33a7e5bf7eacc6d4e8b49c4b3d8e6d27f0f7dc18",
+    "usdSpent": 744.8973392099538,
+    "txs": "https://polygonscan.com/tx/0xd8b77a11e45641805ad02e41906338b37aedc7d561d5739cf2ac0c450a54d9c9 , https://polygonscan.com/tx/0x885e1f5b197aa83a5c9ae99ecdea499fb952aa5e4a4ae92528d43a65c295b4ce , https://polygonscan.com/tx/0x41610eab3a89b302de4ee6f0ec0114dec3998246754cbcead5ab4d522e1f5408 , https://polygonscan.com/tx/0x358797fb6f088cce2bb29d6b235f9bbfe09515432852bcedec3818251fa68f86"
+  },
+  {
+    "buyer_address": "0xb93dcc5a4964dad9626b505f95ddd77a8614bce5",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x5e168f831801b53472b9942e30de980a92017fdf",
+    "usdSpent": 550.1449042291167,
+    "txs": "https://polygonscan.com/tx/0xe49bbfd9afa0e1b64fbf38edf80cfdf8679c2aa0336b9e88e49a23904e4717ca , https://polygonscan.com/tx/0xc3a9ee22940b49e34086eaa22ee5bc34506b7df2cb6d992cc3fa111ad966f711 , https://polygonscan.com/tx/0x668dfebd6744debbb26a61dfa1945e66ae6882efc4cf40eaf521b025b4ad471e , https://polygonscan.com/tx/0x668dfebd6744debbb26a61dfa1945e66ae6882efc4cf40eaf521b025b4ad471e , https://polygonscan.com/tx/0x7bbb0ed2ee516971f3de645b17ff946e83d8c1cde30de7639c651ab0bf032afe , https://polygonscan.com/tx/0x7bbb0ed2ee516971f3de645b17ff946e83d8c1cde30de7639c651ab0bf032afe , https://polygonscan.com/tx/0x4b6b41fa64846d8607995b3bc2f216a57fb0049505f8b00fbe6d25f6a2797969 , https://polygonscan.com/tx/0x4b6b41fa64846d8607995b3bc2f216a57fb0049505f8b00fbe6d25f6a2797969"
+  },
+  {
+    "buyer_address": "0x5692959d9f69fbf8f20736bf6607c1940869a4c7",
+    "usdSpent": 59.56445337942633,
+    "txs": "https://polygonscan.com/tx/0xecc33652002cca8c31f0441e43818dc4d6e05dada229411bfef9ad5f328b7535"
+  },
+  {
+    "buyer_address": "0x000000000000000000000000000000000000dead",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x0506d39effcaefbc632cbe72c36c4d64759a665f",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x059d0025e4e1bb1a37f2c922e54b139bc1231ee0",
+    "usdSpent": 25.506800547874754,
+    "txs": "https://polygonscan.com/tx/0x9a9a9343326b9c8bfc8f9a29ee69cc883f6bc93e59e0c566db7886bed8afa9a2 , https://polygonscan.com/tx/0xca15525bb9196ef9549d6aa960c80e0602adc36014d7f0ecaf2b1c5fd5275e90"
+  },
+  {
+    "buyer_address": "0x082f2a8ea1d8e3ee24c20d12452b7e851ad0d5dd",
+    "usdSpent": 6.921072589679413,
+    "txs": "https://polygonscan.com/tx/0x23e9637b8977e675713056c12899cfb35ffaaa2e8f36da817a2ba00f982f3a5c"
+  },
+  {
+    "buyer_address": "0x0922b9c1c508fb2447d0fe60a84f47ea2a862ace",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x0ec1a477a70fcb5d3c3dc6688cc4faa685e73414",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x1d7886346175e34c614b71d0e2369c7f0e350d07",
+    "usdSpent": 92.40425003838607,
+    "txs": "https://polygonscan.com/tx/0x383dfc47fb7fbbd9f3fc952559b9fe640620de27812a9997c36ba2c0c04dda29 , https://polygonscan.com/tx/0x89de1ca76a2e000c4530c8be57c8407739b93e7ace58e94277968c83617ec355 , https://polygonscan.com/tx/0x860243254ff899e224ade23d83b705b090d18b3f37f639b78418fc583af442ec , https://polygonscan.com/tx/0x67cdf27a0b4a85e8260310b286747483d5d723cca3ab19394404d0fcc3632b86 , https://polygonscan.com/tx/0x6a345b90dfd533ce254de762b8ec330ebf3603e5bd6194d4182c398577e9735b , https://polygonscan.com/tx/0xfbd213cdb79e28762efb7d26dd956581fe9978e4d2c6a51011e963d7ce01e6fc , https://polygonscan.com/tx/0x690727ba28926bd2b36ac8a9709f49709bc47bc840020a150c55b55c336915ce"
+  },
+  {
+    "buyer_address": "0x2fcd5b84e04ea940afff17173e67ec64376e1dfc",
+    "usdSpent": 13.211259871558871,
+    "txs": "https://polygonscan.com/tx/0xc02256a37e868e3e8fa4e3efd74be57e9f58f11284569811e2f1525fc651278c , https://polygonscan.com/tx/0xe0b54c65c8bb30759a7c7114335170ed5264f65ac1ffa478a355d0f31a782069"
+  },
+  {
+    "buyer_address": "0x4534c46ea854c9a302d3dc95b2d3253ae6a28abc",
+    "usdSpent": 6.679750296011599,
+    "txs": "https://polygonscan.com/tx/0xc5a6cc8501331babfc5bfdb2c1446a86a383554dd953792c5e0a3f2fa0ee810a"
+  },
+  {
+    "buyer_address": "0x554333cb53e657f010a104c4e61bf4cc7db26f4c",
+    "usdSpent": 6.679750296011599,
+    "txs": "https://polygonscan.com/tx/0xb29b07b1568593c568b48622d8db94cd3a2145fdce7c725971f9e2d908671957"
+  },
+  {
+    "buyer_address": "0x697c6a6aea3671b1a6e10aea736f18fa3079cb97",
+    "usdSpent": 4.6864989547168,
+    "txs": "https://polygonscan.com/tx/0x9427c25404431aee6a7e3f68f5f4f583260253c012dea2c55d417f4951ee20d3"
+  },
+  {
+    "buyer_address": "0x7a0c9037fb4e51dd10a921e1ea8aaee07862f644",
+    "usdSpent": 53.65254859984813,
+    "txs": "https://polygonscan.com/tx/0xe5ed85b86fcc05b749fff048b5d7d4aa88b3818b252a0e8d29d48a667afed330"
+  },
+  {
+    "buyer_address": "0x7eec58f777f1920ba4a54b2861597efdc3852da0",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x86f6e643f741f9592bed647a5cfd493c64602bc1",
+    "usdSpent": 20.15166538686373,
+    "txs": "https://polygonscan.com/tx/0x67bf4143f08c3b13b86a4e372b67fecdfab29d88a424d0c2fac5cf13dec3c25a"
+  },
+  {
+    "buyer_address": "0x876d9bb007ec7795c5bf887832220b5b43cc9cfb",
+    "usdSpent": 5.202131299267852,
+    "txs": "https://polygonscan.com/tx/0xa93c9ec427fe7b470ca3ee1fc131c74520beb2f05782f02c790421d221604083"
+  },
+  {
+    "buyer_address": "0x8f14d816dfead2c9806e3d0b598ee4f2ba8fde54",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x9a25760dcdcf828264afc5989869298e1288fc4b",
+    "usdSpent": 3.165322526159318,
+    "txs": "https://polygonscan.com/tx/0xd39b1a2fda9acd21d19306700c857197add0449295fed85ba6b9b49c65972010"
+  },
+  {
+    "buyer_address": "0x9b1320957228d352b6c022c16bdb4208e86bf8ff",
+    "usdSpent": 4.53329981124706,
+    "txs": "https://polygonscan.com/tx/0x90cc82cb9d6923d5d0c4969b55dbeca4fd09b20d8ab27524ef1c2c9c30c4819f"
+  },
+  {
+    "buyer_address": "0xb94bba3746d108257289a50490b9eea526832a8b",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xc82fd31500576f394b59be3b10c154b584ea6004",
+    "usdSpent": 17.193363193849354,
+    "txs": "https://polygonscan.com/tx/0x06e38558f593ec731475d45e8912e7bd7e92ceec83a4216c3d27cd00fe69cfef , https://polygonscan.com/tx/0xc334309e611da0c4b9db3cd6ae9d0ed66637f826cf57bf523c73238deb9f041b"
+  },
+  {
+    "buyer_address": "0xdef54a61f77041631d5f268a2576290448912768",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xe97a769414ba59d344e8afc2f62af6fa4e7ed5c3",
+    "usdSpent": 205.8734527222827,
+    "txs": "https://polygonscan.com/tx/0x7aa1adb12e991cbc49ce5648ee535abff6163fa43e36eca6177577d59f7a81a6"
+  },
+  {
+    "buyer_address": "0xf5fdaa91b9bcbbde2e3626e4c4c817b34bd796f9",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x32845e613daefc84255a9db0590a0fb57d624d5b",
+    "usdSpent": 25.880739405317257,
+    "txs": "https://polygonscan.com/tx/0x2f3d27e3d968238f831af2e76781eec22214e8b48a81608cc39ea796fd298198"
+  },
+  {
+    "buyer_address": "0x3ea8147dabfe6818b0f8c1f8d756f4ad20321a65",
+    "usdSpent": 5.096262890362728,
+    "txs": "https://polygonscan.com/tx/0x0a3cc8568dd7b6720cee1ec482aad4641ca2a5895601d9f04ca2e78d310a72bf"
+  },
+  {
+    "buyer_address": "0x712eeadc95e6a3943689060c8ce50f1560740ab6",
+    "usdSpent": 5.176147881063452,
+    "txs": "https://polygonscan.com/tx/0xd2cbc49f188f381b39c5f6175018a6426cb320ac683b10426feefe6928e2fa3e"
+  },
+  {
+    "buyer_address": "0x866f944ac5dd957fa4f35bbb98b4cfb7bf00414e",
+    "usdSpent": 34.50765254042301,
+    "txs": "https://polygonscan.com/tx/0x614dd2315c15cdd1a3992507842338df11a7aec75467271a6596f550ba6d2858"
+  },
+  {
+    "buyer_address": "0x8fb2f0b66278c41d1dc5c5d49845ea6d3df05d54",
+    "usdSpent": 8.861475837949389,
+    "txs": "https://polygonscan.com/tx/0x0ee1e39b942a27706e042334f621a2dca337dd9e5c1f62d7b82588a29c48f731 , https://polygonscan.com/tx/0x014f19c6fd7449627b473f6373c9e24604887fc936b4b82a824d16f84986f256"
+  },
+  {
+    "buyer_address": "0x924cdcfe9968e0f9ad66ae9a9e8c64f71c6b38f9",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xfb7f3519f7f44d2c3d9ea77c980210d3e14fdd6f",
+    "usdSpent": 44.616123009772735,
+    "txs": "https://polygonscan.com/tx/0x77713230ea180d3225df6c1c8c36992caaaf136102d28489851fad3c6df37262 , https://polygonscan.com/tx/0x14129a19a19d5394398b530939a40bbda62674b80bb2be634d268a5cd37e78ca , https://polygonscan.com/tx/0xbb71283c978186445c8011ba37853c2f44b65ddf8ac693cc6f8c492c3ae686cf , https://polygonscan.com/tx/0x2e9723a1d212be742473a69f15a00279ea95c1f3fc60624179d9f47b0ff36ddf"
+  },
+  {
+    "buyer_address": "0x02c435d8189d9a983cdbd77f2109fdd5663a33bb",
+    "usdSpent": 66.70699241522804,
+    "txs": "https://polygonscan.com/tx/0xff92cffc109a34279779aa90aa9624f7abf7b6d82fdb2e4fa9e73712d5e85c3c , https://polygonscan.com/tx/0xff92cffc109a34279779aa90aa9624f7abf7b6d82fdb2e4fa9e73712d5e85c3c , https://polygonscan.com/tx/0x61cea70a4211e181d4eccdb2507eecf101b1917665ab08db0048c0083283ff52 , https://polygonscan.com/tx/0x91d3cb50ab426f1d0e3bc78c65dfe509d829613d278be61dcab18476009727f0 , https://polygonscan.com/tx/0x688129b1f570a6fd15438085db17a36da416b3a5a11e152c9606cfbe8af65849"
+  },
+  {
+    "buyer_address": "0x5abea5436638a7d8340cfd11bbcc4289f513c8d3",
+    "usdSpent": 6.921072589679413,
+    "txs": "https://polygonscan.com/tx/0xb115ab1ddf17821931194345b4c501c6c68dbe53e35629383412c0766c807a28"
+  },
+  {
+    "buyer_address": "0x5b1899d88b4ff0cf5a34651e7ce7164398211c66",
+    "usdSpent": 59.01754193658592,
+    "txs": "https://polygonscan.com/tx/0x0a2564c7ede67df020a6400345dab62e28c9a8cdb0b4d2b7080eb86c5f23b530 , https://polygonscan.com/tx/0x0a2564c7ede67df020a6400345dab62e28c9a8cdb0b4d2b7080eb86c5f23b530 , https://polygonscan.com/tx/0xfcfbd269eb448dd975ad385d34665b680724cfdf99b31fe31dde55a494ff666a , https://polygonscan.com/tx/0x0c530ddb26dda0b4565a7a2ac30461b9795703212f4328bf08c9790c097d94f8"
+  },
+  {
+    "buyer_address": "0x8b9a410f988104b84013517a27becb49a386d7e0",
+    "usdSpent": 52.050931594836655,
+    "txs": "https://polygonscan.com/tx/0x67139071c7ae09e7228d710e82cf878eec9500edc1b7a34f1b8754bdb3135686 , https://polygonscan.com/tx/0x67139071c7ae09e7228d710e82cf878eec9500edc1b7a34f1b8754bdb3135686"
+  },
+  {
+    "buyer_address": "0xb0c4eb0a8bf91d5dfe8db6fef070b522f2a03a9b",
+    "usdSpent": 50.22450099178338,
+    "txs": "https://polygonscan.com/tx/0xbe051adb2c07a7001a250f1d2af10cafd9d6878bc5535c487e0a47f322c150f3 , https://polygonscan.com/tx/0xbe051adb2c07a7001a250f1d2af10cafd9d6878bc5535c487e0a47f322c150f3"
+  },
+  {
+    "buyer_address": "0xf1d27d429dff2b13bf079ea5f6310d8b18713c9a",
+    "usdSpent": 52.050931594836655,
+    "txs": "https://polygonscan.com/tx/0x5eaa556b2e35827b36aa6b5b91d7b08ecbbceb00e67821ad586c732ef76cf518 , https://polygonscan.com/tx/0x5eaa556b2e35827b36aa6b5b91d7b08ecbbceb00e67821ad586c732ef76cf518"
+  },
+  {
+    "buyer_address": "0xf94fd165592d3bca67d36a167ec6afb5784f9cf5",
+    "usdSpent": 59.611747766194334,
+    "txs": "https://polygonscan.com/tx/0x50572b6e72dba6e97df10693034566ed84270fc7728f77ea459c5eeab1aa6e96 , https://polygonscan.com/tx/0x50572b6e72dba6e97df10693034566ed84270fc7728f77ea459c5eeab1aa6e96 , https://polygonscan.com/tx/0x0fab5522b9df807c9e7a2229eac45abbcf2e682babb30b3911946d541faae91c , https://polygonscan.com/tx/0x36c89e08512fc7f483f4955df8ebcd7716344cab8ba8ecff66feaf9a56a92798"
+  },
+  {
+    "buyer_address": "0xf5a3e3709b4a08b4d95a22ecbb74363eddac4ef8",
+    "usdSpent": 46.1484822966269,
+    "txs": "https://polygonscan.com/tx/0xe4e9db360a95d633b084e98a4717bd211709da83425e6cf7ff393ec4a3823f81 , https://polygonscan.com/tx/0xe4e9db360a95d633b084e98a4717bd211709da83425e6cf7ff393ec4a3823f81"
+  },
+  {
+    "buyer_address": "0x0019220ddabe5b8438a6be6ebca31ef01ca69965",
+    "usdSpent": 12.131070064349199,
+    "txs": "https://polygonscan.com/tx/0x7a9349458aa41af1f806433b33f65c4404ed3f6ff6c357a09c59d0912e25d925 , https://polygonscan.com/tx/0xdd284f78efcfc7cb0bf8cc88987d73be476e9985c3876fbe51147f1b38a06b2b , https://polygonscan.com/tx/0x2cba3f42bd6534a231a95aa38cf7f5e603f6eb370c93baa0f30ef2c18d4ea15b"
+  },
+  {
+    "buyer_address": "0x26871b48edad35f81901ab9002e656e594397e7d",
+    "usdSpent": 6.679750296011599,
+    "txs": "https://polygonscan.com/tx/0x59d89fba8008681522d34bdd010a229aba4baa1a0c8f38b8c159704a68385288"
+  },
+  {
+    "buyer_address": "0x34012df14b13ec13e7873d727aff7847bd5b2274",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x4bd3548d6a0f1cb969a2688887104aa7889943b0",
+    "usdSpent": 31.286242905009544,
+    "txs": "https://polygonscan.com/tx/0xf72055a553bcd93147400cf6fdd3c77a547c18250e4c0dc57dae8c607d299a6b , https://polygonscan.com/tx/0x3b0b6a01a844a4db15df262130f5d0342bd64fd5adf5411615797900fec61696 , https://polygonscan.com/tx/0x55d4da8dc673f9c81fbec6a6830e34217b5d5b433a61ce3c83a550cefaa3533c"
+  },
+  {
+    "buyer_address": "0x4f7fe261619141ffa63fefee35bba886581292f4",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x4ffc5f22770ab6046c8d66dabae3a9cd1e7a03e7",
+    "usdSpent": 2.984396215868192,
+    "txs": "https://polygonscan.com/tx/0xf1a39336fdd8ed9ff2d73285f6ca23038d945d043dadafce4f54d2e50255dc91"
+  },
+  {
+    "buyer_address": "0x505d688a38b8cb9190b4f671d98a37a784e92c1f",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x5d30d01e92fcfde549042e25fe78c65bfd4789cc",
+    "usdSpent": 3.0320310751991526,
+    "txs": "https://polygonscan.com/tx/0xb3d637f8069d49db7a9e3ec7b1ab78795611ff50cb05dc96b2c0830e2f0c4286"
+  },
+  {
+    "buyer_address": "0x613e052555ac74ff6af0fc64e40e8035c1e9dcf8",
+    "usdSpent": 14.695450651225517,
+    "txs": "https://polygonscan.com/tx/0x88d69f9f32cccfe5107850e6dcab8579c03cd6157fd14c74f23b440a531a121e , https://polygonscan.com/tx/0x269f986ee8721147298fbf54719e6561584bc263dfae6b4461efcd58037f8930 , https://polygonscan.com/tx/0x350a4d738024a1e4d4eefbf57b52f20171493c6a70982455488c39cd8b7b5f36"
+  },
+  {
+    "buyer_address": "0x65f35c80b35c35dcc916d6f3dffeb80aaa8f73b7",
+    "usdSpent": 6.922198752791854,
+    "txs": "https://polygonscan.com/tx/0x842c8a3fd5bea6c49c458c2efee906c8fc0ce2a370618e05555483bca7f3b2ac"
+  },
+  {
+    "buyer_address": "0x688829760f127c81310becb520bb424a277386cc",
+    "usdSpent": 6.679750296011599,
+    "txs": "https://polygonscan.com/tx/0xe03c8ff4a75cc6e38961c33f7dc3dc444f4144bd76be65fb6ce4d252e5bfa8c9"
+  },
+  {
+    "buyer_address": "0x77cfb387ac4f3490e911f6fb51b030777e85f238",
+    "usdSpent": 6.921072589679413,
+    "txs": "https://polygonscan.com/tx/0x729fa33c3dc75b9c98e50f52ca914be78dbe06d554aa995ac2a3d88c31f536f0"
+  },
+  {
+    "buyer_address": "0x77f478a73858f55973e6ad80f57502793730b721",
+    "usdSpent": 18.09533628922868,
+    "txs": "https://polygonscan.com/tx/0x45d717a4ec3ac3d689cdf4bc847456b0988ba4dceb7e08e59960608b45a059fb , https://polygonscan.com/tx/0x6543dbc73c62de4bc9ee115192241eec5db00f98302fca97b4dfb5914a92c7ba , https://polygonscan.com/tx/0x8cb6d1ac8b4bbcaa3929e389f654557621ed3e43e38bf88a715a1b7bc16ca514"
+  },
+  {
+    "buyer_address": "0x785c8d210ab8888da6d121faa0a9568f75400b13",
+    "usdSpent": 6.679750296011599,
+    "txs": "https://polygonscan.com/tx/0x61f3fc5bb90e063c96ceff80727f6c28509b93b4ed7d1860793241b4989fa739"
+  },
+  {
+    "buyer_address": "0x8071ad9cc60156a7d24dcae3ba747f9b8b42f0a0",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x9845bc3476d1f891266d2a4c7be093e2527c489c",
+    "usdSpent": 6.932838382891974,
+    "txs": "https://polygonscan.com/tx/0xe49986834de6251413b0f4c4d99644913afa5ff9c765e3174cbbd3961478889b"
+  },
+  {
+    "buyer_address": "0x9daae34947a2ba5b185330dc18ae09cae592d7ed",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xa83f02acfa87526f0ac12008e017184803f6243a",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xb472567256479bf6181707ee3c7575079432631d",
+    "usdSpent": 13.966757493881694,
+    "txs": "https://polygonscan.com/tx/0x7b8be0021302c0d26709f5c2762ec00be7a45f81d3bc4789a586b5389626a2cc , https://polygonscan.com/tx/0x227d5bbcb560dc05efa57418b531e3b46ae6e4b2723baf4537a2f74d152402ab"
+  },
+  {
+    "buyer_address": "0xb528c573ddd7acaba1a1da77a4fd5a1ea4a32990",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xbc89a84d19419cf4bc0483595deb825d00d8c2ea",
+    "usdSpent": 6.922198752791854,
+    "txs": "https://polygonscan.com/tx/0xf0a8cac18e093a3fdfa91e4df165411b90750862086f0680486d6a5d40be86b6"
+  },
+  {
+    "buyer_address": "0xc183f0889e897a3ddeace022728eb8fe4971f04b",
+    "usdSpent": 12.770455958152782,
+    "txs": "https://polygonscan.com/tx/0x4ff4f98d921081f84b2c21c46b85817b9e9e116b94e1e133bdcdc6b872aeb13d , https://polygonscan.com/tx/0x1097838bd1a76d27c348553c402804db16bb8ed79b48cfdd0621da5755c596c2 , https://polygonscan.com/tx/0xcf246966fe1f516cbef45b2994816ae9107881a0ba858e8ba9f017500ebb4048"
+  },
+  {
+    "buyer_address": "0xcd631ab36d5e8881626b5e5f6bf0bef6a1926d45",
+    "usdSpent": 6.511089139446683,
+    "txs": "https://polygonscan.com/tx/0xb39c1cd7deb8013f85d9f231879b75340f7580c1d51348f245f27491991360c1 , https://polygonscan.com/tx/0x6db40d5fcfcf4c870b9cdae4092f00c311bb5975af460e59629ec4da4898e83b"
+  },
+  {
+    "buyer_address": "0xd72e2a8b1a33b6689ccb7a929cbebf3a530dc5d7",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xd7af2caf8f8ce8261a5622574b0ea8f1b3e704a9",
+    "usdSpent": 12.990023961476535,
+    "txs": "https://polygonscan.com/tx/0x9d12d63eb5f0204384236ee1df77f8b0ea837b9a4a0b0d3c4b61665e2528ccf9 , https://polygonscan.com/tx/0x54d7a599230183d06a73a34011585b1efb83cc3ac0e80febc682de28ebf35046 , https://polygonscan.com/tx/0xc0c0f35a70601774c1c936730ee307354f4479d2b6d57f9611ea753b4cb0f6c0"
+  },
+  {
+    "buyer_address": "0xdb760099f0f3359131e08716848f23c014d35b9e",
+    "usdSpent": 8.54281922578576,
+    "txs": "https://polygonscan.com/tx/0x965b92a1fa382c8b08c61ee4e142cbb62b2c7ee52a817e4b7e9accd860def789 , https://polygonscan.com/tx/0x4cc8564a87f6b13b7a151516d7a7c6f62d00a06538bef08e49be24bf30682d39"
+  },
+  {
+    "buyer_address": "0xdcc287d36cdfdc3da6ccbfac5c069aa24c0a3bad",
+    "usdSpent": 43.287772166462965,
+    "txs": "https://polygonscan.com/tx/0xb5880102ceeafbe9a2e3722277c788ca31519606675ede2eed15c8a3ec5708f3 , https://polygonscan.com/tx/0x52e0b354f34862ef769863cc2075ddbaa77a018c88d9a25b99c2d42bbb275d2d , https://polygonscan.com/tx/0x825d88b1e2d381a43378e87e813f6757f2ddaf88f7494bf081754e49395b32e8 , https://polygonscan.com/tx/0xa37390a25a460fa474ce2e7e5ae43fb294ec9e86242e7fd9b8db210e4c8cebe6"
+  },
+  {
+    "buyer_address": "0xe1eedbd1e08478707c794e7e8b1ee623f5fa6d64",
+    "usdSpent": 6.921072589679413,
+    "txs": "https://polygonscan.com/tx/0xd637f2de5a67b5890692f010c8e29940d9702a91d790d8ea43775af0ef21fbc3"
+  },
+  {
+    "buyer_address": "0xe523d43f0bde68bd2d6cb2496c1b9d5af573bec1",
+    "usdSpent": 13.843271342471267,
+    "txs": "https://polygonscan.com/tx/0x2d2427a49a66e00b588f8d01bfe50196208352b24ef11e63e8ea3cc4459a2b39 , https://polygonscan.com/tx/0x814334c4cec7870cd96e7837ac249eeb00e9e0fa10ab0b7bf6ed2e20b8886553"
+  },
+  {
+    "buyer_address": "0x01d1caa915cbb6dea512537fa3e22578e9a5991b",
+    "usdSpent": 3.353202262935255,
+    "txs": "https://polygonscan.com/tx/0x32e9528d7b09a2de47df743f81729b769cd5cab1fe506667fce9c8f281c88e7e"
+  },
+  {
+    "buyer_address": "0x196bb73dabc6465f7f8cd8d26c5c7383a395694e",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x29fb0d1b0836f9963f963b0bb07c49d2d61370b4",
+    "usdSpent": 15.30447633947765,
+    "txs": "https://polygonscan.com/tx/0x7b9f15d6c6a9bd5171b79249f87d1cb2bdd61e5f7fd79c5bb2fef24756650997"
+  },
+  {
+    "buyer_address": "0x3429cbff7eb34e4c9dd9d7e41041fd7b2a01fdb0",
+    "usdSpent": 3.0509416102101743,
+    "txs": "https://polygonscan.com/tx/0x8467ce0701ec85f3c338b71bdf3a6054cb1bf9ec319f3b39766f88286e6b37ac"
+  },
+  {
+    "buyer_address": "0x3d7e36e058427c0d1b8c2fc399ca8faa44d0b159",
+    "usdSpent": 8.917599971571075,
+    "txs": "https://polygonscan.com/tx/0xf3846e187d68a23c1e299f3ec4ae2034dcd854a1caa27af8780676b9073645a0 , https://polygonscan.com/tx/0x2afbb6de71d3e3e2307ab267d8dded681c0f696619eb3d0f1127e69c4c6617d3"
+  },
+  {
+    "buyer_address": "0x4308e6f6437332d3bac0120132421ba84d5ea2e7",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x47f55ada8fbd268905bfa0c380bdc6dbf9600207",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x4e7c626d4ae496f4c2187b3a592306925836fba5",
+    "usdSpent": 8.39920658994482,
+    "txs": "https://polygonscan.com/tx/0x3569efd1390cc98a900d7f46e2e984bffad74c8c925ccb0070da1f29797e14d6"
+  },
+  {
+    "buyer_address": "0x515bee382ea1043b699863c06f319a8267d58431",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x5262d77e21f2ec74fefc636a46db464e7a162453",
+    "usdSpent": 4.565165806943906,
+    "txs": "https://polygonscan.com/tx/0xe4e164ba992027d751cde731ec5ddb4fa2b8591ec11fe13e0306e5eed1d068c3"
+  },
+  {
+    "buyer_address": "0x5b310b6837a32da144355d63b4558b59d378393d",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x63209811f7010b31942b3465b648c2c49d049df1",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x66b1488a32e21f2d2757713d16facd9d25ec977c",
+    "usdSpent": 6.921072589679413,
+    "txs": "https://polygonscan.com/tx/0x6f0b157dfbbc114a6eae14544019b4fb77230a4a06896052c52ddacd60950c88"
+  },
+  {
+    "buyer_address": "0x706b5e2e84f606d7e98abe70017dc6f805ebb82f",
+    "usdSpent": 19.945064263271245,
+    "txs": "https://polygonscan.com/tx/0x288dd23622da9758a7234230acc17979797b4e094fdb2ce254de8ffdac89a1ce , https://polygonscan.com/tx/0x6f21921e60365ebde823a30964b8466af7309548c5f1f73a30f222326456e5b9 , https://polygonscan.com/tx/0x82962bd45cb9194b4bb1ff4cb9e92192104e4fb81c532351f2f95c907975fd35"
+  },
+  {
+    "buyer_address": "0x75c1be5ee5e49db24a449e103bef656b8268baeb",
+    "usdSpent": 4.986266065817811,
+    "txs": "https://polygonscan.com/tx/0xbbf941c0cafbe4be2cfa085a79c998c3044f79b3ce9f0c31d2cc8e81d393d12b"
+  },
+  {
+    "buyer_address": "0x846153b3e87266a09a19678a6abf39f88d77ed1f",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x8d839ee5d81aeaf3bb2e78098e3952383f00093e",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x961ee9e19bfe75ffa458267c4580a89833a7af73",
+    "usdSpent": 9.878389130079192,
+    "txs": "https://polygonscan.com/tx/0x61338bff7e59f1c3809ce4e40fada7255f1cfc8cc9b2931d033880f9eda7e2bf , https://polygonscan.com/tx/0x97c324177428d7cab6d114c37213b29e82fc4aefad263928138ed0ee806269dd"
+  },
+  {
+    "buyer_address": "0x97aea1b60738d88add4a76f95489f2f690336993",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xa9ca6f7f79156572aaf6857e17a8c2d3f13ab0a6",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xd4cdcf8a66b2eceb2c6db131b8cbefeeaa18d8ab",
+    "usdSpent": 6.421645133990581,
+    "txs": "https://polygonscan.com/tx/0x06e9ae436f8d018d418f966c2fed4275421f29efafce61398156e0458c00293a"
+  },
+  {
+    "buyer_address": "0xd5ab288a05965abf339c1ea6180b1a2eb6551e49",
+    "usdSpent": 1.4334209735761902,
+    "txs": "https://polygonscan.com/tx/0x9d913862a62c5c1a23f8c2bd12ece233bec7a263a0d987d30bab7c86020764a4"
+  },
+  {
+    "buyer_address": "0xd6eff8f07caf3443a1178407d3de4129149d6ef6",
+    "usdSpent": 17.1410496559669,
+    "txs": "https://polygonscan.com/tx/0x2603de697baaf85efde3a6e4c945afdca240546621ed23b8b66c5db85c76caa2 , https://polygonscan.com/tx/0x19805e9ca96a45eaa5ffca841e7f5489ead7238e4e28511cc49c617c82c4c7d7 , https://polygonscan.com/tx/0x5c5e7e6c129cb1daceb4b53da8ed0a6b03016aa42401a1ea5a98cf2f4455aee5 , https://polygonscan.com/tx/0xe0a053ae4f424c9d3ba3c0457ed642b16ac45e4c7197479f0797f60da621fad0"
+  },
+  {
+    "buyer_address": "0xf1cec2f001fa5cfb50ff5e60245724d2353cff38",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xf605e3257c5662406b8baa9e6040dc393d05922f",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xfab9a3d37999e12252b47468d2ffd4be15936012",
+    "usdSpent": 6.36012450330965,
+    "txs": "https://polygonscan.com/tx/0xc3f9a1fe4a3423a69ffd85c27cb623c05e6b7e6ed4442539976a129014bcf20c"
+  },
+  {
+    "buyer_address": "0x11078130217bc2baa9628837e945276e55cbdd86",
+    "usdSpent": 12.04691526755784,
+    "txs": "https://polygonscan.com/tx/0xb362e3d89f52eb395c88e94ed6ddcde9cf45562dd3ca064cd9fec046e5c617e8"
+  },
+  {
+    "buyer_address": "0x153a5393a34aef5358c52781cbae27865d829c3a",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x153b2252eddcb3690ae6f5e9f38be13779e1364d",
+    "usdSpent": 94.12374420387964,
+    "txs": "https://polygonscan.com/tx/0x663146b34d666a877b96f4c14a73da16b5d16bb0a629395943881aa239decb52"
+  },
+  {
+    "buyer_address": "0x474543b99438a978b39d39d8983723eb5ff9196b",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x520b735e20b7f2ac6d844bfb341643d37a35cdbf",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x693ed878e7183d4b249bfbc23d7a80c86dbfeafb",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x7c127c92eba3f5a321116c59ef5da709e61c0af0",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x8b11cc87ba28c0cb0767e1fecc799e0184a07b9d",
+    "usdSpent": 16.288101674694445,
+    "txs": "https://polygonscan.com/tx/0x5ead19f43b089a47f83f81b08f0bc143b11cd6900fb3db6c7cd06ab7030aaf3d"
+  },
+  {
+    "buyer_address": "0x8b7c37671f37db95e9d84714f7a4464d552aa0ea",
+    "usdSpent": 31.050792578353228,
+    "txs": "https://polygonscan.com/tx/0x7dec9521fdb40aeec93cc9d8b5da9589eaedb364e8d43d644767c4db02a5a6c1 , https://polygonscan.com/tx/0x022e55f7c12a17178e07646e6804b9b624fab7a733f6a54ce69c7e385f6c9c50 , https://polygonscan.com/tx/0x84e3d150d07b58c1fdedd5a2248577f313de248836da024cf0290ffcfb67fff7 , https://polygonscan.com/tx/0xc07ab0f4439a3f6e0e0ab35b58362816d019c9f1e4d063556fa29316503210d7"
+  },
+  {
+    "buyer_address": "0x938067b483d32515a6bcfc28c43595ca88b647f1",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xa4244f6711052752e6bb0271bf17c756e6598406",
+    "usdSpent": 14.520082778826215,
+    "txs": "https://polygonscan.com/tx/0xc5e65f28b6fa4bfd3a9d3b2e99f9dbe0628966e743bc7900ba0faa9807869395 , https://polygonscan.com/tx/0x6c74327fa06d18db43382f2aa7bc27aaebf866307ae2e937cfe5629979af4d8b , https://polygonscan.com/tx/0x71058693cd215b3fb10118eaafcc9dde9fd0bd936392428855d21da74168b6c3"
+  },
+  {
+    "buyer_address": "0xa540c15c636cce789c663adcc164fe9a1febb0ba",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xaae9d8bff1ef3606c51545b953e0137abb7ce7f3",
+    "usdSpent": 16.043332397584443,
+    "txs": "https://polygonscan.com/tx/0x0bdeb0422bad0095bd00e8171bc242b1dbcbf9db3c51972b326d16e0f422dcc2"
+  },
+  {
+    "buyer_address": "0xb5f4ebcc5a90e58d953ee9e64e365c2468f31f51",
+    "usdSpent": 40.56562237373942,
+    "txs": "https://polygonscan.com/tx/0x540bde06a99a031e42b180f60ee4238463eec34cc7836e14ec9ec61beca4ba92 , https://polygonscan.com/tx/0x3cdf57a92509cdde602cf3f0f9d9fd8e943e781e63c48207fd0764160aa8c335 , https://polygonscan.com/tx/0xf85943399933a1baf97c40e72b6bfd867a2f8c98dd3b2abe71e1ef0278a646cb"
+  },
+  {
+    "buyer_address": "0xc7905b6dc8e2c6a55e936e999123edbb481629ed",
+    "usdSpent": 36.73074321474636,
+    "txs": "https://polygonscan.com/tx/0xd77098b09c6f1aab70f6177e7c303fa30726114899d7f1b5c5984f4fba4b2e8d , https://polygonscan.com/tx/0x713b7d40bc6fc76d45b10cd4304ac88f12c5afc977c9070f396a4b1e0fcdaab0 , https://polygonscan.com/tx/0x8372412fee04936f4afb25db02323fbfc77c1d360fa057cb76d45567daa9aacb"
+  },
+  {
+    "buyer_address": "0xc856046b97b2e0ea9313493a71030847e7e0627a",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xce02683ebf83343d24e8f43390af06749a9e9105",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xdb2fe84854c2a8b3de449fd6e2fedee733a8583d",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xe5a8ec2d78c4a2fecf267c445db84bb359622756",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xecc354a6936b1c16c9aafbda40e7bdc87da58218",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x021cd6e21865c919164d76e310b1352252b8c6ad",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x154620ddfdcd6ab15dd9c1682386debad1eef536",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x20acb0fd8634edae33b3e82f527fa5f806dc5a3a",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x2372a159d54059702eb1da62798ec6e04e3825b9",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x2c0f6d2052b401de8bb1269fc1b86653b976cc6b",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x37f00ec67d68c2d3c662339c183d37403c36f28e",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x3a9f84db2219b20cffbf308e8c0b3e6a9f19c0d3",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x3bbc2b3e48076c0089c8c9ad1b94ee1b80866b24",
+    "usdSpent": 20.15166538686373,
+    "txs": "https://polygonscan.com/tx/0x2d08de5be2891e3b5d90838964994d27bf0a3332ebed2dae9d1cff592d661d05"
+  },
+  {
+    "buyer_address": "0x40a81f7ad84ea2063937c22f4582eada756a63b8",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x4df3732aedc347e168fa2b0f281f40294c951d71",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x56d947fa1ae6d6293b307b489540c156af628f0f",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x62f163a73f1da758870b37561584d963e9b92a35",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x72631b0ea0e5316a6c8b9682236c7717a6da7e5b",
+    "usdSpent": 30.215633697003383,
+    "txs": "https://polygonscan.com/tx/0xb5a917ae0e731f45bf8a82a5b6766c8305c1cf17f14581ecdc3c53002592e496 , https://polygonscan.com/tx/0x1f14ed05ee0e8a9c760e8e25db34815a4f195996f4206f3f22e8ba387613802b , https://polygonscan.com/tx/0x35eea22987a3dec0e11f3494e80eb1d76e38b48f474bb9ba54368ed4bde16aa5"
+  },
+  {
+    "buyer_address": "0x77cd14182ee0bb2cffba59c358b7e0fe16d32ee0",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x86f5badc9fb2db49303d69ad0358b467cfd393e0",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x886e7c4c7f5a7f02021bf1fb1931a0d310bd0275",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x894f0d51fb7caa5adb5363ad42aff64ae7afdc77",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x9a712335ded8455a623a51046f7baabd604a337c",
+    "usdSpent": 2.0500067253446237,
+    "txs": "https://polygonscan.com/tx/0xb78663f41f4b6bff53e5c40d0d47bbb2c903ea76ef22a2a48f071f0c8fcfc189"
+  },
+  {
+    "buyer_address": "0x9cc2ab18786740755720b380abab69d2d4ad0efc",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x9d984918a0353bb7cab472f3210d1ef7b01e664c",
+    "usdSpent": 30.66755526675552,
+    "txs": "https://polygonscan.com/tx/0x13b90018f4d490bf00d38e83474a718c456479ba3cb6c7383c4f716de2f1095c , https://polygonscan.com/tx/0x4a2231a6b4207c3ba79d977f76475f1b5d338a848e584fff0ec062bff24ae068 , https://polygonscan.com/tx/0xf25eb3bd0e959f4f49c56746e6fba23e50b1447db78764a106e927989e3d21d4"
+  },
+  {
+    "buyer_address": "0x9dab43bc15bd29cfe3030ca1b7edb3eeb9f3b6c1",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xa4306309ab083662d81f7302b59799e2dc42f0d1",
+    "usdSpent": 14.773748629442647,
+    "txs": "https://polygonscan.com/tx/0xfeb2a26c387850a208beefb72c3b7a38cff6c41aab699e0ef98e819b0e585444"
+  },
+  {
+    "buyer_address": "0xb02365dc1a28d82cc454d05a765feee31ccc2b00",
+    "usdSpent": 9.831055642401001,
+    "txs": "https://polygonscan.com/tx/0xc4588eeb8cbc401aafffa0a1a7dd5483729c9d7f2949dbb6c47eab2b8ba95566"
+  },
+  {
+    "buyer_address": "0xb72efed94ce9bfceb807a8985012829995036465",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xbdc80ced39996444994c7622c662861d1b9eabda",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xc5cf448d0065e9b8de31291e517dcd79798135d0",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xcccd6bc9ae993dbc778b146e5be811626940b8d5",
+    "usdSpent": 14.714795382619382,
+    "txs": "https://polygonscan.com/tx/0xe80459f287e129b4f943921e1f7db19cb44f85a83c1c639873d92f9d03cafe50"
+  },
+  {
+    "buyer_address": "0xd42abc999ca237fe3e754916112a39b84b9c63f0",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xd689478d44a438798ee0dc07657cce2135c0aef7",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xe40efe2fbfb655299f65088041335542cf891102",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xe8c14bbbae1e2f4307609f7fb0d4278655a7d975",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xe944f07f9847275c55ac1f919e7476be1c3be9b9",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x01583b793668442f8e206514eda684cd5fc72885",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x02c71d547534c27b2886750e2889d42827d213a7",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x0312255f336dffd0db780bea698a7e002cacf791",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x038b7f5e080f9341148a6b936f10b363e7a89b5e",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x03ff9611ed26af8477e74aa162d52c6a4adde2bb",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x04ad70398ebc8feb31c999498a57e1e4cf16b624",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x04dac17038aa25329120abf7ade335251b7404cf",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x0636211443e91468ee3657e1d7faede7059c4843",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x0749d1abb5ca9128432b612644c0ea1e9c6cc9af",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x0786a24145fef2c60a38237e8671332899ce7c1f",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x07d6fb9043aa9320936937e94bbeab8b6d6752f4",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x0812edffb70ce04c37284f9df50e8ffced84ae8e",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x09bc69a986e1b37fb01ef36124f4c2e14fa0ab6b",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x0a3dff6b6786e25d08168fdba2c41b550014219d",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x0add22fc4f8a32890b8d2b87bba386fe007a0d5e",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x0b2264fb1aca3f4e45768800a0053ce8eca2908d",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x0bce3238fb72ece1e0ec7cac2cf4ee6c5ba2ff48",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x0c403e0d57eeb8f091bcfa8efdf01c00509f04f2",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x0ef57705c2ebb42f36df178ae81c15308a28755b",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x0fb19bb8175d14477a176aaf261345235e408428",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x10084ffe8d5f80fb5ee909c31fd600c1b0e709c2",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x101e894e5536eb2b7508be1b40b6566502ecd593",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x10e8325ecbc4af72bbedb603e73306829f7a94e5",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x111def62760c99419114fc1d3b30a059163ef923",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x1141d663a3a758fe9bfbfb215354d97aad91e2e9",
+    "usdSpent": 4.752729685917403,
+    "txs": "https://polygonscan.com/tx/0xf5c1d0b14968ca988c09b3ea35a98cfa14dd725a73a7f6b74454603b83d4894f"
+  },
+  {
+    "buyer_address": "0x11610d0bf661d3ccbb9493cf23184f68ecfe4783",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x12fdc2622744a7ff838d3b51e18797a526859ca6",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x13a22264c3dce612dec8f6d8cd77385d631398dc",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x13f43edf55addf755f7233bf275f9286bad8d492",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x14e38e92a8f3f39ae41c519c4f124163bb53e18d",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x1669d0cd35c1494bb49083de75365441a41ce989",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x187fc932038c0af37c8b6d1e3a6276cb8fa2bc93",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x18ec2bde5dc901aeabed117603583b2977d84269",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x1d9c0ae5d4959f92c32e28a82b53d2cf8fdcebd1",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x1e010790e03ab7f23ff6195c1623013dc3b386cc",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x1e93e534c5e26b01ed242410b43ae23dd0faa52b",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x1f1df9a5b9c07e4433f9a8a17a6041e2738938a2",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x1fb4bfe9d893af3f3220d056fc09ead41a1442c9",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x20dfeed4bd0a027b31240a25dd257e85a42bffaf",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x20e6af36fd433821f704b12ec03f644dc406a5dc",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x2350a8118d01d588a3b1cfa8f9bc696b1ae73d36",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x24aebcec75f6d2b04a8993462231810ab79d11ec",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x24dfdd0402086d665dafec765008b6bc1af768a6",
+    "usdSpent": 4.348354607899479,
+    "txs": "https://polygonscan.com/tx/0xa4ba10c353494c072992eb2b18b49e8527a76930df97c8d74647d76ca32bb8d9"
+  },
+  {
+    "buyer_address": "0x253ca6c07525e5ebfdfa1495f60d99c260a04e6b",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x25edd861fbbad226cac295a06d53590212c4af46",
+    "usdSpent": 5.821028320480964,
+    "txs": "https://polygonscan.com/tx/0x929f957e2128777067d10d569628bb015a56cd59d5ab2ee649af58ebf56556c7"
+  },
+  {
+    "buyer_address": "0x2684a202a374d87bb321a744482b89bf6deaf8bd",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x26854a4c22ac1a9bafe0609ce53309e60408a0fb",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x26d4a54e9c9337196e9727552bd53f90860746af",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x28e90db3711a465a10bd86071804f1fe46830423",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x2ae9070b029d05d8e6516aec0475002c53595a9d",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x2c2583c2d24642ef25c597d587ba29f71d309957",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x2d10c6039337dec604413c306e5d1f2ea29c8d3d",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x2f1ceb09c986dd5522daf86be2b8e710fffafa54",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x2f744b5f3ec8191a4cff832600bede5ffbe38b5d",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x3084621a962ee3ef39a87bbbbb59a08208986f5b",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x30f1067e441f4afcd21fd135a4d856c1046e3c7e",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x31d0dfd048875e6bfc9db0a812a4dd5b2eaf0638",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x328a5d52ce01a0e4cf8c635b19d134ab012d1a96",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x33c553041c38bf03d78536faa1b44fac96f79544",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x3421daffaf5d9c84c73bd6d1db87c92275d4c57a",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x356e74fd357491ee0ae56ea4c188cf10e6d7a7bf",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x35f6aa65205da3c3725ee3c9030c7460918905bc",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x36476bc4adfd9a6ebfcbd1eaab1abf2555899999",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x37dc74cd0b33116697fffa92ff5e5fd94ef9354a",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x3961178d550991bd4dbaccd3d685cd4d360c5d7e",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x3e56c41501204db6b58a6c54382737466ccd6434",
+    "usdSpent": 1.6961497576246656,
+    "txs": "https://polygonscan.com/tx/0x0e02666ef1122ef410c6b316cd5a1c3fe7466791ccf0580ecb162d9636b95268"
+  },
+  {
+    "buyer_address": "0x3eb74680ea424d539b7697ec156efb7e4c894bfd",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x4009f34dae89d04902dce24995594e57ff5830a6",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x41a9ddb316fab468b189a0b44879c5a2450cb699",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x426d235ad7cf97214a10bed0470f3023b11a2f09",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x43026dda6348771ebcf956d154326f10107d8b2e",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x439da92d62aca5a88d434ebab6106918e51bce8a",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x44415c6431dbedb2e71b08f7555cdfc588e7a151",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x4580cdd9202f949aae8ad8e8e3cf7e3602dd1942",
+    "usdSpent": 14.00750324106466,
+    "txs": "https://polygonscan.com/tx/0xec560db8f537cefe5427582bfc958b227cda92b0b3fd90d19c79138b0dcf3f25 , https://polygonscan.com/tx/0xf14fc7e1756b03b7b0c5fbaff1c047a204508cfe11f7a0722659d926fa310661 , https://polygonscan.com/tx/0x88b4759e045981d1f779f42fe6b3c66215ee6af0e6ea17fb134c8a77dfa9a362"
+  },
+  {
+    "buyer_address": "0x4599acc33c2c8f47dcb9646d5120a874fcb6b1d6",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x4663418e016a66facb0ab8db1ba187331edddf3d",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x46dff55b96d9bdcd4259e995da031ff3329c9690",
+    "usdSpent": 4.996645997608358,
+    "txs": "https://polygonscan.com/tx/0x2f908684dc20bf90a5c807248957185c3ec3a727dfeb06e5c6822b19b5e1139f"
+  },
+  {
+    "buyer_address": "0x47a20344a941e7a3d9357231cf05d6d38adbb562",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x48883afd673178744e769a5e262e117161dfdf57",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x496da1e13a7d608ab86ace61666e7ceb46758041",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x4a53e7f61159eb8dbac9ee957bed64e59c9b72d7",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x4a7617ebb215aae7945d418be5b606cd253aa545",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x4a9879ce2611cc727d042f83b003590c85a63537",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x4cb01b6672bc750821af952ec5a2447fc90195b1",
+    "usdSpent": 24.223296969501448,
+    "txs": "https://polygonscan.com/tx/0x1f5b21a8be765568cf44aafd6d192caea525bda2e119692579f85efb50184764 , https://polygonscan.com/tx/0x896926c0ac9b8c43d5eff1fb15442fcdfeba12192c86c624dd4fa3abdc580620"
+  },
+  {
+    "buyer_address": "0x4ced430894532e670e016f8dbbb7d08f7965a46c",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x4cfdd6a53184ab9bfe75f815d3cfd59661cd7939",
+    "usdSpent": 4.348354607899479,
+    "txs": "https://polygonscan.com/tx/0xb63ef51faa94e542ef541e631c2973a18e0fa244d0040bc645a241e56ec287b4"
+  },
+  {
+    "buyer_address": "0x4d3c903bc9380eacfd4ed8c840932ccb32dce7e0",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x4da03f669dd9609dc49ca6f3451ba22d3b792395",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x4e78db740bdaa444cfe30561e07ef6ae528df3d5",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x4f7a3e383b5f742ddbf764aa6a1d096de8bbd80b",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x501785b656bd9b1908c232ed85a86df2a7040f87",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x501956ace74edb360c56d0c0fa74b0066fd6f486",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x505b06ee203db9de72d322ef8c0a8f4f39839df8",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x5178a5c0bc4b27979e1ae2bf802fb7bb775c060a",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x52894fcaf49b764824a008eb6a70a48aae442cf9",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x54839bb778952f51238d9849ee41a0b2a86bd2ef",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x54f18b984d4aac6a1c57dc4b96afb2fed7ce4563",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x5637ec500fcca62d48dc2193e4548e77b00b8bc0",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x5696a8ba76ff5c6f6e1e46c20925f5a056167a2b",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x57d23a76582f30b09106ced93efecf2ef718e187",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x5889fe6c2dad3b18dc32b8b3bb3322a60f22e3f5",
+    "usdSpent": 4.752729685917403,
+    "txs": "https://polygonscan.com/tx/0xfaca93dbf04f3e4494334282a32cafd628b70800bb943c40072974898c3318b9"
+  },
+  {
+    "buyer_address": "0x597d94248c5181232e83ee054b74f01548090f33",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x59837dab1021dbab9a8488e795dd883a59071d77",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x5af8f36884fe34f9413a1a7b7ded764eec121888",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x5c18a3206c516cddb226fe853e8ac16ac2844eda",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x5d2e915003dd326d4ca7b1fb4bc0a9bdde2d3ed1",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x5f45f8296be3f38119d0c56ad339f6bf66154b9b",
+    "usdSpent": 4.252064946757413,
+    "txs": "https://polygonscan.com/tx/0x859cf00061aa065f730e04a9d6ef5cd2472dc409b9e678188d1c7b970f01e231"
+  },
+  {
+    "buyer_address": "0x5f6cc997d6585fe95e432d23508346771d6f864c",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x5f7d1b375c9e4140972e9b01c00b22adeced891a",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x608edd9f73e273c080dd96f08fcaec4f961da0cc",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x60d2b7bc992c88351b00e03e624bbc900078946e",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x60e5ebedc587dce993d58acd29175f6d420b6a75",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x62d722c5f524be0619fa8caa6440b0871022b8fa",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x6304a272726cf1177e47b9d4baca5e474925ad6f",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x641c3b74392bf2bcc393ae4d18b0c5b87bc56520",
+    "usdSpent": 11.739751066093165,
+    "txs": "https://polygonscan.com/tx/0x0cf78c16a477843f57a504e7d06f3c0f13a512d2c8f0e414116b01040a4ca08b , https://polygonscan.com/tx/0xaee5bb99f79f4a538831688b55025ff2c1973cdee22f5ba482ce7d81a25c2a31 , https://polygonscan.com/tx/0xeb27f2f10057c2e22e80d37cd2c8c3b7929bf66db302bd5b655dc884f1459737 , https://polygonscan.com/tx/0xc1320438a3b1aa75f79347bc879d2b1a86e32d235d905e8b0f02bca8c0e84057"
+  },
+  {
+    "buyer_address": "0x64c3acab990222b78ae2abe30daaecfc092f8b9c",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x64e8f7c2b4fd33f5e8470f3c6df04974f90fc2ca",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x6517c37055bc5f5c0a48f26035a2db9eddf9d4db",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x65813baedfd68029af5382672b0e4dd2e6f27952",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x6905d79682ab9ec12459704dff740318e6ab8088",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x6aadd9dee9a06a5d91f2342ff0c56533001c346e",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x6b5b72495df7fb28e16deca8c181e66a1c877679",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x6b9e2beb2200fe03129e178c66b6ca18e360109f",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x6c1fb6d7bc5a745edf2e04668823424020c16aad",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x6c3850f04b48817557afab3c79015c3e86d6d0e5",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x6de78f1bcb883be9b5bb9b1703a07247ab39b91e",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x6e28ec7d28cf469f624579ec47d1a8bf4befdae3",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x6f14857f776db9233b61d1c2cb7e912edb8eb16c",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x6f64f650c6e7d68f14595da9cbdc948d23ec3146",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x70a601a48bc82615b6defafaefafa60d6a6c7e50",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x716c59a499fadeb4b5be3b319b6cf24385503ed0",
+    "usdSpent": 5.703952669848678,
+    "txs": "https://polygonscan.com/tx/0x789e731dfc6638609a77147d85204c7ebebfdd85d94e507bad3e3c44d798554e"
+  },
+  {
+    "buyer_address": "0x726ee5e43e87058049423d84ce947f4560bddf4e",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x7340d383120a9ffd0afcd4e8f3b2ce62d29c47e8",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x74e4b08be21c35a944465190949fafc1bd6dd0bd",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x74f85674932ff2f6d8194e6f92940c6b8582504c",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x762aa70e1a9e48822e9ecf4d23e8d6a0a529ed7e",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x7697f6729dc3beb75b297574fa67d868082f1ebf",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x76fb13f00cdbdd5eac8e2664cf14be791af87cb0",
+    "usdSpent": 1.4461355966284979,
+    "txs": "https://polygonscan.com/tx/0x5ee9afc285a299bb834940435f8712808d280ccceb9c20f73f5d51ffe0ad84ea"
+  },
+  {
+    "buyer_address": "0x776e31f3242b7e9480ccd42308c4fef8b4f39c69",
+    "usdSpent": 1.9781026630915375,
+    "txs": "https://polygonscan.com/tx/0x89bcfd0f9c89be55dcf4c1f3f543f687674382810319d24060683f8a8c8fe93e"
+  },
+  {
+    "buyer_address": "0x77c72de1b70558b8310e2a5f29c6950d98971ac7",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x797520f471de8ec7b1e771e014149c4fd408367c",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x79f62e33b4076ed1d3a3eeff1c76350633286078",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x7a2d08411c52fbc6257d7f80a347ee9de3d5f0ac",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x7a85ce699a0db08faa2ce1f701c81b38df2a5a3f",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x7be33ff6d06f812cb261353022d27d72e8efa92d",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x7be7d0907aa13703d2f6092183fe48e827f57d9a",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x7c4f32d702c5327ac7a1bfb404fb27ce95ed6be3",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x7ccd94504ff4cc48cace135553e86cc049777c20",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x7cd4b6f59f282b80232338c001eaca7e89dd5430",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x7e3a2eafcae8b76c483f42d835e7d01e463ddc75",
+    "usdSpent": 1.685438571886749,
+    "txs": "https://polygonscan.com/tx/0xdee36045d2d73463fc870bf02cbc29e134435f5c506f7bf71e6db335cffdc816"
+  },
+  {
+    "buyer_address": "0x7e51bb472a662ed71300e7b4ea47bde5100cabb0",
+    "usdSpent": 4.252064946757413,
+    "txs": "https://polygonscan.com/tx/0xb31c69d387ecef83619249ea6e89a547371ad99c038276a6c64b841da7a610e0"
+  },
+  {
+    "buyer_address": "0x800e944d8d67941fe3ed78fadc6294ed688760c7",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x809b72b23eea19bf1e1bb3b16741d08b122226d0",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x80ec41c24b852d96d80a664c79864bd0471d00a5",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x819e479f87a6384dcd1c63be221e76b474a581d0",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x81d8321a64d0c437a967708a245cb830d1b1e529",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x822ccbd24fa44c9986712ddc407577b82f0f02fd",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x824a34a84da9e88c63ce0cfdfdf9005de4269aa1",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x832c66e2a27deaf244d31ab091e9e5656b3aac0d",
+    "usdSpent": 2.9547497258885294,
+    "txs": "https://polygonscan.com/tx/0x7dd742fed1902ae7fcc4c042c356a278157e882e6454a6856136dc11dae58f55"
+  },
+  {
+    "buyer_address": "0x838fdc7efd0877a8529c562867cc32bc728a599e",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x83fdac7cdd6054f90f863497de06f6969be74613",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x87b895f37a93e76cf1c27ed68b38d77fee0f7867",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x891dfd96c24c6c0552997b8322b9fcfa4c6e4a8a",
+    "usdSpent": 2.6601644067675365,
+    "txs": "https://polygonscan.com/tx/0x2e5184c6b16e8773f10627aea287b20492bfb2dc7d73474ead63389cbbbe5f29"
+  },
+  {
+    "buyer_address": "0x8cf659f9813f05aaba3acc16a902fa4bb712dfe8",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x8eeaae3320b436647d2b8ded6b7cca547b7620c1",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x90136a3f7b78b3e947b934322421ea023e4922e9",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x9038d9fd2590f0a42c1a374470bf3ae1acbe5907",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x90a15b3d2a96ea5a146e648e257175af114f8e8a",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x917b2c81ea107bec5bb5e829bc3d1331ab452db6",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x933b98af8322fb3cea23e68720d1520644b02fe8",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x93f5c71ab5216e6b0a25d11733805a07f8c492e7",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x940c4ae26c4aaa032d0c8a20f52cfa4e11545f1b",
+    "usdSpent": 23.9165497055861,
+    "txs": "https://polygonscan.com/tx/0x12d6dc527ddcf836be8ccd74d2da32133edaf59ba948860a4ee399e854d3ce99 , https://polygonscan.com/tx/0xebfc95b45042ee472fe9196be4e1571f9877283c37563acfb105c4f90075f9a1"
+  },
+  {
+    "buyer_address": "0x94aab6363b77f6b446054785eeb9f74edc575a09",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x9591385ef63f49304f3929f1e3d830c2b696fb60",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x95c13f9d434dd9b7422b8ad7ae5b6a581352023b",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x97441fae6ce21319070e124195e4f81fb7cd8927",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x97c5ff77cddef41d13731765edd76e5898aa9824",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x99b7a16bff3878adb53bc7ddb8e8568744417233",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x9f4132f6c4eff3433e06c120c6e04c0e40cf63cc",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x9f67f910f130079f3a1f8e2c108870c800108777",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xa10e19f76ad5dc73434cf31d23a7935b4038a5b3",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xa12ba7d500ea7def2bfd61bcdfcd72a9392eb8ef",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xa14410f4fbe7354c2497a2457d8c7c47574675b8",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xa14ba25c1fcf3bf13d3b2f5bcc611810d3c9fc2e",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xa1561eae2b9817306884656a04b811b1bfd6c28d",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xa23aa5fce659a828ab52d62a708e29e3347b9eb7",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xa2a0857695f0961dde7e3738a372d3860c28a2f7",
+    "usdSpent": 4.53329981124706,
+    "txs": "https://polygonscan.com/tx/0x7dffb350c9c43c55d3109a87c263febc8464b4d66ec0a6220b3fc791e55ccdf2"
+  },
+  {
+    "buyer_address": "0xa33bcd7280f59754406f2f25c28d6521dfc773b5",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xa44e6fc5be923d6b969de3252d49d1cf6d1691d6",
+    "usdSpent": 1.2247603798381366,
+    "txs": "https://polygonscan.com/tx/0x3f9cc6f5f973bb5c00e06d32c93dbf4936ceb5ba5fdf13bc2a3bc85bdf653616"
+  },
+  {
+    "buyer_address": "0xa453470b66f21e353ca3ba8c5d5cb0f71350d6d0",
+    "usdSpent": 4.348354607899479,
+    "txs": "https://polygonscan.com/tx/0x0c5d3b79dac21b1a1cb7fe356b4293f5376c41a2da1ad10ab7611ef7e74715c5"
+  },
+  {
+    "buyer_address": "0xa8f74f6679708fd946e514a5db9a660d29c9d015",
+    "usdSpent": 4.252064946757413,
+    "txs": "https://polygonscan.com/tx/0x494913a0bd21483de241332c3c77ef35ce450abe34b0897506fc85719d523b42"
+  },
+  {
+    "buyer_address": "0xa988612376214e731de1d2cbe9c16515374caeb2",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xaa312eb19552f924dfc47bfefe47f35a902fc595",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xaa6d90c3589473b278f47cc8586f8d2b9bff7f29",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xaabfc54d77f37b4f437d34a3c415c56fafa05370",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xaaed29c2b8f389a7192d41d1c28d1ba61e307d20",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xac40caa837c987c1be6ee6acbc5f029ca84771ba",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xaf546230bff1bd2abb5e464ed1eabc5d87654910",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xaf770b349815c6d6aa3a6dd23ba602d4113a0b6b",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xafe871e467cc9c5f0e560bbf572089e723c9b38a",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xb03e80515b8099fddecb8be16c1724ed79ffb5b0",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xb04756c43c363949a901a9ba8e349cd8e100dbfb",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xb0ba045be434271078c0ff8cc903d5d0995d2cc1",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xb343880dc01517dcfcbb528864d567e3389753e1",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xb46ac8b02b9213346b37bacc8bc9221ed9e78f18",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xb568f3bd7d8eb78f773538eb769cf4c77efa6d25",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xb659f2f3aa8f84a7db3a65ae740b07ece67d243d",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xb79f8877bda3739043e598e4dd4960c27303ad79",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xb91c5f50c2c30012f9fdb8833e14c115de20d7b0",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xb93eb9821bcd4c7607d66bafa510dd43a62cc1ef",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xb9cb2c924cba1418587bf4e00957bf8e61842097",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xba21b4b3bf256bd996b3fede403b09c17e98f7f6",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xba55a4ad8b09c532fd5f330768a5c415e5cd689b",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xba825fd4b94250d3d03b83e64605ba5903d20386",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xbab1bd6ae682f0ea0b5804bc6e1cb110f78d7563",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xbc51493179cba3d2dcf58cdb6b8b080b8eeba89d",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xbd03add5da0e173c67c9c1073ffba017147c42d4",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xbd2a2efeca1d2b496d3e998582c8460d59bf3fc3",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xbeee816c3ab89976b22faba9a17e12488e30bcaa",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xbf79e4f3141a879d5bf8d75876710827b7580b06",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xc05629e976927ff5213722033bc6d4a464faf8b8",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xc155fb2819ca242223092c0bac652dba55c9c1b0",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xc1da5370e2943834ae332d529dfdce2992d7c463",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xc2877b05cfe462e585fe3de8046f7528998af6f1",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xc598bfb2c211973226b59981ecb27a71b332cf7b",
+    "usdSpent": 5.690032033314415,
+    "txs": "https://polygonscan.com/tx/0x81104fd664d529fa8bc9a3efcb3ce0870d3811b626fcd0cb5e73fba6fe46a64e"
+  },
+  {
+    "buyer_address": "0xc60f0e53899d59f54768b577e0c55b36fe3bbf85",
+    "usdSpent": 1.685438571886749,
+    "txs": "https://polygonscan.com/tx/0xb5d785ac097696d08dc50fc1439f27b699016f0c2f18bfb8a24417170e765ddd"
+  },
+  {
+    "buyer_address": "0xc6b02b845f6b8110bcc4f55f17cfbd1392446b57",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xc7370c77485ce51997572747332f39e0d84fa245",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xc85f754b6ccd24ebc9875fd9db4031a72d9afbe8",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xcbb58904774cf1bee98741c466aace0206fb090b",
+    "usdSpent": 5.7009798583431355,
+    "txs": "https://polygonscan.com/tx/0xeee3435ab078a7ea039001d20c6909432c7d8ce193820073e06be13a9395629a"
+  },
+  {
+    "buyer_address": "0xccf1360aa2c849ecb526667144b77dc759e57b0a",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xcd8fc894b96f080297ec31c83b163b9a19b392d6",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xcd982d2ed8d2ef9a801ff6aecdec9ab081896145",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xce093818ac2dbc51404480a7f349fcfb1ca68b82",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xd013eb6cc78a378602837b7af229f6142453b55b",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xd0b12c5e07ae1a1de35342d6f643c23757adbb2a",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xd0ce8ccd77e6d40c3602e5b0faf4b69c55bf75c9",
+    "usdSpent": 4.58887196609279,
+    "txs": "https://polygonscan.com/tx/0x7e1bac8383d0788cd748903a5def9e38b89c4c9199835b1bd9034b2803d4e69a"
+  },
+  {
+    "buyer_address": "0xd1419e611b2bd27547b6cf756213c5a18657635c",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xd169c5bd662963f7e2c917f4ca3b26e6d7905bf4",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xd17ea83dbb421518cf4d7392e4beea7d67ba7027",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xd182cfab25830f5a1c3a9c4d6ba1f9fb78629851",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xd2172778f6132b2619dc07d71a0a0f068e0883c3",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xd505af77d421aff12a9a820e8cba4784e3a8cb24",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xd58f6c641bf91f5c9eb789df25ba571c36854858",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xd70bcd0f880a170b1abc6bd30fb63fa58492ec79",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xd7e1df3c6d6f974f2aed3d13cec917217c9a7187",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xd87ec9e7058a08bbc9ac932764c78810ab03efce",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xd909772c2dfaacfb0f9584b1264eb8812173eee7",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xd9c9251682a91a12869688649ab31bda1eec07de",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xdab86752eae07f5c85c04be9915335a263dc2aa4",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xdba3703b88ddc3ee34381231c74f13aaac8699c4",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xdd8b916de8c2ecee69ceb1908163613f24d3c77a",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xddaac482530e2d5c31c19727c6721e192d539666",
+    "usdSpent": 2.5591751625816492,
+    "txs": "https://polygonscan.com/tx/0xd49781c3e38deeada20e77a6071380f3421b407eae4f33ffce71e31d2bffd690"
+  },
+  {
+    "buyer_address": "0xdea752383f9b7906496e2ae5f33d66fe11a0b630",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xded779a3ae62f69f2ad8068476d1cb922a293c78",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xdf8d2f90ac76dbf34eee75d3f9c5a5d68a669e39",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xdff6aa48a1e69db8fbe6970558cac25e20477f13",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xe0b7fc12b6829880aaade5b33c92eb3b592e3f15",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xe0ce67de347cba83382e9f1eb8d25980e5be0061",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xe0e0e6141a7b56bb653c41cbd0db62e4f6d73827",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xe13e7572cffbdca422a00babb593a80a6b3dc202",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xe2f6ef3b96348de51667d3cb924fdc1a25696e10",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xe44226b97648ba96ae416d676c3449c3df9cd2b4",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xe53f35ccf63bb37a3bb0ac3b7f89808077a78eae",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xe6275174f3d5d2ae08679cce87045fb1552d4782",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xe6dcfdfa7667a6856d929e0ef980a22e2420c0ad",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xe92c558ff019cc87c7bf3aa5ee9854708d0d6739",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xea149754c26c0de23496f76b4a14baa20ed58179",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xec77093521fcddab3d39d4d6634df70e530f2e33",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xecd12a63e0097208b271d58010a85603ff6888b1",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xed9e4963d0bf5344adc177c4c69748198bfa9370",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xf04e0472dede867aba7c91038ec4755735605540",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xf2b3825012d5b9eb1aafc851825a06e20ef40633",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xf30ea66456556c86568c4d4ff3f96d460b6db8d7",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xf3f6ec386b5ba685a6ce23c099deef8603a57f79",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xf4680c0a183f7f0f6a5bb060550140688bc41042",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xf5456d2155a90dbf1ae3e4fa60eb79045de6bdd6",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xf59767c0ec69400fe087ae11ac80ae747459bf8b",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xf5bb870769c4a1d581bd3e8f0ae670617a3a286e",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xf6fc2a2c0f2a9bf99a45a9372794ef96369e046c",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xf7046bd722dbf743a9a846d30da976ebefb1a92c",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xf7a622b39321e68f4e52fd55d41f0304f506f533",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xf8549f43f64cc4d6b624ac76f844aa6511200db6",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xf85ca9c52ed6f75ea58f82d3ea5633dfc063f930",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xf8f8a91a4a066f9b6fe0873b19b2105aff3b2835",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xfa27b12c7d70d179a17a99555880b243f0c69a18",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xfa8cbffae27ea6ab5bf5c397aa742839eabeb83e",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xfac747a91a1915074848334c37286b0d0fd6424a",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xfba5c049896285f2bd21063bfe2206d13a952fb4",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xfc744af6ddfb4e853d7c8fa4a727c2a250856278",
+    "usdSpent": 4.252064946757413,
+    "txs": "https://polygonscan.com/tx/0x1dc2ed60e387344296fe4aad059c260cc69350451fb4a4de2b5b3d9847c21058"
+  },
+  {
+    "buyer_address": "0xff9dfb14dcdace65493bacf56908673c8bd1ba9b",
+    "usdSpent": 4.904428642598339,
+    "txs": "https://polygonscan.com/tx/0x07933d578c74b178ea277a8897eb4718e0bef429f12151ac9d3e04edac3a0511"
+  },
+  {
+    "buyer_address": "0xffcd48291de1fc439200ad4574f5e5c8d0bbab13",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x08ede5c20c6cb3b5f84f918322126ab207ac6cd0",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x260f900b5e6c7cc367b35165ea71a924e1bd87f0",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x2c5cba7b2ec6c634e9f5e557cfcc5c63279c5439",
+    "usdSpent": 17.067604058279244,
+    "txs": "https://polygonscan.com/tx/0x8cd22dfe3755349fff418ea7efb4fa2bfeb21531a39a7194d4072dfb4284aea3"
+  },
+  {
+    "buyer_address": "0x4317036d2cb249e3e4b847164674b7d27c33442b",
+    "usdSpent": 8.045412759812832,
+    "txs": "https://polygonscan.com/tx/0xa8b59eb255f6967004546cc7aebdb19e2558b232777bd8267879384572b59101"
+  },
+  {
+    "buyer_address": "0x5efd0bfe237f37cf4180db3f79ad10730fd67fb8",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x8e0861c8a32a572207657c69245cbcf8a4e782ca",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x975eb9c974cd6c586f4c8d1e96b5b8940652f492",
+    "usdSpent": 19.971232022744033,
+    "txs": "https://polygonscan.com/tx/0x1426b56cfd63860dc097462b840ad5d4ca7b55a798c5a67b617987bb35853e8c"
+  },
+  {
+    "buyer_address": "0x9937e3e274be96a624d7cd00f384eb71c741dd1b",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xab05fe7f1dee4cdb5640d79fe847ef80204451f1",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xb1293afcd282e193299295e7095b02d4927f90a9",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xbb1dc2f28e6706c25ad30077ca0062ce1395ee07",
+    "usdSpent": 4.17237272906508,
+    "txs": "https://polygonscan.com/tx/0x913fd2418e663c5347aa1339f47be71e0e7bb9e32db42fde3d1bce870765becb"
+  },
+  {
+    "buyer_address": "0xc33f5d20c5252f0454867ff13981bbd6657eb079",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xc7eb81d251acd8f53fd16be2d64ab09d03d8c600",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xcc2621f8a1974d50631c85922f2b921867a397e1",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xdd730eca74f05e2dc91af6a78944909a5a081123",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xe142eb56c6768fff63277472cdc61f4a28a9264e",
+    "usdSpent": 12.09099923211824,
+    "txs": "https://polygonscan.com/tx/0xcaa0b98461a564c4ab86b8ea8a190cd389d03e44cf8e110d400789376d41ae99"
+  },
+  {
+    "buyer_address": "0xe3ede2c3ed758346ca4d002d54e146f97e71bb4a",
+    "usdSpent": 14.354083166017958,
+    "txs": "https://polygonscan.com/tx/0x645d0419a37fcfd6647b385ffb06b617073abc5fdc9725cc2816d6ac7a3307f3"
+  },
+  {
+    "buyer_address": "0xe6148f7361893c46b5d805e104879568e717c2a3",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xfbdc406d68386bf3e8b9221382cfab0f9449d78f",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xfdd23077c002fe2a5a05040a2f8cb4514ae6a78a",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x2f39a836fcb04ea99564b39f27b4377ee606ff4f",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x813237fdb0c5f046575c6cd4650077923c8e4039",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0x9780f27913b1affd8a51a32c1d435f74c3dbd982",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xb28c6aacd545296404c5095e2e1f7cd82acadd7c",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xc5d137ff97fd0f918e280ee34c2d815c725a46e1",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xfd814c2b2f6947328cae95a369d30aecb8bbad7c",
+    "usdSpent": 0,
+    "txs": ""
+  },
+  {
+    "buyer_address": "0xff576646377f106fcdbc875494709a01ddf6653d",
+    "usdSpent": 4.169883516037002,
+    "txs": "https://polygonscan.com/tx/0xaba1802b225cbcd0807609ea00f9e14c9048b3ddd4948b8351669c0eff4b29ba"
+  },
+  {
+    "buyer_address": "0x0e63d633af0db639f7ae85b2c0011fee96fba71a",
+    "usdSpent": 3.958393237969796,
+    "txs": "https://polygonscan.com/tx/0x057bf09dbca2bcbef549fb55ae9a1fd6583d6a20ca1e510f289a689533e8c23b"
+  },
+  {
+    "buyer_address": "0x05d460310a2d785d0bd5b586c8f6402e70366fae",
+    "usdSpent": 17.527273664470066,
+    "txs": "https://polygonscan.com/tx/0xf991f6967ab8b62446cfd9459cbca293dedde7c30dc0f3688b64c9a2e791f0b7 , https://polygonscan.com/tx/0x93ca99f39766e278d5f562462e2ec6df2a85721a3fe15268bec0312e649ff2b3 , https://polygonscan.com/tx/0x50f8a9d8bdc2461400dc9b4ecffd48f39fcb1555caa3ae807a33b75094a902a3"
+  },
+  {
+    "buyer_address": "0x336685bb3a96e13b77e909d7c52e8afcff1e859e",
+    "usdSpent": 1.4091369808404564,
+    "txs": "https://polygonscan.com/tx/0x7781786cf62871a3bca8a3017df7a14cec85678c8d7c74baba64babd891eb6da"
+  },
+  {
+    "buyer_address": "0x5cecdcf8a2f107d5e69326993ad6d56f1dafa1b9",
+    "usdSpent": 15.087727354246717,
+    "txs": "https://polygonscan.com/tx/0x83a144e65f3f861005bee2223b817355d2a5a494fb9ab98a03f8b72811b86bb4"
+  },
+  {
+    "buyer_address": "0xb84ca8793707fed801bf15cadc72e7d7e0843dfd",
+    "usdSpent": 16.679533206214632,
+    "txs": "https://polygonscan.com/tx/0x41bf90902377a8e6a7432f34fe076914299cdb1485e76e6d372145b9f80d4add"
+  },
+  {
+    "buyer_address": "0x6d873a14a470dd969d7c76a2e088169ab2a1d7ae",
+    "usdSpent": 20.033405732684948,
+    "txs": "https://polygonscan.com/tx/0xdabfd6fe8387d1dc4f49663b8dd8c053b9d9824b38b140db5bff755f6306a40f"
+  },
+  {
+    "buyer_address": "0x21b8892cd610420e35d64a191141f32d3b1bcd3c",
+    "usdSpent": 2.689272213365867,
+    "txs": "https://polygonscan.com/tx/0x93df50efcb485764cd72a22d020946830db652a2617ade7b560713e966bf6b52"
+  },
+  {
+    "buyer_address": "0xd6dc34d95fda8d3a4edb3c90f2975a399fa1fb45",
+    "usdSpent": 2.2736870844261436,
+    "txs": "https://polygonscan.com/tx/0x73af9b9157d8a74422e7828517e305af03cf63e1802351ec2b5f1f2ac5c96270"
+  },
+  {
+    "buyer_address": "0xff3327cc139449fa111ad87351bb300e9cc7607c",
+    "usdSpent": 6.783100306179081,
+    "txs": "https://polygonscan.com/tx/0x8a83a78e902a7a32a4980816d1b7aacc1705062c5be50869a2d8a2fc32502946"
+  },
+  {
+    "buyer_address": "0x6bf066e150e25be0f3964c4f28a30861f093e10c",
+    "usdSpent": 4.748339856317899,
+    "txs": "https://polygonscan.com/tx/0x6c3fd85f0eaa16686f27070001ea6e11a698b41c1f20b8bb96f9c1fe00518a7f"
+  },
+  {
+    "buyer_address": "0xc939519869c946e4bdca8fd0b6459048c4aebae2",
+    "usdSpent": 4.959335868956661,
+    "txs": "https://polygonscan.com/tx/0xe8eff16475d0debcc198f7392241a26d97a5ac5cadbaff11620151ac63f6b22b"
+  },
+  {
+    "buyer_address": "0xc671140d742e315833d7a1876f770ff8057b843d",
+    "usdSpent": 5.821028320480964,
+    "txs": "https://polygonscan.com/tx/0x7a9ebfff68f2e231be190abeefe9f6e1c4770397d394136406bf70954163d830"
+  },
+  {
+    "buyer_address": "0x2a8c613eee8c97d1d33c36ed87e75abf44869627",
+    "usdSpent": 2.934937766523291,
+    "txs": "https://polygonscan.com/tx/0xdb55cf3c8f6735ee1082ffd29bac9e7f2a05cdf41e434158dd733cd9f3212ae0"
+  },
+  {
+    "buyer_address": "0xe32728ff6b97d82a99bc4b34f4b59a9c00308886",
+    "usdSpent": 7.980493220302609,
+    "txs": "https://polygonscan.com/tx/0x0e887b1d438d0190e9dec562ec743dcac42ca2847e236326ca3c02fe69c95185"
+  },
+  {
+    "buyer_address": "0xb133f049b38b2431a872329a31c856f571e32095",
+    "usdSpent": 2.6601644067675365,
+    "txs": "https://polygonscan.com/tx/0xb5fe335785f7f514f58dff23e0528e90b00805c3fbdbc924fa2c68770784ea2c"
+  },
+  {
+    "buyer_address": "0x49b3b19330cce9e910446a5be9cac5027aeb54bc",
+    "usdSpent": 5.320328813535073,
+    "txs": "https://polygonscan.com/tx/0x1bf59b9f30126e8941d677a8e316223ec9b99999f58c526e11434829e65d8d11 , https://polygonscan.com/tx/0x681c89835dff4bb2f43cd1aa71c9a92341659a198f2fd2373d9894d0c8b26e25"
+  },
+  {
+    "buyer_address": "0x54bb240bde7a71cacb6f104d965fcbd4cc48563c",
+    "usdSpent": 5.0605183409020915,
+    "txs": "https://polygonscan.com/tx/0x39f80014a668ae1b730f154b03cfada38dce972910507b65a540eca2938c1437"
+  },
+  {
+    "buyer_address": "0xfe2d424af0df49bb3316cb2e9f574b0d09cf98ad",
+    "usdSpent": 2.5302591704510458,
+    "txs": "https://polygonscan.com/tx/0x4dc81341a339f7ee6d7465a2a733d8c21fb1b96ec32712baccf95bd8191ca4aa"
+  },
+  {
+    "buyer_address": "0x7d6516125c29eb0cd75b2652be7bc344c04fc085",
+    "usdSpent": 4.348354607899479,
+    "txs": "https://polygonscan.com/tx/0x973f27dce82aafee2212cc20baf023511684c328d01bd814de7566f2617e9a2a"
+  },
+  {
+    "buyer_address": "0xc97eb62fb7ba85b608ec9a80e103330ed15b560e",
+    "usdSpent": 4.252064946757413,
+    "txs": "https://polygonscan.com/tx/0xe2cf7c67b7c0401b871b0ab8a2bacc5e9e88727837f0650df1fd6f4ec9b492a3"
+  },
+  {
+    "buyer_address": "0xcfceaa31020333756bb66f9842427efa32f668e0",
+    "usdSpent": 4.252064946757413,
+    "txs": "https://polygonscan.com/tx/0x8af83a4b27dea3855b814d8ea8d2c837962b9d29b3e069421bdcf804c7ed8ef1"
+  },
+  {
+    "buyer_address": "0x55fd9ab823d5c28128818da3d2a2d144244406b2",
+    "usdSpent": 4.252064946757413,
+    "txs": "https://polygonscan.com/tx/0x57b42260a1e8406ef4e983b3e8680d65c5fb78b2dc2846c46cd1fed44bcf1528"
+  }
+]

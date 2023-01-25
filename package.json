@@ -7,7 +7,7 @@
   },
   "type": "module",
   "scripts": {
-    "private-sale-lists": "node scripts/privateSaleLists.js"
+    "privateSaleScript": "node scripts/privateSaleLists.js"
   },
   "repository": {
     "type": "git",
@@ -18,10 +18,13 @@
   "license": "MIT",
   "homepage": "https://github.com/antho31/bufalo-nft-skulls",
   "dependencies": {
+    "@json2csv/plainjs": "^6.1.2",
     "@openzeppelin/contracts": "^4.8.0",
     "alchemy-sdk": "^2.2.5",
     "dotenv": "^16.0.0",
     "solc": "^0.8.13",
-    "superagent": "^8.0.8"
+    "superagent": "^8.0.8",
+    "superagent-throttle": "^1.0.1",
+    "web3": "^1.8.1"
   }
 }

@@ -1,14 +1,37 @@
 import * as dotenv from 'dotenv'
-import fs from 'fs'
-import { Alchemy, Network } from 'alchemy-sdk'
-import superagant from 'superagent'
 
+import { Alchemy, Network } from 'alchemy-sdk'
+import { Parser } from '@json2csv/plainjs'
+import fs from 'fs'
+import superagent from 'superagent'
+import Throttle from 'superagent-throttle'
+import Web3 from 'web3'
+
+import NFTReleasesCollection from '../data/inputs/previous-collections/opensea-nftreleases.js'
 import previousCollections from '../data/inputs/previous-collections/index.js'
 import sellersAddresses from '../data/inputs/sellers-addresses.js'
 import toAddManuallyAddresses from '../data/inputs/toadd-manually-addresses.js'
 
 dotenv.config()
-const { ALCHEMY_API_KEY } = process.env
+const { ALCHEMY_API_KEY, NFT_PORT_API_KEY } = process.env
+
+const coingeckoThrottle = new Throttle({
+  active: true, // set false to pause queue
+  rate: 10, // how many requests can be sent every `ratePer`
+  ratePer: 1000 * 60, // number of ms in which `rate` requests may be sent
+  concurrent: 1 // how many requests can be sent concurrently
+})
+
+const nftPortThrottle = new Throttle({
+  active: true, // set false to pause queue
+  rate: 1, // how many requests can be sent every `ratePer`
+  ratePer: 1000, // number of ms in which `rate` requests may be sent
+  concurrent: 3 // how many requests can be sent concurrently
+})
+
+const WETH_Polygon_Address = '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619'
+const ethPrices = {}
+const manaPrices = {}
 
 const allowlistsData = {}
 
@@ -19,11 +42,6 @@ function initAllowlistsDataForAddr(addr) {
       collections: { totalOwned: 0, tokens: [] }
     }
   }
-}
-
-function addAddressesFromManualList() {
-  toAddManuallyAddresses.forEach(initAllowlistsDataForAddr)
-  console.log('Add addresses from a specific list : DONE')
 }
 
 async function addAddressesFromCollectionsOwners() {
@@ -41,7 +59,7 @@ async function addAddressesFromCollectionsOwners() {
 
     const { owners } = tokenId
       ? await alchemy.nft.getOwnersForNft(contractAddress, tokenId)
-      : await alchemy.nft.getOwnersForNft(contractAddress)
+      : await alchemy.nft.getOwnersForContract(contractAddress)
 
     owners.forEach((addr) => {
       initAllowlistsDataForAddr(addr)
@@ -53,66 +71,241 @@ async function addAddressesFromCollectionsOwners() {
       allowlistsData[addr]['collections']['totalOwned']++
     })
   }
-  console.log('Add addresses from previous collections owners : DONE')
 }
 
-async function addAddressesFromBuyers() {
-  for (const sellerAddress of sellersAddresses) {
-    for (const network of [Network.ETH_MAINNET, Network.MATIC_MAINNET]) {
-      const config = {
-        apiKey: ALCHEMY_API_KEY,
-        network
+async function retrieveNftMarketplaceSales() {
+  // Note : https://api.nftport.xyz/v0/transactions/accounts/${addr}' do not include all sales on Polygon...
+  // We have to check all NFT transfers from Polygon and detect txs with WETH transfers
+
+  for (let { tokenId, name, contractAddress, chain } of NFTReleasesCollection) {
+    if (chain === 'ETHEREUM') {
+      const {
+        body: { transactions }
+      } = await superagent(
+        `https://api.nftport.xyz/v0/transactions/nfts/${contractAddress}/${tokenId}?chain=ethereum&page_size=50&type=sale`
+      )
+        .set('Authorization', NFT_PORT_API_KEY)
+        .use(nftPortThrottle.plugin())
+
+      for (let {
+        buyer_address,
+        seller_address,
+        quantity,
+        price_details: { asset_type, price_usd },
+        transaction_hash,
+        transaction_date
+      } of transactions) {
+        if (sellersAddresses.includes(seller_address)) {
+          initAllowlistsDataForAddr(buyer_address)
+          allowlistsData[buyer_address]['sales']['usdSpent'] += price_usd
+          allowlistsData[buyer_address]['sales']['tokens'].push({
+            tokenId,
+            name,
+            contractAddress,
+            chain,
+            price_usd,
+            transaction_hash,
+            transaction_date
+          })
+        }
       }
-      const alchemy = new Alchemy(config)
-      const nftSales = await alchemy.nft.getNftSales({
-        sellerAddress
-      })
+    } else if (chain === 'MATIC') {
+      const {
+        body: { transactions }
+      } = await superagent(
+        `https://api.nftport.xyz/v0/transactions/nfts/${contractAddress}/${tokenId}?chain=polygon&page_size=50&type=transfer`
+      )
+        .set('Authorization', NFT_PORT_API_KEY)
+        .use(nftPortThrottle.plugin())
 
-      console.log('NFT sales ', config.network, nftSales)
+      for (let {
+        transfer_from,
+        transfer_to,
+        quantity,
+        transaction_hash,
+        block_number,
+        transaction_date
+      } of transactions) {
+        if (sellersAddresses.includes(transfer_from)) {
+          const config = {
+            apiKey: ALCHEMY_API_KEY,
+            network: Network.MATIC_MAINNET
+          }
+          const alchemy = new Alchemy(config)
+
+          // @todo get transfer fees too (from 0x 0xf715beb51ec8f63317d66f491e37e7bb048fcc2d)
+          const { transfers } = await alchemy.core.getAssetTransfers({
+            fromBlock: block_number,
+            toBlock: block_number,
+            fromAddress: transfer_to,
+            toAddress: transfer_from,
+            contractAddress: WETH_Polygon_Address,
+            excludeZeroValue: true,
+            category: ['erc20']
+          })
+
+          for (const { value } of transfers) {
+            // from YYYY-MM-DD to DD-MM-YYYY
+            let date = new Date(transaction_date)
+            date = `${date.getDate()}-${
+              date.getMonth() + 1
+            }-${date.getFullYear()}`
+
+            let price_usd
+            if (!ethPrices[date]) {
+              const {
+                body: {
+                  market_data: {
+                    current_price: { usd }
+                  }
+                }
+              } = await superagent(
+                `https://api.coingecko.com/api/v3/coins/ethereum/history?date=${date}&localization=false`
+              ).use(coingeckoThrottle.plugin())
+              ethPrices[date] = usd
+              price_usd = usd * value
+            } else {
+              price_usd = ethPrices[date] * value
+            }
+
+            initAllowlistsDataForAddr(transfer_to)
+            allowlistsData[transfer_to]['sales']['usdSpent'] += price_usd
+            allowlistsData[transfer_to]['sales']['tokens'].push({
+              tokenId,
+              name,
+              contractAddress,
+              chain,
+              price_usd,
+              transaction_hash,
+              transaction_date
+            })
+          }
+        }
+      }
     }
-
-    /*
-  async function getPrice(coingeckoCoin, date) {
-    return superagent(
-      `https://api.coingecko.com/api/v3/coins/${coingeckoCoin}/history?date=${date}&localization=false`
-    )
   }
+}
 
-  // decentraland sales  https://nft-api.decentraland.org/v1/sales?seller=0x505d688a38b8cb9190b4f671d98a37a784e92c1f
-  // coingecko coin : "decentraland"
-  // open sea sales https://docs.alchemy.com/reference/getnftsales
-  */
+async function retrieveManaSales() {
+  for (const sellerAddress of sellersAddresses) {
+    const {
+      body: { data }
+    } = await superagent(
+      `https://nft-api.decentraland.org/v1/sales?seller=${sellerAddress}&first=1000`
+    )
+
+    for (const {
+      buyer,
+      tokenId,
+      contractAddress,
+      price,
+      timestamp,
+      txHash: transaction_hash,
+      network
+    } of data) {
+      const paidInMana = Number(Web3.utils.fromWei(price, 'ether'))
+
+      // from YYYY-MM-DD to DD-MM-YYYY
+      let date = new Date(timestamp)
+      date = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+
+      // note we include DCL fees (not received by seller)
+      let price_usd
+      if (!manaPrices[date]) {
+        const {
+          body: {
+            market_data: {
+              current_price: { usd }
+            }
+          }
+        } = await superagent(
+          `https://api.coingecko.com/api/v3/coins/decentraland/history?date=${date}&localization=false`
+        ).use(coingeckoThrottle.plugin())
+        manaPrices[date] = usd
+        price_usd = usd * paidInMana
+      } else {
+        price_usd = manaPrices[date] * paidInMana
+      }
+
+      const collection = previousCollections.find(
+        (c) => c.contractAddress.toLowerCase() === contractAddress
+      )
+      const name = collection ? collection.name : '(DCL item)'
+      const chain = network
+      const transaction_date = date
+
+      initAllowlistsDataForAddr(buyer)
+      allowlistsData[buyer]['sales']['usdSpent'] += price_usd
+      allowlistsData[buyer]['sales']['tokens'].push({
+        tokenId,
+        name,
+        contractAddress,
+        chain,
+        price_usd,
+        transaction_hash,
+        transaction_date
+      })
+    }
   }
 }
 
 async function main() {
   try {
-    //  await addAddressesFromCollectionsOwners()
+    toAddManuallyAddresses.forEach(initAllowlistsDataForAddr)
+    console.log('Add addresses from a specific list : DONE')
 
-    await addAddressesFromBuyers()
+    await addAddressesFromCollectionsOwners()
+    console.log('Add addresses from token scraping : DONE')
 
-    addAddressesFromManualList()
+    await retrieveNftMarketplaceSales()
+    console.log('Add addresses & compute sales values from Opensea tx : DONE')
 
-    /*
-  fs.writeFileSync(
-    './data/results/wl-private-sale-addresses.json',
-    '[' + Array.from(whitelistAddresses).toString() + ']'
-  )
+    await retrieveManaSales()
+    console.log('Add addresses & compute sales values from DCL : DONE')
 
-  fs.writeFileSync(
-    './data/results/wl-private-sale-data.json',
-    JSON.stringify({
-      whitelistAddresses,
-      wlInfos,
-      nbAdrUniq: whitelistAddresses.size
+    let totalSales = []
+    for (const buyer_address in allowlistsData) {
+      const {
+        sales: { usdSpent, tokens }
+      } = allowlistsData[buyer_address]
+      const txs = tokens.map(
+        (t) => `https://polygonscan.com/tx/${t.transaction_hash}`
+      )
+      totalSales.push({ buyer_address, usdSpent, txs: txs.join(' , ') })
+    }
+    totalSales.sort(function (a, b) {
+      return a.usdSpent - b.usdSpent
     })
-  )
+    const parser = new Parser()
+    const csv = parser.parse(totalSales)
 
-  console.log(
-    'Data for the private sale (addresses whitelisted) updated, ',
-    'check data/results/wl-private-sale-*.json files'
-  )
-  */
+    const upto100UsdSaleIndex = totalSales.findIndex((e) => e.usdSpent >= 100)
+    const superfansAllowlist = Object.keys(
+      totalSales.slice(upto100UsdSaleIndex)
+    )
+
+    const communityAllowlist = Object.keys(allowlistsData)
+
+    fs.writeFileSync(
+      './data/results/superfansAllowlist.json',
+      JSON.stringify(superfansAllowlist, null, 2)
+    )
+
+    fs.writeFileSync(
+      './data/results/communityAllowlist.json',
+      JSON.stringify(communityAllowlist, null, 2)
+    )
+
+    fs.writeFileSync('./data/results/totalSales.csv', csv)
+
+    fs.writeFileSync(
+      './data/results/privateSaleResults.json',
+      JSON.stringify(allowlistsData, null, 2)
+    )
+
+    console.log(
+      'Data results in the data/results folder, checkout communityAllowlist.json, totalSales.csv and privateSaleResults.json files'
+    )
   } catch (e) {
     console.error('Main error : ', e)
   }
