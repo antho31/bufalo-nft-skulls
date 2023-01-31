@@ -5,9 +5,12 @@
   "directories": {
     "test": "test"
   },
+  "engines": {
+    "node": ">=17.5.0"
+  },
   "type": "module",
   "scripts": {
-    "privateSaleScript": "node scripts/privateSaleLists.js"
+    "privateSaleScript": "node scripts/privateSaleLists.js && node scripts/merkleLists.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +25,8 @@
     "@openzeppelin/contracts": "^4.8.0",
     "alchemy-sdk": "^2.2.5",
     "dotenv": "^16.0.0",
+    "keccak256": "^1.0.6",
+    "merkletreejs": "^0.3.9",
     "solc": "^0.8.13",
     "superagent": "^8.0.8",
     "superagent-throttle": "^1.0.1",

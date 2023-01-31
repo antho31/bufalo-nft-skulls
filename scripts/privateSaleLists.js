@@ -1,8 +1,9 @@
 import * as dotenv from 'dotenv'
 
 import { Alchemy, Network } from 'alchemy-sdk'
-import { Parser } from '@json2csv/plainjs'
 import fs from 'fs'
+import { Parser } from '@json2csv/plainjs'
+
 import superagent from 'superagent'
 import Throttle from 'superagent-throttle'
 import Web3 from 'web3'
@@ -15,25 +16,27 @@ import toAddManuallyAddresses from '../data/inputs/toadd-manually-addresses.js'
 dotenv.config()
 const { ALCHEMY_API_KEY, NFT_PORT_API_KEY } = process.env
 
-const coingeckoThrottle = new Throttle({
-  active: true, // set false to pause queue
-  rate: 10, // how many requests can be sent every `ratePer`
-  ratePer: 1000 * 60, // number of ms in which `rate` requests may be sent
-  concurrent: 1 // how many requests can be sent concurrently
-})
-
-const nftPortThrottle = new Throttle({
-  active: true, // set false to pause queue
-  rate: 1, // how many requests can be sent every `ratePer`
-  ratePer: 1000, // number of ms in which `rate` requests may be sent
-  concurrent: 3 // how many requests can be sent concurrently
-})
-
 const WETH_Polygon_Address = '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619'
+const TOTAL_USD_FANS_THRESOLD = 20
+
 const ethPrices = {}
 const manaPrices = {}
 
 const allowlistsData = {}
+
+const coingeckoThrottle = new Throttle({
+  active: true,
+  rate: 10,
+  ratePer: 1000 * 60,
+  concurrent: 1
+})
+
+const nftPortThrottle = new Throttle({
+  active: true,
+  rate: 1,
+  ratePer: 1000,
+  concurrent: 3
+})
 
 function initAllowlistsDataForAddr(addr) {
   if (!allowlistsData[addr]) {
@@ -64,9 +67,10 @@ async function addAddressesFromCollectionsOwners() {
     owners.forEach((addr) => {
       initAllowlistsDataForAddr(addr)
       allowlistsData[addr]['collections']['tokens'].push({
-        chain,
+        tokenId,
         name,
-        tokenId
+        contractAddress,
+        chain
       })
       allowlistsData[addr]['collections']['totalOwned']++
     })
@@ -90,8 +94,7 @@ async function retrieveNftMarketplaceSales() {
       for (let {
         buyer_address,
         seller_address,
-        quantity,
-        price_details: { asset_type, price_usd },
+        price_details: { price_usd },
         transaction_hash,
         transaction_date
       } of transactions) {
@@ -121,7 +124,6 @@ async function retrieveNftMarketplaceSales() {
       for (let {
         transfer_from,
         transfer_to,
-        quantity,
         transaction_hash,
         block_number,
         transaction_date
@@ -133,7 +135,8 @@ async function retrieveNftMarketplaceSales() {
           }
           const alchemy = new Alchemy(config)
 
-          // @todo get transfer fees too (from 0x 0xf715beb51ec8f63317d66f491e37e7bb048fcc2d)
+          // We might count later transfer fees too ... (from 0x 0xf715beb51ec8f63317d66f491e37e7bb048fcc2d)
+          // For now, we check from sellersAddresses only
           const { transfers } = await alchemy.core.getAssetTransfers({
             fromBlock: block_number,
             toBlock: block_number,
@@ -145,7 +148,7 @@ async function retrieveNftMarketplaceSales() {
           })
 
           for (const { value } of transfers) {
-            // from YYYY-MM-DD to DD-MM-YYYY
+            // Format from YYYY-MM-DD to DD-MM-YYYY for Coingecko request
             let date = new Date(transaction_date)
             date = `${date.getDate()}-${
               date.getMonth() + 1
@@ -205,11 +208,12 @@ async function retrieveManaSales() {
     } of data) {
       const paidInMana = Number(Web3.utils.fromWei(price, 'ether'))
 
-      // from YYYY-MM-DD to DD-MM-YYYY
+      // Format from YYYY-MM-DD to DD-MM-YYYY for Coingecko request
       let date = new Date(timestamp)
       date = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
 
-      // note we include DCL fees (not received by seller)
+      // We include DCL fees (not received by seller)
+      // We might exclude the fees amounts later...
       let price_usd
       if (!manaPrices[date]) {
         const {
@@ -258,56 +262,66 @@ async function main() {
     console.log('Add addresses from token scraping : DONE')
 
     await retrieveNftMarketplaceSales()
-    console.log('Add addresses & compute sales values from Opensea tx : DONE')
+    console.log('Add addresses & compute sales values from Opensea txs : DONE')
 
     await retrieveManaSales()
     console.log('Add addresses & compute sales values from DCL : DONE')
 
+    if (allowlistsData['0x000000000000000000000000000000000000dead'])
+      delete allowlistsData['0x000000000000000000000000000000000000dead']
+
+    // Let's generate a spreadsheet (CSV) for the sales, ordered by total spending amount
     let totalSales = []
-    for (const buyer_address in allowlistsData) {
+    for (const allowlistedAddress in allowlistsData) {
       const {
         sales: { usdSpent, tokens }
-      } = allowlistsData[buyer_address]
-      const txs = tokens.map(
-        (t) => `https://polygonscan.com/tx/${t.transaction_hash}`
+      } = allowlistsData[allowlistedAddress]
+      const txs = tokens.map((t) =>
+        t.chain === 'MATIC'
+          ? `https://polygonscan.com/tx/${t.transaction_hash}`
+          : `https://etherscan.com/tx/${t.transaction_hash}`
       )
-      totalSales.push({ buyer_address, usdSpent, txs: txs.join(' , ') })
+      totalSales.push({ allowlistedAddress, usdSpent, txs: txs.join(' , ') })
     }
     totalSales.sort(function (a, b) {
-      return a.usdSpent - b.usdSpent
+      return b.usdSpent - a.usdSpent
     })
     const parser = new Parser()
     const csv = parser.parse(totalSales)
 
-    const upto100UsdSaleIndex = totalSales.findIndex((e) => e.usdSpent >= 100)
-    const superfansAllowlist = Object.keys(
-      totalSales.slice(upto100UsdSaleIndex)
+    const upto20UsdSaleIndex = totalSales.findIndex(
+      (e) => e.usdSpent < TOTAL_USD_FANS_THRESOLD
+    )
+    totalSales.splice(upto20UsdSaleIndex)
+    const fansAllowlist = totalSales.map(
+      ({ allowlistedAddress }) => allowlistedAddress
     )
 
     const communityAllowlist = Object.keys(allowlistsData)
 
     fs.writeFileSync(
-      './data/results/superfansAllowlist.json',
-      JSON.stringify(superfansAllowlist, null, 2)
-    )
-
-    fs.writeFileSync(
-      './data/results/communityAllowlist.json',
+      './data/results/allowlists/community.json',
       JSON.stringify(communityAllowlist, null, 2)
     )
 
-    fs.writeFileSync('./data/results/totalSales.csv', csv)
-
     fs.writeFileSync(
-      './data/results/privateSaleResults.json',
+      './data/results/allowlists/fans.json',
+      JSON.stringify(fansAllowlist, null, 2)
+    )
+
+    fs.writeFileSync('./data/results/communityActivity/totalSales.csv', csv)
+
+    allowlistsData['snapshotDate'] = new Date().toJSON()
+    fs.writeFileSync(
+      `./data/results/communityActivity/snapshot.json`,
       JSON.stringify(allowlistsData, null, 2)
     )
 
     console.log(
-      'Data results in the data/results folder, checkout communityAllowlist.json, totalSales.csv and privateSaleResults.json files'
+      '[privateSaleLists] Generated files in the data/results/allowlists and data/results/communityActivity folders'
     )
   } catch (e) {
-    console.error('Main error : ', e)
+    console.error('[privateSaleLists] Main error : ', e)
   }
 }
 

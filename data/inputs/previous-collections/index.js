@@ -5,19 +5,16 @@ export default [
 
   {
     name: 'The Bufalo Charge Emote',
-
     contractAddress: '0xBD1622479260eF17514385dE53EDB587f711bbE2',
     chain: 'MATIC'
   },
   {
     name: 'Bufalo Cowboy Line Dance',
-
     contractAddress: '0x6123758f0Da7df3d61E6f8307eF12e3E9e3DED8E',
     chain: 'MATIC'
   },
   {
     name: 'Bufalo Diamond Set',
-
     contractAddress: '0xcEd8c8A0a7641F91Ad7cF9A065899a97971A41EC',
     chain: 'MATIC'
   },
