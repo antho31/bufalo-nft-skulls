@@ -1,5 +1,5 @@
 // snapshot on January 9, 2023
-export default [
+module.exports = [
   '0x2bd420f22c3d88439cc7713023267e5ead575630', // https://atlanticusmusic.com/nft/0x0a3BAf84427357136Abca676Ab0060A90bf99A79/7
   '0x30d1d0821a37784785f9c3ca04dd3da675291c28', // https://atlanticusmusic.com/nft/0x0a3BAf84427357136Abca676Ab0060A90bf99A79/7
   // excluded 	'0x505d688a38b8cb9190b4f671d98a37a784e92c1f', // https://atlanticusmusic.com/nft/0x0a3BAf84427357136Abca676Ab0060A90bf99A79/7

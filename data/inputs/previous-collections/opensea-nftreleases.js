@@ -1,5 +1,5 @@
 // Got from https://apify.com/dhrumil/opensea-collection-scraper
-export default [
+module.exports = [
   {
     tokenId:
       '36350066171751915763166281007467485449586398269626739187466691384694152364033',

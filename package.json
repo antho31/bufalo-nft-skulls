@@ -8,9 +8,13 @@
   "engines": {
     "node": ">=17.5.0"
   },
-  "type": "module",
   "scripts": {
-    "privateSaleScript": "node scripts/privateSaleLists.js && node scripts/merkleLists.js"
+    "analyze": "slither contracts --solc-remaps @openzeppelin=node_modules/@openzeppelin",
+    "coverage": "npx hardhat coverage",
+    "deploy": "npx hardhat run scripts/deploy.js --network",
+    "privateSaleScript": "node scripts/privateSaleLists.js && node scripts/merkleLists.js",
+    "sizes": "npx hardhat size-contracts",
+    "test": "npx hardhat test"
   },
   "repository": {
     "type": "git",
@@ -21,15 +25,37 @@
   "license": "MIT",
   "homepage": "https://github.com/antho31/bufalo-nft-skulls",
   "dependencies": {
+    "@chainlink/contracts": "^0.5.1",
     "@json2csv/plainjs": "^6.1.2",
     "@openzeppelin/contracts": "^4.8.0",
+    "@thirdweb-dev/contracts": "^3.4.2",
+    "@thirdweb-dev/sdk": "^3.8.2",
     "alchemy-sdk": "^2.2.5",
     "dotenv": "^16.0.0",
     "keccak256": "^1.0.6",
     "merkletreejs": "^0.3.9",
-    "solc": "^0.8.13",
     "superagent": "^8.0.8",
     "superagent-throttle": "^1.0.1",
     "web3": "^1.8.1"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "^1.0.2",
+    "@nomicfoundation/hardhat-toolbox": "^1.0.2",
+    "@nomiclabs/hardhat-ethers": "^2.1.0",
+    "@nomiclabs/hardhat-etherscan": "^3.1.0",
+    "@nomiclabs/hardhat-web3": "^2.0.0",
+    "@openzeppelin/test-helpers": "^0.5.16",
+    "chai": "^4.3.6",
+    "eslint": "^8.23.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "ethers": "^5.7.2",
+    "hardhat": "^2.10.1",
+    "hardhat-contract-sizer": "^2.6.1",
+    "hardhat-gas-reporter": "^1.0.9",
+    "prettier": "^2.7.1",
+    "prettier-plugin-solidity": "^1.0.0-beta.24",
+    "solidity-coverage": "^0.7.21"
   }
 }

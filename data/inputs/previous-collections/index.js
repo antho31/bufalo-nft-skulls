@@ -1,8 +1,12 @@
-import nftReleasesOpenseaCollection from './opensea-nftreleases.js'
+const nftReleasesOpenseaCollection = require('./opensea-nftreleases.js')
 
 export default [
   ...nftReleasesOpenseaCollection,
-
+  {
+    name: 'Bufalo - Pony Up!',
+    contractAddress: '0xa8c3733e25a9F5E1f5F238660701546e70aE3c89',
+    chain: 'MATIC'
+  },
   {
     name: 'The Bufalo Charge Emote',
     contractAddress: '0xBD1622479260eF17514385dE53EDB587f711bbE2',

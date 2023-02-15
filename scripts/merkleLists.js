@@ -1,10 +1,9 @@
-import communityList from '../data/results/allowlists/community.json' assert { type: 'json' }
-import fansList from '../data/results/allowlists/fans.json' assert { type: 'json' }
+const communityList = require('../data/results/allowlists/community.json')
+const fansList = require('../data/results/allowlists/fans.json')
 
-import fs from 'fs'
-import keccak256 from 'keccak256'
-import MerkleTreeJS from 'merkletreejs'
-const { MerkleTree } = MerkleTreeJS
+const fs = require('fs')
+const keccak256 = require('keccak256')
+const { MerkleTree } = require('merkletreejs')
 
 function getMerkleDataFromAllowlistArray(addresses) {
   const leafNodes = addresses.map((addr) =>

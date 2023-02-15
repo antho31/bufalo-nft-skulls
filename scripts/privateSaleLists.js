@@ -1,23 +1,23 @@
-import * as dotenv from 'dotenv'
+require('dotenv').config()
 
-import { Alchemy, Network } from 'alchemy-sdk'
-import fs from 'fs'
-import { Parser } from '@json2csv/plainjs'
+const { Alchemy, Network } = require('alchemy-sdk')
+const fs = require('fs')
+const { Parser } = '@json2csv/plainjs'
 
-import superagent from 'superagent'
-import Throttle from 'superagent-throttle'
-import Web3 from 'web3'
+const superagent = require('superagent')
+const Throttle = require('superagent-throttle')
+const Web3 = require('web3')
 
-import NFTReleasesCollection from '../data/inputs/previous-collections/opensea-nftreleases.js'
-import previousCollections from '../data/inputs/previous-collections/index.js'
-import sellersAddresses from '../data/inputs/sellers-addresses.js'
-import toAddManuallyAddresses from '../data/inputs/toadd-manually-addresses.js'
+const NFTReleasesCollection = require('../data/inputs/previous-collections/opensea-nftreleases.js')
+const previousCollections = require('../data/inputs/previous-collections/index.js')
+const sellersAddresses = require('../data/inputs/sellers-addresses.js')
+const toAddManuallyAddresses = require('../data/inputs/toadd-manually-addresses.js')
 
 dotenv.config()
 const { ALCHEMY_API_KEY, NFT_PORT_API_KEY } = process.env
 
 const WETH_Polygon_Address = '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619'
-const TOTAL_USD_FANS_THRESOLD = 20
+const TOTAL_USD_FANS_THRESOLD = 50
 
 const ethPrices = {}
 const manaPrices = {}
@@ -269,6 +269,8 @@ async function main() {
 
     if (allowlistsData['0x000000000000000000000000000000000000dead'])
       delete allowlistsData['0x000000000000000000000000000000000000dead']
+    if (allowlistsData['0x0000000000000000000000000000000000000000'])
+      delete allowlistsData['0x0000000000000000000000000000000000000000']
 
     // Let's generate a spreadsheet (CSV) for the sales, ordered by total spending amount
     let totalSales = []

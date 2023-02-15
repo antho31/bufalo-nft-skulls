@@ -1,0 +1,16 @@
+{
+  "env": {
+    "mocha": true,
+    "es6": true,
+    "es2021": true,
+    "node": true,
+    "sourceType": "module"
+  },
+  "extends": ["prettier"],
+  "plugins": ["prettier"],
+  "rules": {
+    "no-unused-vars": "warn",
+    "no-undef": "error",
+    "no-console": "off"
+  }
+}
