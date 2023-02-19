@@ -1,957 +1,1662 @@
-const { ethers } = require('hardhat')
-const {
-  //  time,
-  loadFixture
-} = require('@nomicfoundation/hardhat-network-helpers')
-// const { anyValue } = require('@nomicfoundation/hardhat-chai-matchers/withArgs')
-const { expect } = require('chai')
-const {
-  // keccak256, toUtf8Bytes, toUtf8String ,
-  parseEther
-} = require('ethers/lib/utils')
+const { loadFixture } = require("@nomicfoundation/hardhat-network-helpers");
 const {
   constants: { ZERO_ADDRESS }
-} = require('@openzeppelin/test-helpers')
-const { BigNumber } = require('ethers')
+} = require("@openzeppelin/test-helpers");
+const { expect } = require("chai");
+const { BigNumber } = require("ethers");
+const { formatBytes32String, parseEther } = require("ethers/lib/utils");
+const { ethers } = require("hardhat");
 
-describe('DSponsorNFT', function () {
+const { getMerkleDataFromAllowlistArray } = require("../utils/merkle");
+
+const MAX_SUPPLY = 1000;
+const MINT_LIMIT_PER_WALLET = 10;
+
+const BASE_URI = "@TODO-ipfs://base-uri-to-replace/";
+
+describe("BOTV", function () {
   // We define a fixture to reuse the same setup in every test.
   // We use loadFixture to run this setup once, snapshot that state,
   // and reset Hardhat Network to that snapshopt in every test.
   async function initFixture() {
-    const signers = await ethers.getSigners()
+    const signers = await ethers.getSigners();
 
-    const [deployer, controller, treasury, owner1, owner2, user1, user2] =
-      signers
+    const [
+      deployer,
+      treasury,
+      publicUser1,
+      publicUser2,
+      publicUser3,
+      privateUser1,
+      privateUser2,
+      privateUser3,
+      discountUser1,
+      discountUser2,
+      discountPrivateUser
+    ] = signers;
 
-    const ERC20Amount = BigNumber.from('100')
+    const ERC20Amount = BigNumber.from("100");
 
-    const ERC20MockDeployer = await ethers.getContractFactory('ERC20Mock')
-    const ERC20Mock = await ERC20MockDeployer.deploy()
-
-    const ReentrantDeployer = await ethers.getContractFactory('Reentrant')
-    const Reentrant = await ReentrantDeployer.deploy()
-
-    const ERC721MockDeployer = await ethers.getContractFactory('ERC721Mock')
-    const ERC721Mock = await ERC721MockDeployer.deploy()
-
-    let tx
+    const ERC20MockDeployer = await ethers.getContractFactory("ERC20Mock");
+    const ERC20Mock = await ERC20MockDeployer.deploy();
+    let tx;
     for (let { address } of signers) {
-      tx = await ERC20Mock.mint(address, 10 * ERC20Amount)
-      await tx.wait()
+      tx = await ERC20Mock.mint(
+        address,
+        BigNumber.from(ERC20Amount).mul(MINT_LIMIT_PER_WALLET)
+      );
+      await tx.wait();
     }
 
-    const name = 'DSponsorNFT-test'
-    const symbol = 'DNFTTEST'
-    const maxSupply = 5
+    const BASE_FEE = "100000000000000000";
+    const GAS_PRICE_LINK = "1000000000"; // 0.000000001 LINK per gas
+    const vrfCoordinatorV2MockDeployer = await ethers.getContractFactory(
+      "VRFCoordinatorV2Mock"
+    );
+    const vrfCoordinatorV2Mock = await vrfCoordinatorV2MockDeployer.deploy(
+      BASE_FEE,
+      GAS_PRICE_LINK
+    );
+    tx = await vrfCoordinatorV2Mock.createSubscription();
+    const transactionReceipt = await tx.wait(1);
+    const subscriptionId = BigNumber.from(
+      transactionReceipt.events[0].topics[1]
+    );
+    await vrfCoordinatorV2Mock.fundSubscription(
+      subscriptionId,
+      parseEther("7")
+    );
+    const keyHash =
+      "0xd89b2bf150e3b9e13446986e571fb9cab24b13cea0a43ea20a6049a85cc807cc";
 
-    const DSponsorNFTDeployer = await ethers.getContractFactory('DSponsorNFT')
-    const DSponsorNFT = await DSponsorNFTDeployer.deploy(
-      name,
-      symbol,
-      maxSupply,
-      controller.address,
-      treasury.address
-    )
+    const ERC721MockDeployer = await ethers.getContractFactory("ERC721Mock");
+    const AirdropTokensContract1 = await ERC721MockDeployer.deploy(
+      "AirdropTokensContract1",
+      "A1"
+    );
+    const ACOffset1 = 45;
+    tx = await AirdropTokensContract1.mint(
+      deployer.address,
+      ACOffset1,
+      MAX_SUPPLY
+    );
+    await tx.wait();
+    const AirdropTokensContract2 = await ERC721MockDeployer.deploy(
+      "AirdropTokensContract2",
+      "A2"
+    );
+    const ACOffset2 = 105;
+    tx = await AirdropTokensContract2.mint(
+      deployer.address,
+      ACOffset2,
+      MAX_SUPPLY
+    );
+    await tx.wait();
+    const AirdropTokensContract3 = await ERC721MockDeployer.deploy(
+      "AirdropTokensContract3",
+      "A3"
+    );
+    const ACOffset3 = 0;
+    tx = await AirdropTokensContract3.mint(
+      deployer.address,
+      ACOffset3,
+      MAX_SUPPLY
+    );
+    await tx.wait();
 
-    tx = await DSponsorNFT.connect(controller).setPrice(
+    const wearablesContracts = [
+      AirdropTokensContract1,
+      AirdropTokensContract2,
+      AirdropTokensContract3
+    ];
+    const wearablesAddresses = wearablesContracts.map((c) => c.address);
+    const wearablesTokenIdsOffset = [ACOffset1, ACOffset2, ACOffset3];
+
+    const discountListMerkle = getMerkleDataFromAllowlistArray([
+      discountUser1.address,
+      discountUser2.address,
+      discountPrivateUser.address
+    ]);
+    const discountListMerkleRoot = discountListMerkle.root;
+    const discountMerkleProof = (addr) =>
+      discountListMerkle[addr] ? discountListMerkle[addr] : [];
+
+    const privateListMerkle = getMerkleDataFromAllowlistArray([
+      privateUser1.address,
+      privateUser2.address,
+      privateUser3.address,
+      discountPrivateUser.address
+    ]);
+    const privateListMerkleProof = (addr) =>
+      privateListMerkle[addr] ? privateListMerkle[addr] : [];
+    const privateListMerkleRoot = privateListMerkle.root;
+
+    const BOTVDeployer = await ethers.getContractFactory("BOTV");
+    const BOTV = await BOTVDeployer.deploy(
       ERC20Mock.address,
-      true,
-      ERC20Amount
-    )
-    await tx.wait()
+      ERC20Amount,
+      treasury.address,
+      vrfCoordinatorV2Mock.address,
+      wearablesAddresses,
+      wearablesTokenIdsOffset,
+      discountListMerkleRoot,
+      privateListMerkleRoot
+    );
 
-    tx = await ERC20Mock.approve(DSponsorNFT.address, ERC20Amount * 2)
-    await tx.wait()
+    for (let wearableContract of wearablesContracts) {
+      tx = await wearableContract.setApprovalForAll(BOTV.address, true);
+      await tx.wait();
+    }
 
-    tx = await DSponsorNFT.payAndMint(ERC20Mock.address, owner1.address, '')
-    await tx.wait()
+    tx = await ERC20Mock.connect(publicUser1).approve(
+      BOTV.address,
+      BigNumber.from(ERC20Amount).mul(MAX_SUPPLY)
+    );
+    await tx.wait();
 
-    const DSponsorDeployer = await ethers.getContractFactory('DSponsor')
-    const DSponsorContract = await DSponsorDeployer.deploy(
-      ERC721Mock.address,
-      'rulesURI',
-      controller.address
-    )
+    await vrfCoordinatorV2Mock.addConsumer(subscriptionId, BOTV.address);
 
     return {
       deployer,
-      controller,
       treasury,
-      owner1,
-      owner2,
-      user1,
-      user2,
+      publicUser1,
+      publicUser2,
+      publicUser3,
+      privateUser1,
+      privateUser2,
+      privateUser3,
+      discountUser1,
+      discountUser2,
+      discountPrivateUser,
 
       ERC20Amount,
 
-      name,
-      symbol,
-      maxSupply,
-      tokenId: 0,
-
+      ERC20MockDeployer,
       ERC20Mock,
-      ERC721Mock,
 
-      DSponsorNFT,
-      DSponsorNFTDeployer,
+      vrfCoordinatorV2MockDeployer,
+      vrfCoordinatorV2Mock,
+      subscriptionId,
+      keyHash,
 
-      DSponsorContract,
-      Reentrant
-    }
+      wearablesContracts,
+      wearablesAddresses,
+      wearablesTokenIdsOffset,
+
+      discountListMerkle,
+      discountListMerkleRoot,
+      discountMerkleProof,
+      privateListMerkle,
+      privateListMerkleRoot,
+      privateListMerkleProof,
+
+      BOTV,
+      BOTVDeployer
+    };
   }
 
-  describe('Deployment', async function () {
-    it('Should support ERC2981 and ERC721 interfaces', async function () {
-      const { DSponsorNFT } = await loadFixture(initFixture)
+  async function activeSaleFixture() {
+    const { BOTV, ...others } = await initFixture();
 
-      const supportsDummy = await DSponsorNFT.supportsInterface('0x80ac58cf')
+    let tx = await BOTV.setPublicSale(true);
+    await tx.wait();
 
-      // interfaceID == 0x4e2312e0 -  ERC-1155 `ERC1155TokenReceiver` support (i.e. `bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)")) ^ bytes4(keccak256("onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)"))`).
-      const supportsERC1555 = await DSponsorNFT.supportsInterface('0x4e2312e0')
+    return { BOTV, ...others };
+  }
 
-      const supportsERC165 = await DSponsorNFT.supportsInterface('0x01ffc9a7')
+  async function afterOneSaleFixture() {
+    const { BOTV, publicUser1, ERC20Mock, ...others } =
+      await activeSaleFixture();
 
-      const supportsERC20 = await DSponsorNFT.supportsInterface('0x36372b07')
+    const quantity = 5;
+    let tx = await BOTV.connect(publicUser1).mint(
+      publicUser1.address,
+      quantity,
+      ERC20Mock.address,
+      [],
+      []
+    );
+    await tx.wait();
 
-      const supportsERC2981 = await DSponsorNFT.supportsInterface('0x2a55205a')
+    return { quantity, BOTV, publicUser1, ERC20Mock, ...others };
+  }
 
-      const supportsERC721 = await DSponsorNFT.supportsInterface('0x80ac58cd')
+  describe("Deployment", async function () {
+    it("Should support ERC2981 and ERC721 interfaces", async function () {
+      const { BOTV } = await loadFixture(initFixture);
 
-      const supportsERC721Enumerable = await DSponsorNFT.supportsInterface(
-        '0x780e9d63'
-      )
+      const supportsDummy = await BOTV.supportsInterface("0x80ac58cf");
+      const supportsERC1555 = await BOTV.supportsInterface("0x4e2312e0");
+      const supportsERC165 = await BOTV.supportsInterface("0x01ffc9a7");
+      const supportsERC20 = await BOTV.supportsInterface("0x36372b07");
+      const supportsERC2981 = await BOTV.supportsInterface("0x2a55205a");
+      const supportsERC4907 = await BOTV.supportsInterface("0xad092b5c");
+      const supportsERC721 = await BOTV.supportsInterface("0x80ac58cd");
 
-      const supportsERC721Metadata = await DSponsorNFT.supportsInterface(
-        '0x5b5e139f'
-      )
+      const supportsERC721Metadata = await BOTV.supportsInterface("0x5b5e139f");
 
-      expect(supportsDummy).to.equal(false)
-      expect(supportsERC1555).to.equal(false)
-      expect(supportsERC165).to.equal(true)
-      expect(supportsERC20).to.equal(false)
-      expect(supportsERC2981).to.equal(true)
-      expect(supportsERC721).to.equal(true)
-      expect(supportsERC721Enumerable).to.equal(false)
-      expect(supportsERC721Metadata).to.equal(true)
-    })
+      expect(supportsDummy).to.equal(false);
+      expect(supportsERC1555).to.equal(false);
+      expect(supportsERC165).to.equal(true);
+      expect(supportsERC20).to.equal(false);
+      expect(supportsERC2981).to.equal(true);
+      expect(supportsERC4907).to.equal(true);
+      expect(supportsERC721).to.equal(true);
+      expect(supportsERC721Metadata).to.equal(true);
+    });
 
-    it('Fails if invalid arguments (zero address, max supply == 0) in constructor', async function () {
-      const { deployer, treasury, DSponsorNFT, DSponsorNFTDeployer } =
-        await loadFixture(initFixture)
+    it("Should fail if invalid arguments are provided in constructor", async function () {
+      const {
+        deployer,
+        treasury,
+        ERC20Amount,
 
-      await expect(
-        DSponsorNFTDeployer.deploy(
-          'test',
-          'test',
-          1,
-          ZERO_ADDRESS,
-          treasury.address
-        )
-      ).to.be.revertedWithCustomError(DSponsorNFT, 'CannotBeZeroAddress')
+        ERC20Mock,
+        vrfCoordinatorV2Mock,
 
-      await expect(
-        DSponsorNFTDeployer.deploy(
-          'test',
-          'test',
-          1,
-          deployer.address,
-          ZERO_ADDRESS
-        )
-      ).to.be.revertedWithCustomError(DSponsorNFT, 'CannotBeZeroAddress')
+        wearablesAddresses,
+        wearablesTokenIdsOffset,
+        discountListMerkleRoot,
+        privateListMerkleRoot,
 
-      await expect(
-        DSponsorNFTDeployer.deploy(
-          'test',
-          'test',
-          0,
-          deployer.address,
-          treasury.address
-        )
-      ).to.be.revertedWithCustomError(
-        DSponsorNFT,
-        'MaxSupplyShouldBeGreaterThan0'
-      )
-    })
-  })
-
-  describe('NFT Minting', async function () {
-    it('Mints with ERC20 currency', async function () {
-      const { owner2, user2, treasury, ERC20Amount, ERC20Mock, DSponsorNFT } =
-        await loadFixture(initFixture)
-      const referralData = 'referralData'
-      const tokenId = 1
-
-      const totalSupply = await DSponsorNFT.totalSupply()
-
-      const ERC20balanceOfOwner2 = await ERC20Mock.balanceOf(owner2.address)
-      const ERC20balanceOfUser2 = await ERC20Mock.balanceOf(user2.address)
-      const ERC20balanceOfTreasury = await ERC20Mock.balanceOf(treasury.address)
-
-      const NFTbalanceOfOwner2 = await DSponsorNFT.balanceOf(owner2.address)
-      const NFTbalanceOfUser2 = await DSponsorNFT.balanceOf(user2.address)
-      const NFTbalanceOfTreasury = await DSponsorNFT.balanceOf(treasury.address)
-
-      const tx = await ERC20Mock.connect(user2).approve(
-        DSponsorNFT.address,
-        ERC20Amount * 20
-      )
-      await tx.wait()
+        BOTV,
+        BOTVDeployer
+      } = await loadFixture(initFixture);
 
       await expect(
-        DSponsorNFT.connect(user2).payAndMint(
-          ERC20Mock.address,
-          owner2.address,
-          referralData
-        )
-      )
-        .to.emit(DSponsorNFT, 'Mint')
-        .withArgs(
+        BOTVDeployer.deploy(
           ERC20Mock.address,
           ERC20Amount,
-          owner2.address,
-          referralData,
-          user2.address,
-          tokenId
+          ZERO_ADDRESS,
+          vrfCoordinatorV2Mock.address,
+          wearablesAddresses,
+          wearablesTokenIdsOffset,
+          discountListMerkleRoot,
+          privateListMerkleRoot
         )
-
-      expect(await ERC20Mock.balanceOf(owner2.address)).to.be.equal(
-        ERC20balanceOfOwner2
-      )
-
-      expect(await ERC20Mock.balanceOf(user2.address)).to.be.equal(
-        ERC20balanceOfUser2.sub(ERC20Amount)
-      )
-
-      expect(await ERC20Mock.balanceOf(treasury.address)).to.be.equal(
-        ERC20balanceOfTreasury.add(ERC20Amount)
-      )
-
-      expect(await DSponsorNFT.balanceOf(owner2.address)).to.be.equal(
-        NFTbalanceOfOwner2.add(1)
-      )
-
-      expect(await DSponsorNFT.balanceOf(user2.address)).to.be.equal(
-        NFTbalanceOfUser2
-      )
-
-      expect(await DSponsorNFT.balanceOf(treasury.address)).to.be.equal(
-        NFTbalanceOfTreasury
-      )
-
-      expect(await DSponsorNFT.totalSupply()).to.be.equal(totalSupply.add(1))
+      ).to.be.revertedWithCustomError(BOTV, "CannotBeZeroAddress");
 
       await expect(
-        DSponsorNFT.connect(user2).payAndMint(
+        BOTVDeployer.deploy(
           ERC20Mock.address,
-          owner2.address,
-          referralData
+          ERC20Amount,
+          treasury.address,
+          vrfCoordinatorV2Mock.address,
+          [deployer.address, ...wearablesAddresses],
+          wearablesTokenIdsOffset,
+          discountListMerkleRoot,
+          privateListMerkleRoot
         )
-      ).to.changeTokenBalances(
-        ERC20Mock,
-        [user2.address, treasury.address, owner2.address],
-        [-ERC20Amount, ERC20Amount, 0]
-      )
+      ).to.be.revertedWithCustomError(BOTV, "IncompleteAirdropParameter");
 
+      const wearablesAddresses2 = [...wearablesAddresses];
+      wearablesAddresses2[0] = ZERO_ADDRESS;
       await expect(
-        DSponsorNFT.connect(user2).payAndMint(
+        BOTVDeployer.deploy(
           ERC20Mock.address,
-          owner2.address,
-          referralData
+          ERC20Amount,
+          treasury.address,
+          vrfCoordinatorV2Mock.address,
+          wearablesAddresses2,
+          wearablesTokenIdsOffset,
+          discountListMerkleRoot,
+          privateListMerkleRoot
         )
-      ).to.changeTokenBalances(
-        DSponsorNFT,
-        [user2.address, treasury.address, owner2.address],
-        [0, 0, 1]
-      )
-    })
-
-    it('Mints with native currency', async function () {
-      const { controller, owner2, user2, treasury, DSponsorNFT } =
-        await loadFixture(initFixture)
-      const referralData = 'referralData'
-      const tokenId = 1
-
-      const totalSupply = await DSponsorNFT.totalSupply()
-
-      const etherValue = '0.05'
-      const value = parseEther(etherValue)
-
-      const EtherBalanceOfOwner2 = await ethers.provider.getBalance(
-        owner2.address
-      )
-
-      const NFTbalanceOfOwner2 = await DSponsorNFT.balanceOf(owner2.address)
-      const NFTbalanceOfUser2 = await DSponsorNFT.balanceOf(user2.address)
-      const NFTbalanceOfTreasury = await DSponsorNFT.balanceOf(treasury.address)
-
-      let tx = await DSponsorNFT.connect(controller).setPrice(
-        ZERO_ADDRESS,
-        true,
-        value
-      )
-      await tx.wait()
+      ).to.be.revertedWithCustomError(BOTV, "InvalidAirdropParameter");
 
       await expect(
-        DSponsorNFT.connect(user2).payAndMint(
-          ZERO_ADDRESS,
-          owner2.address,
-          referralData,
-          { value }
-        )
-      )
-        .to.emit(DSponsorNFT, 'Mint')
-        .withArgs(
-          ZERO_ADDRESS,
-          value,
-          owner2.address,
-          referralData,
-          user2.address,
-          tokenId
-        )
-
-      expect(await ethers.provider.getBalance(owner2.address)).to.be.equal(
-        EtherBalanceOfOwner2
-      )
-
-      expect(await DSponsorNFT.balanceOf(owner2.address)).to.be.equal(
-        NFTbalanceOfOwner2.add(1)
-      )
-
-      expect(await DSponsorNFT.balanceOf(user2.address)).to.be.equal(
-        NFTbalanceOfUser2
-      )
-
-      expect(await DSponsorNFT.balanceOf(treasury.address)).to.be.equal(
-        NFTbalanceOfTreasury
-      )
-
-      expect(await DSponsorNFT.totalSupply()).to.be.equal(totalSupply.add(1))
-
-      await expect(
-        DSponsorNFT.connect(user2).payAndMint(
-          ZERO_ADDRESS,
-          owner2.address,
-          referralData,
-          { value }
-        )
-      ).to.changeEtherBalances(
-        [user2.address, treasury.address],
-        [parseEther(`-${etherValue}`), value]
-      )
-
-      await expect(
-        DSponsorNFT.connect(user2).payAndMint(
-          ZERO_ADDRESS,
-          owner2.address,
-          referralData,
-          { value }
-        )
-      ).to.changeTokenBalances(
-        DSponsorNFT,
-        [user2.address, treasury.address, owner2.address],
-        [0, 0, 1]
-      )
-    })
-
-    it('Can be minted for free', async function () {
-      const { owner2, user2, treasury, controller, ERC20Mock, DSponsorNFT } =
-        await loadFixture(initFixture)
-      const referralData = 'referralData'
-      const tokenId = 1
-
-      const totalSupply = await DSponsorNFT.totalSupply()
-
-      const ERC20balanceOfUser2 = await ERC20Mock.balanceOf(user2.address)
-      const ERC20balanceOfTreasury = await ERC20Mock.balanceOf(treasury.address)
-
-      const NFTbalanceOfOwner2 = await DSponsorNFT.balanceOf(owner2.address)
-      const NFTbalanceOfUser2 = await DSponsorNFT.balanceOf(user2.address)
-      const NFTbalanceOfTreasury = await DSponsorNFT.balanceOf(treasury.address)
-
-      let tx = await DSponsorNFT.connect(controller).setPrice(
-        ERC20Mock.address,
-        true,
-        0
-      )
-      await tx.wait()
-
-      tx = await DSponsorNFT.connect(controller).setPrice(ZERO_ADDRESS, true, 0)
-      await tx.wait()
-
-      await expect(
-        DSponsorNFT.connect(user2).payAndMint(
-          ZERO_ADDRESS,
-          owner2.address,
-          referralData
-        )
-      )
-        .to.emit(DSponsorNFT, 'Mint')
-        .withArgs(
-          ZERO_ADDRESS,
-          0,
-          owner2.address,
-          referralData,
-          user2.address,
-          tokenId
-        )
-
-      tx = await DSponsorNFT.connect(controller).setPrice(ZERO_ADDRESS, true, 0)
-      await tx.wait()
-
-      await expect(
-        DSponsorNFT.connect(user2).payAndMint(
+        BOTVDeployer.deploy(
           ERC20Mock.address,
-          owner2.address,
-          referralData
+          ERC20Amount,
+          treasury.address,
+          vrfCoordinatorV2Mock.address,
+          wearablesAddresses,
+          wearablesTokenIdsOffset,
+          formatBytes32String(""),
+          privateListMerkleRoot
         )
-      )
-        .to.emit(DSponsorNFT, 'Mint')
-        .withArgs(
+      ).to.be.revertedWithCustomError(BOTV, "InvalidMerkleRoot");
+
+      await expect(
+        BOTVDeployer.deploy(
           ERC20Mock.address,
-          0,
-          owner2.address,
-          referralData,
-          user2.address,
-          tokenId + 1
+          ERC20Amount,
+          treasury.address,
+          vrfCoordinatorV2Mock.address,
+          wearablesAddresses,
+          wearablesTokenIdsOffset,
+          discountListMerkleRoot,
+          formatBytes32String("")
         )
+      ).to.be.revertedWithCustomError(BOTV, "InvalidMerkleRoot");
+    });
+  });
 
-      expect(await ERC20Mock.balanceOf(user2.address)).to.be.equal(
-        ERC20balanceOfUser2
-      )
+  describe("Minting", async function () {
+    describe("Public mint", async function () {
+      it("Should mint as expected with ERC20 currency payment", async function () {
+        const {
+          treasury,
+          publicUser1,
+          publicUser2,
+          publicUser3,
+          ERC20Amount,
+          ERC20Mock,
+          wearablesContracts,
+          BOTV
+        } = await loadFixture(activeSaleFixture);
 
-      expect(await ERC20Mock.balanceOf(treasury.address)).to.be.equal(
-        ERC20balanceOfTreasury
-      )
+        const quantity = 3;
+        const price = BigNumber.from(ERC20Amount).mul(quantity);
 
-      expect(await DSponsorNFT.balanceOf(owner2.address)).to.be.equal(
-        NFTbalanceOfOwner2.add(2)
-      )
+        const nbOfMints = quantity * (3 + wearablesContracts.length);
 
-      expect(await DSponsorNFT.balanceOf(user2.address)).to.be.equal(
-        NFTbalanceOfUser2
-      )
+        // should have more ERC20 to run all tests
+        let tx = await ERC20Mock.mint(
+          publicUser1.address,
+          BigNumber.from(price).mul(nbOfMints).sub(MINT_LIMIT_PER_WALLET)
+        );
+        await tx.wait();
 
-      expect(await DSponsorNFT.balanceOf(treasury.address)).to.be.equal(
-        NFTbalanceOfTreasury
-      )
+        const totalSupply = await BOTV.totalSupply();
 
-      expect(await DSponsorNFT.totalSupply()).to.be.equal(totalSupply.add(2))
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            quantity,
+            ERC20Mock.address,
+            [],
+            []
+          )
+        ).to.changeTokenBalances(
+          ERC20Mock,
+          [publicUser1.address, treasury.address, publicUser2.address],
+          [-price, price, 0]
+        );
 
-      await expect(
-        DSponsorNFT.connect(user2).payAndMint(
-          ERC20Mock.address,
-          owner2.address,
-          referralData
+        expect(await BOTV.totalSupply()).to.be.equal(totalSupply.add(quantity));
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            quantity,
+            ERC20Mock.address,
+            [],
+            []
+          )
+        ).to.changeTokenBalances(
+          BOTV,
+          [publicUser1.address, treasury.address, publicUser2.address],
+          [0, 0, quantity]
+        );
+
+        for (let wearableContract of wearablesContracts) {
+          await expect(
+            BOTV.connect(publicUser1).mint(
+              publicUser3.address,
+              quantity,
+              ERC20Mock.address,
+              [],
+              []
+            )
+          ).to.changeTokenBalances(
+            wearableContract,
+            [publicUser1.address, treasury.address, publicUser3.address],
+            [0, 0, quantity]
+          );
+        }
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            quantity,
+            ERC20Mock.address,
+            [],
+            []
+          )
         )
-      ).to.changeTokenBalances(
-        ERC20Mock,
-        [user2.address, treasury.address, owner2.address],
-        [0, 0, 0]
-      )
+          .to.emit(BOTV, "Mint")
+          .withArgs(
+            publicUser2.address,
+            quantity,
+            BigNumber.from(ERC20Amount).mul(quantity),
+            ERC20Mock.address,
+            publicUser1.address
+          );
 
-      await expect(
-        DSponsorNFT.connect(user2).payAndMint(
-          ERC20Mock.address,
-          owner2.address,
-          referralData
+        expect(await BOTV.totalSupply()).to.be.equal(
+          totalSupply.add(nbOfMints)
+        );
+      });
+
+      it("Should mint as expected with native currency payment", async function () {
+        const {
+          treasury,
+          publicUser1,
+          publicUser2,
+          publicUser3,
+          wearablesContracts,
+          BOTV
+        } = await loadFixture(activeSaleFixture);
+
+        const etherAmount = "0.05";
+        const amount = parseEther(etherAmount);
+        const quantity = 3;
+        const value = BigNumber.from(amount).mul(BigNumber.from(quantity));
+        const etherValue = "0.15";
+
+        let tx = await BOTV.setPrice(ZERO_ADDRESS, true, amount);
+        await tx.wait();
+
+        const nbOfMints = quantity * (3 + wearablesContracts.length);
+
+        const totalSupply = await BOTV.totalSupply();
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            quantity,
+            ZERO_ADDRESS,
+            [],
+            [],
+            { value }
+          )
+        ).to.changeEtherBalances(
+          [publicUser1.address, treasury.address],
+          [parseEther(`-${etherValue}`), value]
+        );
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            quantity,
+            ZERO_ADDRESS,
+            [],
+            [],
+            { value }
+          )
+        ).to.changeTokenBalances(
+          BOTV,
+          [publicUser1.address, treasury.address, publicUser2.address],
+          [0, 0, quantity]
+        );
+
+        for (let wearableContract of wearablesContracts) {
+          await expect(
+            BOTV.connect(publicUser1).mint(
+              publicUser3.address,
+              quantity,
+              ZERO_ADDRESS,
+              [],
+              [],
+              { value }
+            )
+          ).to.changeTokenBalances(
+            wearableContract,
+            [publicUser1.address, treasury.address, publicUser3.address],
+            [0, 0, quantity]
+          );
+        }
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            quantity,
+            ZERO_ADDRESS,
+            [],
+            [],
+            { value }
+          )
         )
-      ).to.changeTokenBalances(
-        DSponsorNFT,
-        [user2.address, treasury.address, owner2.address],
-        [0, 0, 1]
-      )
-    })
+          .to.emit(BOTV, "Mint")
+          .withArgs(
+            publicUser2.address,
+            quantity,
+            value,
+            ZERO_ADDRESS,
+            publicUser1.address
+          );
 
-    it('Reverts if not enough available amount to spend', async function () {
-      const {
-        controller,
-        owner2,
-        user2,
-        treasury,
-        DSponsorNFT,
-        ERC20Amount,
-        ERC20Mock
-      } = await loadFixture(initFixture)
-      const referralData = 'referralData'
+        expect(await BOTV.totalSupply()).to.be.equal(
+          totalSupply.add(nbOfMints)
+        );
+      });
 
-      const totalSupply = await DSponsorNFT.totalSupply()
+      it("Should mint even if pricing is set as free", async function () {
+        const { treasury, publicUser1, publicUser2, ERC20Mock, BOTV } =
+          await loadFixture(activeSaleFixture);
 
-      const ERC20balanceOfUser2 = await ERC20Mock.balanceOf(user2.address)
+        const value = 0;
 
-      const NFTbalanceOfOwner2 = await DSponsorNFT.balanceOf(owner2.address)
-      const NFTbalanceOfUser2 = await DSponsorNFT.balanceOf(user2.address)
-      const NFTbalanceOfTreasury = await DSponsorNFT.balanceOf(treasury.address)
+        const quantity = 2;
+        const totalSupply = await BOTV.totalSupply();
+        const nbOfMints = quantity * 4;
 
-      let tx = await DSponsorNFT.connect(controller).setPrice(
-        ZERO_ADDRESS,
-        true,
-        parseEther('0.051')
-      )
-      await tx.wait()
+        let tx = await BOTV.setPrice(ZERO_ADDRESS, true, value);
+        await tx.wait();
+        tx = await BOTV.setPrice(ERC20Mock.address, true, 0);
+        await tx.wait();
 
-      tx = await DSponsorNFT.connect(controller).setPrice(
-        ERC20Mock.address,
-        true,
-        ERC20Amount * 1000
-      )
-      await tx.wait()
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            quantity,
+            ERC20Mock.address,
+            [],
+            []
+          )
+        ).to.changeTokenBalances(
+          ERC20Mock,
+          [publicUser1.address, treasury.address, publicUser2.address],
+          [0, 0, 0]
+        );
 
-      tx = await ERC20Mock.connect(user2).approve(
-        DSponsorNFT.address,
-        ERC20Amount * 10000
-      )
-      await tx.wait()
-
-      await expect(
-        DSponsorNFT.connect(user2).payAndMint(
-          ZERO_ADDRESS,
-          owner2.address,
-          referralData,
-          { value: parseEther('0.05') }
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            quantity,
+            ERC20Mock.address,
+            [],
+            []
+          )
         )
-      ).to.be.revertedWithCustomError(DSponsorNFT, 'AmountValueTooLow')
+          .to.emit(BOTV, "Mint")
+          .withArgs(
+            publicUser2.address,
+            quantity,
+            0,
+            ERC20Mock.address,
+            publicUser1.address
+          );
 
-      await expect(
-        DSponsorNFT.connect(user2).payAndMint(
-          ERC20Mock.address,
-          owner2.address,
-          referralData
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            quantity,
+            ZERO_ADDRESS,
+            [],
+            [],
+            { value }
+          )
+        ).to.changeEtherBalances(
+          [publicUser1.address, treasury.address],
+          [0, 0]
+        );
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            quantity,
+            ZERO_ADDRESS,
+            [],
+            [],
+            { value }
+          )
         )
-      ).to.be.revertedWith('ERC20: transfer amount exceeds balance')
+          .to.emit(BOTV, "Mint")
+          .withArgs(
+            publicUser2.address,
+            quantity,
+            value,
+            ZERO_ADDRESS,
+            publicUser1.address
+          );
 
-      expect(await ERC20Mock.balanceOf(user2.address)).to.be.equal(
-        ERC20balanceOfUser2
-      )
-      expect(await DSponsorNFT.balanceOf(owner2.address)).to.be.equal(
-        NFTbalanceOfOwner2
-      )
+        expect(await BOTV.totalSupply()).to.be.equal(
+          totalSupply.add(nbOfMints)
+        );
+      });
 
-      expect(await DSponsorNFT.balanceOf(user2.address)).to.be.equal(
-        NFTbalanceOfUser2
-      )
+      it("Should revert if not enough available ERC20 amount to spend", async function () {
+        const {
+          publicUser1,
+          publicUser2,
 
-      expect(await DSponsorNFT.balanceOf(treasury.address)).to.be.equal(
-        NFTbalanceOfTreasury
-      )
+          ERC20Amount,
+          ERC20Mock,
+          BOTV
+        } = await loadFixture(activeSaleFixture);
 
-      expect(await DSponsorNFT.totalSupply()).to.be.equal(totalSupply)
-    })
+        const totalSupply = await BOTV.totalSupply();
 
-    it('Reverts if arguments are invalid', async function () {
-      const { deployer, treasury, ERC20Mock, DSponsorNFTDeployer, user1 } =
-        await loadFixture(initFixture)
+        let tx = await ERC20Mock.connect(publicUser1).approve(BOTV.address, 0);
+        await tx.wait();
 
-      const supply = 3
-      const contract = await DSponsorNFTDeployer.deploy(
-        'test',
-        'test',
-        supply,
-        deployer.address,
-        treasury.address
-      )
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            1,
+            ERC20Mock.address,
+            [],
+            []
+          )
+        ).to.be.revertedWith("ERC20: insufficient allowance");
 
-      await expect(
-        contract.payAndMint(ERC20Mock.address, ZERO_ADDRESS, '')
-      ).to.be.revertedWithCustomError(contract, 'CannotBeZeroAddress')
+        tx = await ERC20Mock.connect(publicUser1).approve(
+          BOTV.address,
+          BigNumber.from(ERC20Amount).mul(2).mul(MAX_SUPPLY)
+        );
+        await tx.wait();
 
-      await expect(contract.payAndMint(ZERO_ADDRESS, user1.address, ''))
-        .to.be.revertedWithCustomError(contract, 'ForbiddenCurrency')
-        .withArgs(ZERO_ADDRESS)
-
-      await expect(contract.payAndMint(ERC20Mock.address, user1.address, ''))
-        .to.be.revertedWithCustomError(contract, 'ForbiddenCurrency')
-        .withArgs(ERC20Mock.address)
-    })
-
-    it('Fails if currency is not native and has not transferFrom method', async function () {
-      const {
-        owner2,
-        user2,
-        treasury,
-        controller,
-        DSponsorNFT,
-        ERC20Amount,
-        DSponsorContract
-      } = await loadFixture(initFixture)
-
-      const totalSupply = await DSponsorNFT.totalSupply()
-
-      const NFTbalanceOfOwner2 = await DSponsorNFT.balanceOf(owner2.address)
-      const NFTbalanceOfUser2 = await DSponsorNFT.balanceOf(user2.address)
-      const NFTbalanceOfTreasury = await DSponsorNFT.balanceOf(treasury.address)
-
-      let tx = await DSponsorNFT.connect(controller).setPrice(
-        DSponsorContract.address,
-        true,
-        ERC20Amount
-      )
-      await tx.wait()
-
-      await expect(
-        DSponsorNFT.connect(user2).payAndMint(
-          DSponsorContract.address,
-          owner2.address,
-          'referralData'
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            1,
+            ERC20Mock.address,
+            [],
+            []
+          )
         )
-      ).to.be.revertedWith('SafeERC20: low-level call failed')
+          .to.emit(BOTV, "Mint")
+          .withArgs(
+            publicUser2.address,
+            1,
+            ERC20Amount,
+            ERC20Mock.address,
+            publicUser1.address
+          );
 
-      expect(await DSponsorNFT.balanceOf(owner2.address)).to.be.equal(
-        NFTbalanceOfOwner2
-      )
-
-      expect(await DSponsorNFT.balanceOf(user2.address)).to.be.equal(
-        NFTbalanceOfUser2
-      )
-
-      expect(await DSponsorNFT.balanceOf(treasury.address)).to.be.equal(
-        NFTbalanceOfTreasury
-      )
-
-      expect(await DSponsorNFT.totalSupply()).to.be.equal(totalSupply)
-    })
-
-    it('Fails if treasury is a contract with reentrancy attack', async function () {
-      const {
-        owner2,
-        user2,
-
-        controller,
-        Reentrant,
-        DSponsorNFTDeployer
-      } = await loadFixture(initFixture)
-
-      const DSponsorNFT = await DSponsorNFTDeployer.deploy(
-        'testreentrant',
-        'testreentrant',
-        10,
-        controller.address,
-        Reentrant.address
-      )
-
-      const totalSupply = await DSponsorNFT.totalSupply()
-
-      const etherValue = '4.4444444'
-      const value = parseEther(etherValue)
-
-      const NFTbalanceOfOwner2 = await DSponsorNFT.balanceOf(owner2.address)
-      const NFTbalanceOfUser2 = await DSponsorNFT.balanceOf(user2.address)
-      const NFTbalanceOfTreasury = await DSponsorNFT.balanceOf(
-        Reentrant.address
-      )
-
-      let tx = await DSponsorNFT.connect(controller).setPrice(
-        ZERO_ADDRESS,
-        true,
-        value
-      )
-      await tx.wait()
-
-      await expect(
-        DSponsorNFT.connect(owner2).payAndMint(
-          ZERO_ADDRESS,
-          owner2.address,
-          'referralData',
-          { value }
-        )
-      ).to.be.reverted
-
-      expect(await DSponsorNFT.balanceOf(owner2.address)).to.be.equal(
-        NFTbalanceOfOwner2
-      )
-
-      expect(await DSponsorNFT.balanceOf(user2.address)).to.be.equal(
-        NFTbalanceOfUser2
-      )
-
-      expect(await DSponsorNFT.balanceOf(Reentrant.address)).to.be.equal(
-        NFTbalanceOfTreasury
-      )
-
-      expect(await DSponsorNFT.totalSupply()).to.be.equal(totalSupply)
-    })
-
-    it('Fails if currency is a contract with reentrancy attack', async function () {
-      const {
-        owner2,
-        user2,
-        treasury,
-        controller,
-        DSponsorNFT,
-        ERC20Amount,
-        Reentrant
-      } = await loadFixture(initFixture)
-
-      const totalSupply = await DSponsorNFT.totalSupply()
-
-      const NFTbalanceOfOwner2 = await DSponsorNFT.balanceOf(owner2.address)
-      const NFTbalanceOfUser2 = await DSponsorNFT.balanceOf(user2.address)
-      const NFTbalanceOfTreasury = await DSponsorNFT.balanceOf(treasury.address)
-
-      let tx = await DSponsorNFT.connect(controller).setPrice(
-        Reentrant.address,
-        true,
-        ERC20Amount
-      )
-      await tx.wait()
-
-      tx = await DSponsorNFT.connect(controller).setPrice(
-        ZERO_ADDRESS,
-        true,
-        ERC20Amount
-      )
-      await tx.wait()
-
-      await expect(
-        DSponsorNFT.connect(user2).payAndMint(
-          Reentrant.address,
-          owner2.address,
-          'referralData'
-        )
-      ).to.be.revertedWith('ReentrancyGuard: reentrant call')
-
-      expect(await DSponsorNFT.balanceOf(owner2.address)).to.be.equal(
-        NFTbalanceOfOwner2
-      )
-
-      expect(await DSponsorNFT.balanceOf(user2.address)).to.be.equal(
-        NFTbalanceOfUser2
-      )
-
-      expect(await DSponsorNFT.balanceOf(treasury.address)).to.be.equal(
-        NFTbalanceOfTreasury
-      )
-
-      expect(await DSponsorNFT.totalSupply()).to.be.equal(totalSupply)
-    })
-
-    it('Reverts if number of tokens exceed MAX_SUPPLY value', async function () {
-      const { deployer, treasury, ERC20Mock, DSponsorNFTDeployer, user1 } =
-        await loadFixture(initFixture)
-
-      const supply = 3
-      const contract = await DSponsorNFTDeployer.deploy(
-        'test',
-        'test',
-        supply,
-        deployer.address,
-        treasury.address
-      )
-      const price = 2
-      let tx = await contract.setPrice(ERC20Mock.address, true, price)
-      await tx.wait()
-
-      tx = await ERC20Mock.approve(contract.address, 1000000)
-      await tx.wait()
-
-      for (let i = 0; i < supply; i++) {
-        tx = await contract.payAndMint(ERC20Mock.address, user1.address, '')
-        await tx.wait()
-      }
-
-      await expect(
-        contract.payAndMint(ERC20Mock.address, user1.address, '')
-      ).to.be.revertedWithCustomError(contract, 'MaxSupplyExceeded')
-    })
-  })
-
-  describe('Controller operations', async function () {
-    it('Fails any controller operation if caller is not controller', async function () {
-      const {
-        DSponsorNFT,
-        owner1,
-        ERC20Mock,
-        ERC20Amount,
-        tokenId,
-        controller
-      } = await loadFixture(initFixture)
-
-      const controllerAddr = await DSponsorNFT.connect(owner1).getController()
-
-      await expect(
-        DSponsorNFT.connect(owner1).setBaseURI('baseURI')
-      ).to.be.revertedWithCustomError(
-        DSponsorNFT,
-        'ForbiddenControllerOperation'
-      )
-
-      await expect(
-        DSponsorNFT.connect(owner1).setContractURI('contractURI')
-      ).to.be.revertedWithCustomError(
-        DSponsorNFT,
-        'ForbiddenControllerOperation'
-      )
-
-      await expect(
-        DSponsorNFT.setPrice(ERC20Mock.address, true, ERC20Amount)
-      ).to.be.revertedWithCustomError(
-        DSponsorNFT,
-        'ForbiddenControllerOperation'
-      )
-
-      await expect(
-        DSponsorNFT.setPrice(ZERO_ADDRESS, true, 100000000)
-      ).to.be.revertedWithCustomError(
-        DSponsorNFT,
-        'ForbiddenControllerOperation'
-      )
-
-      await expect(DSponsorNFT.setRoyalty(100)).to.be.revertedWithCustomError(
-        DSponsorNFT,
-        'ForbiddenControllerOperation'
-      )
-
-      await expect(
-        DSponsorNFT.connect(owner1).setTokenURI(tokenId, 'baseURI')
-      ).to.be.revertedWithCustomError(
-        DSponsorNFT,
-        'ForbiddenControllerOperation'
-      )
-
-      const value = 100
-      const tx = await DSponsorNFT.connect(controller).setPrice(
-        ZERO_ADDRESS,
-        true,
-        value
-      )
-      await tx.wait()
-
-      expect(controllerAddr).to.be.equal(controller.address)
-    })
-
-    it('Sets! baseURI, tokenURI & contractURI correctly', async function () {
-      const { DSponsorNFT, controller, tokenId } = await loadFixture(
-        initFixture
-      )
-
-      const maxSupply = await DSponsorNFT.getMaxSupply()
-
-      const baseURI = 'baseURI'
-      const contractURI = 'contractURI'
-      const tokenURI1 = 'tokenURI1'
-      const tokenURI2 = 'tokenURI2'
-
-      let tx = await DSponsorNFT.connect(controller).setBaseURI(baseURI)
-      await tx.wait()
-      tx = await DSponsorNFT.connect(controller).setContractURI(contractURI)
-      await tx.wait()
-
-      expect(await DSponsorNFT.getContractURI()).to.be.equal(contractURI)
-
-      expect(await DSponsorNFT.uri(tokenId)).to.be.equal(baseURI + tokenId)
-      expect(await DSponsorNFT.tokenURI(tokenId)).to.be.equal(baseURI + tokenId)
-
-      tx = await DSponsorNFT.connect(controller).setTokenURI(tokenId, tokenURI1)
-      await tx.wait()
-
-      tx = await DSponsorNFT.connect(controller).setTokenURI(
-        tokenId + 1,
-        tokenURI2
-      )
-      await tx.wait()
-
-      await expect(
-        DSponsorNFT.connect(controller).setTokenURI(
-          tokenId + maxSupply,
-          'maxURI'
-        )
-      ).to.be.revertedWithCustomError(DSponsorNFT, 'InvalidTokenId')
-
-      expect(await DSponsorNFT.uri(tokenId)).to.be.equal(baseURI + tokenURI1)
-      expect(await DSponsorNFT.tokenURI(tokenId)).to.be.equal(
-        baseURI + tokenURI1
-      )
-
-      tx = await DSponsorNFT.connect(controller).setBaseURI('')
-      await tx.wait()
-
-      expect(await DSponsorNFT.uri(tokenId)).to.be.equal(tokenURI1)
-      expect(await DSponsorNFT.tokenURI(tokenId)).to.be.equal(tokenURI1)
-
-      await expect(DSponsorNFT.uri(tokenId + 1)).to.be.revertedWith(
-        'ERC721: invalid token ID'
-      )
-      await expect(DSponsorNFT.tokenURI(tokenId + 1)).to.be.revertedWith(
-        'ERC721: invalid token ID'
-      )
-    })
-
-    it('Sets & gets pricing parameters correctly', async function () {
-      const { DSponsorNFT, controller, ERC20Mock, ERC721Mock, ERC20Amount } =
-        await loadFixture(initFixture)
-
-      expect(
-        await DSponsorNFT.getMintPriceForCurrency(ERC20Mock.address)
-      ).to.be.deep.equal([true, BigNumber.from(ERC20Amount)])
-      expect(
-        await DSponsorNFT.getMintPriceForCurrency(ERC721Mock.address)
-      ).to.be.deep.equal([false, 0])
-      expect(
-        await DSponsorNFT.getMintPriceForCurrency(ZERO_ADDRESS)
-      ).to.be.deep.equal([false, 0])
-
-      const value = 100
-      const newERC20Amount = ERC20Amount + 100
-
-      await expect(
-        DSponsorNFT.connect(controller).setPrice(ZERO_ADDRESS, true, value)
-      )
-        .to.emit(DSponsorNFT, 'MintPriceChange')
-        .withArgs(ZERO_ADDRESS, true, value)
-
-      await expect(
-        DSponsorNFT.connect(controller).setPrice(
+        tx = await BOTV.setPrice(
           ERC20Mock.address,
           true,
-          newERC20Amount
-        )
-      )
-        .to.emit(DSponsorNFT, 'MintPriceChange')
-        .withArgs(ERC20Mock.address, true, newERC20Amount)
+          BigNumber.from(ERC20Amount).mul(MINT_LIMIT_PER_WALLET).add(1)
+        );
+        await tx.wait();
 
-      expect(
-        await DSponsorNFT.getMintPriceForCurrency(ERC20Mock.address)
-      ).to.be.deep.equal([true, BigNumber.from(newERC20Amount)])
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            1,
+            ERC20Mock.address,
+            [],
+            []
+          )
+        ).to.be.revertedWith("ERC20: transfer amount exceeds balance");
+        expect(await BOTV.totalSupply()).to.be.equal(totalSupply.add(1));
+      });
+
+      it("Should revert if msg.value is too low", async function () {
+        const { publicUser1, publicUser2, BOTV } = await loadFixture(
+          activeSaleFixture
+        );
+
+        const etherAmount = "0.05";
+        const amount = parseEther(etherAmount);
+        const quantity = 3;
+        const value = BigNumber.from(amount).mul(quantity);
+
+        let tx = await BOTV.setPrice(ZERO_ADDRESS, true, amount);
+        await tx.wait();
+
+        const totalSupply = await BOTV.totalSupply();
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            quantity,
+            ZERO_ADDRESS,
+            [],
+            [],
+            { value: amount }
+          )
+        ).to.be.revertedWithCustomError(BOTV, "AmountValueTooLow");
+
+        const provider = ethers.provider;
+        const balance = await provider.getBalance(publicUser1.address);
+
+        tx = await BOTV.setPrice(
+          ZERO_ADDRESS,
+          true,
+          BigNumber.from(balance).add(1)
+        );
+        await tx.wait();
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            quantity,
+            ZERO_ADDRESS,
+            [],
+            [],
+            { value }
+          )
+        ).to.be.revertedWithCustomError(BOTV, "AmountValueTooLow");
+
+        tx = await BOTV.setPrice(ZERO_ADDRESS, true, amount);
+        await tx.wait();
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            quantity,
+            ZERO_ADDRESS,
+            [],
+            [],
+            { value }
+          )
+        )
+          .to.emit(BOTV, "Mint")
+          .withArgs(
+            publicUser2.address,
+            quantity,
+            value,
+            ZERO_ADDRESS,
+            publicUser1.address
+          );
+        expect(await BOTV.totalSupply()).to.be.equal(totalSupply.add(quantity));
+      });
+
+      it("Should revert if provided currency is not enabled", async function () {
+        const { publicUser1, publicUser2, ERC20Amount, ERC20Mock, BOTV } =
+          await loadFixture(activeSaleFixture);
+
+        let tx = await BOTV.setPrice(ERC20Mock.address, false, ERC20Amount);
+        await tx.wait();
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            1,
+            ERC20Mock.address,
+            [],
+            []
+          )
+        )
+          .to.be.revertedWithCustomError(BOTV, "ForbiddenCurrency")
+          .withArgs(ERC20Mock.address);
+
+        ERC20Amount.add(1);
+
+        await tx.wait();
+        tx = await BOTV.setPrice(ERC20Mock.address, true, ERC20Amount);
+        await tx.wait();
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            1,
+            ERC20Mock.address,
+            [],
+            []
+          )
+        )
+          .to.emit(BOTV, "Mint")
+          .withArgs(
+            publicUser2.address,
+            1,
+            ERC20Amount,
+            ERC20Mock.address,
+            publicUser1.address
+          );
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            1,
+            ZERO_ADDRESS,
+            [],
+            []
+          )
+        )
+          .to.be.revertedWithCustomError(BOTV, "ForbiddenCurrency")
+          .withArgs(ZERO_ADDRESS);
+      });
+
+      it("Should revert if arguments are invalid", async function () {
+        const {
+          publicUser1,
+          publicUser2,
+          publicUser3,
+          ERC20Amount,
+          ERC20Mock,
+          BOTV
+        } = await loadFixture(activeSaleFixture);
+
+        let tx = await ERC20Mock.mint(
+          publicUser1.address,
+          BigNumber.from(ERC20Amount).mul(MINT_LIMIT_PER_WALLET).mul(2)
+        );
+        await tx.wait();
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            ZERO_ADDRESS,
+            1,
+            ERC20Mock.address,
+            [],
+            []
+          )
+        ).to.be.revertedWithCustomError(BOTV, "CannotBeZeroAddress");
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            1,
+            ZERO_ADDRESS,
+            [],
+            []
+          )
+        )
+          .to.be.revertedWithCustomError(BOTV, "ForbiddenCurrency")
+          .withArgs(ZERO_ADDRESS);
+
+        const ERC20MockDeployer = await ethers.getContractFactory("ERC20Mock");
+        const ERC20Mock2 = await ERC20MockDeployer.deploy();
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            1,
+            ERC20Mock2.address,
+            [],
+            []
+          )
+        )
+          .to.be.revertedWithCustomError(BOTV, "ForbiddenCurrency")
+          .withArgs(ERC20Mock2.address);
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            MINT_LIMIT_PER_WALLET + 1,
+            ERC20Mock.address,
+            [],
+            []
+          )
+        ).to.be.revertedWithCustomError(BOTV, "TokenMintingLimitExceeded");
+
+        const quantity = MINT_LIMIT_PER_WALLET;
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            quantity,
+            ERC20Mock.address,
+            [],
+            []
+          )
+        )
+          .to.emit(BOTV, "Mint")
+          .withArgs(
+            publicUser2.address,
+            quantity,
+            BigNumber.from(ERC20Amount).mul(quantity),
+            ERC20Mock.address,
+            publicUser1.address
+          );
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            1,
+            ERC20Mock.address,
+            [],
+            []
+          )
+        ).to.be.revertedWithCustomError(BOTV, "TokenMintingLimitExceeded");
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser3.address,
+            quantity,
+            ERC20Mock.address,
+            [],
+            []
+          )
+        )
+          .to.emit(BOTV, "Mint")
+          .withArgs(
+            publicUser3.address,
+            quantity,
+            BigNumber.from(ERC20Amount).mul(quantity),
+            ERC20Mock.address,
+            publicUser1.address
+          );
+      });
+
+      it("Should revert if number of tokens exceed MAX_SUPPLY value", async function () {
+        const { publicUser1, ERC20Amount, ERC20Mock, BOTV } = await loadFixture(
+          activeSaleFixture
+        );
+        let tx;
+
+        tx = await ERC20Mock.mint(
+          publicUser1.address,
+          BigNumber.from(ERC20Amount).mul(MAX_SUPPLY)
+        );
+        await tx.wait();
+
+        for (let i = 0; i < MAX_SUPPLY / MINT_LIMIT_PER_WALLET; i++) {
+          // Get a new wallet
+          const wallet = ethers.Wallet.createRandom();
+          // add the provider from Hardhat
+          const signer = wallet.connect(ethers.provider);
+
+          await expect(
+            BOTV.connect(publicUser1).mint(
+              signer.address,
+              MINT_LIMIT_PER_WALLET,
+              ERC20Mock.address,
+              [],
+              []
+            )
+          )
+            .to.emit(BOTV, "Mint")
+            .withArgs(
+              signer.address,
+              MINT_LIMIT_PER_WALLET,
+              BigNumber.from(ERC20Amount).mul(MINT_LIMIT_PER_WALLET),
+              ERC20Mock.address,
+              publicUser1.address
+            );
+        }
+
+        expect(await BOTV.totalSupply()).to.be.equal(
+          BigNumber.from(MAX_SUPPLY)
+        );
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser1.address,
+            1,
+            ERC20Mock.address,
+            [],
+            []
+          )
+        ).to.be.revertedWithCustomError(BOTV, "MaxSupplyExceeded");
+      });
+    });
+
+    describe("Private sale mint", async function () {
+      it("Should authorize if tokenOwner is in the private sale allowlist", async function () {
+        const {
+          publicUser1,
+          privateUser3,
+          discountPrivateUser,
+
+          ERC20Amount,
+
+          ERC20Mock,
+          privateListMerkleProof,
+
+          BOTV
+        } = await loadFixture(initFixture);
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            privateUser3.address,
+            1,
+            ERC20Mock.address,
+            privateListMerkleProof(privateUser3.address),
+            []
+          )
+        ).to.be.revertedWithCustomError(BOTV, "NoActiveSale");
+
+        let tx = await BOTV.setPrivateSale(true);
+        await tx.wait();
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            privateUser3.address,
+            1,
+            ERC20Mock.address,
+            privateListMerkleProof(privateUser3.address),
+            []
+          )
+        )
+          .to.emit(BOTV, "Mint")
+          .withArgs(
+            privateUser3.address,
+            1,
+            ERC20Amount,
+            ERC20Mock.address,
+            publicUser1.address
+          );
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            discountPrivateUser.address,
+            1,
+            ERC20Mock.address,
+            privateListMerkleProof(discountPrivateUser.address),
+            []
+          )
+        )
+          .to.emit(BOTV, "Mint")
+          .withArgs(
+            discountPrivateUser.address,
+            1,
+            ERC20Amount,
+            ERC20Mock.address,
+            publicUser1.address
+          );
+      });
+
+      it("Should revert if tokenOwner is not in the private sale allowlist", async function () {
+        const {
+          publicUser1,
+          publicUser2,
+          privateUser3,
+          discountUser1,
+
+          ERC20Amount,
+
+          ERC20Mock,
+          privateListMerkleProof,
+
+          BOTV
+        } = await loadFixture(initFixture);
+
+        let tx = await BOTV.setPrivateSale(true);
+        await tx.wait();
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            1,
+            ERC20Mock.address,
+            privateListMerkleProof(privateUser3.address),
+            []
+          )
+        ).to.be.revertedWithCustomError(BOTV, "NotAllowedForPrivateSale");
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            discountUser1.address,
+            1,
+            ERC20Mock.address,
+            privateListMerkleProof(discountUser1.address),
+            []
+          )
+        ).to.be.revertedWithCustomError(BOTV, "NotAllowedForPrivateSale");
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            privateUser3.address,
+            1,
+            ERC20Mock.address,
+            privateListMerkleProof(publicUser1.address),
+            []
+          )
+        ).to.be.revertedWithCustomError(BOTV, "NotAllowedForPrivateSale");
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            privateUser3.address,
+            1,
+            ERC20Mock.address,
+            privateListMerkleProof(privateUser3.address),
+            []
+          )
+        )
+          .to.emit(BOTV, "Mint")
+          .withArgs(
+            privateUser3.address,
+            1,
+            ERC20Amount,
+            ERC20Mock.address,
+            publicUser1.address
+          );
+
+        tx = await BOTV.setPublicSale(true);
+        await tx.wait();
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            discountUser1.address,
+            1,
+            ERC20Mock.address,
+            privateListMerkleProof(discountUser1.address),
+            []
+          )
+        )
+          .to.emit(BOTV, "Mint")
+          .withArgs(
+            discountUser1.address,
+            1,
+            ERC20Amount,
+            ERC20Mock.address,
+            publicUser1.address
+          );
+      });
+    });
+
+    describe("Discount", async function () {
+      it("Should have a discount if tokenOwner is in the allowlist and is minting a second token", async function () {
+        const {
+          treasury,
+          publicUser1,
+          discountUser1,
+          discountUser2,
+          discountPrivateUser,
+
+          ERC20Amount,
+
+          ERC20Mock,
+          discountMerkleProof,
+
+          BOTV
+        } = await loadFixture(activeSaleFixture);
+
+        let discount = BigNumber.from(ERC20Amount).div(2);
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            discountUser1.address,
+            2,
+            ERC20Mock.address,
+            [],
+            discountMerkleProof(discountUser1.address)
+          )
+        )
+          .to.emit(BOTV, "Mint")
+          .withArgs(
+            discountUser1.address,
+            2,
+            BigNumber.from(ERC20Amount).mul(2).sub(discount),
+            ERC20Mock.address,
+            publicUser1.address
+          );
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            discountUser2.address,
+            1,
+            ERC20Mock.address,
+            [],
+            discountMerkleProof(discountUser2.address)
+          )
+        ).to.changeTokenBalances(
+          ERC20Mock,
+          [publicUser1.address, treasury.address, discountUser2.address],
+          [-ERC20Amount, ERC20Amount, 0]
+        );
+
+        const etherValue = "0.15";
+        const value = parseEther(etherValue);
+
+        let tx = await BOTV.setPrice(ZERO_ADDRESS, true, value);
+        await tx.wait();
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            discountUser2.address,
+            1,
+            ZERO_ADDRESS,
+            [],
+            discountMerkleProof(discountUser2.address),
+            { value: BigNumber.from(value).div(2) }
+          )
+        ).to.changeEtherBalances(
+          [publicUser1.address, treasury.address],
+          [parseEther(`-${etherValue}`).div(2), BigNumber.from(value).div(2)]
+        );
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            discountPrivateUser.address,
+            1,
+            ZERO_ADDRESS,
+            [],
+            discountMerkleProof(discountPrivateUser.address),
+            { value }
+          )
+        ).to.changeEtherBalances(
+          [publicUser1.address, treasury.address],
+          [parseEther(`-${etherValue}`), value]
+        );
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            discountPrivateUser.address,
+            5,
+            ERC20Mock.address,
+            [],
+            discountMerkleProof(discountPrivateUser.address)
+          )
+        ).to.changeTokenBalances(
+          ERC20Mock,
+          [publicUser1.address, treasury.address, discountPrivateUser.address],
+          [
+            -BigNumber.from(ERC20Amount).mul(5).sub(discount),
+            BigNumber.from(ERC20Amount).mul(5).sub(discount),
+            0
+          ]
+        );
+      });
+
+      it("Should not have a discount for tokenOwner in the allowlist if he is not minting a second token", async function () {
+        const {
+          treasury,
+          publicUser1,
+          discountUser1,
+          discountUser2,
+
+          ERC20Amount,
+
+          ERC20Mock,
+          discountMerkleProof,
+
+          BOTV
+        } = await loadFixture(activeSaleFixture);
+
+        let discount = BigNumber.from(ERC20Amount).div(2);
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            discountUser1.address,
+            2,
+            ERC20Mock.address,
+            [],
+            discountMerkleProof(discountUser1.address)
+          )
+        )
+          .to.emit(BOTV, "Mint")
+          .withArgs(
+            discountUser1.address,
+            2,
+            BigNumber.from(ERC20Amount).mul(2).sub(discount),
+            ERC20Mock.address,
+            publicUser1.address
+          );
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            discountUser1.address,
+            1,
+            ERC20Mock.address,
+            [],
+            discountMerkleProof(discountUser1.address)
+          )
+        ).to.changeTokenBalances(
+          ERC20Mock,
+          [publicUser1.address, treasury.address, discountUser2.address],
+          [-ERC20Amount, ERC20Amount, 0]
+        );
+
+        const etherValue = "0.15";
+        const value = parseEther(etherValue);
+
+        let tx = await BOTV.setPrice(ZERO_ADDRESS, true, value);
+        await tx.wait();
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            discountUser2.address,
+            1,
+            ZERO_ADDRESS,
+            [],
+            discountMerkleProof(discountUser2.address),
+            { value }
+          )
+        ).to.changeEtherBalances(
+          [publicUser1.address, treasury.address],
+          [parseEther(`-${etherValue}`), value]
+        );
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            discountUser2.address,
+            1,
+            ZERO_ADDRESS,
+            [],
+            discountMerkleProof(discountUser2.address),
+            { value: BigNumber.from(value).div(2) }
+          )
+        ).to.changeEtherBalances(
+          [publicUser1.address, treasury.address],
+          [parseEther(`-${etherValue}`).div(2), BigNumber.from(value).div(2)]
+        );
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            discountUser2.address,
+            1,
+            ZERO_ADDRESS,
+            [],
+            discountMerkleProof(discountUser2.address),
+            { value: BigNumber.from(value).div(2) }
+          )
+        ).to.be.revertedWithCustomError(BOTV, "AmountValueTooLow");
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            discountUser2.address,
+            5,
+            ERC20Mock.address,
+            [],
+            discountMerkleProof(discountUser2.address)
+          )
+        ).to.changeTokenBalances(
+          ERC20Mock,
+          [publicUser1.address, treasury.address, discountUser2.address],
+          [
+            -BigNumber.from(ERC20Amount).mul(5),
+            BigNumber.from(ERC20Amount).mul(5),
+            0
+          ]
+        );
+      });
+
+      it("Should not have a discount if tokenOwner is not in the discount allowlist", async function () {
+        const {
+          treasury,
+          publicUser1,
+          publicUser2,
+
+          privateUser1,
+
+          discountUser1,
+
+          ERC20Amount,
+
+          ERC20Mock,
+          discountMerkleProof,
+
+          BOTV
+        } = await loadFixture(activeSaleFixture);
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            2,
+            ERC20Mock.address,
+            [],
+            discountMerkleProof(publicUser2.address)
+          )
+        )
+          .to.emit(BOTV, "Mint")
+          .withArgs(
+            publicUser2.address,
+            2,
+            BigNumber.from(ERC20Amount).mul(2),
+            ERC20Mock.address,
+            publicUser1.address
+          );
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            privateUser1.address,
+            1,
+            ERC20Mock.address,
+            [],
+            discountMerkleProof(discountUser1.address)
+          )
+        ).to.changeTokenBalances(
+          ERC20Mock,
+          [publicUser1.address, treasury.address, privateUser1.address],
+          [-ERC20Amount, ERC20Amount, 0]
+        );
+
+        const etherValue = "0.15";
+        const value = parseEther(etherValue);
+
+        let tx = await BOTV.setPrice(ZERO_ADDRESS, true, value);
+        await tx.wait();
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            privateUser1.address,
+            1,
+            ZERO_ADDRESS,
+            [],
+            discountMerkleProof(privateUser1.address),
+            { value: BigNumber.from(value).div(2) }
+          )
+        ).to.be.revertedWithCustomError(BOTV, "AmountValueTooLow");
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            privateUser1.address,
+            1,
+            ZERO_ADDRESS,
+            [],
+            discountMerkleProof(discountUser1.address),
+            { value: BigNumber.from(value).div(2) }
+          )
+        ).to.be.revertedWithCustomError(BOTV, "AmountValueTooLow");
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            privateUser1.address,
+            1,
+            ZERO_ADDRESS,
+            [],
+            discountMerkleProof(discountUser1.address),
+            { value }
+          )
+        ).to.changeEtherBalances(
+          [publicUser1.address, treasury.address],
+          [parseEther(`-${etherValue}`), value]
+        );
+      });
+    });
+  });
+
+  describe("Metadata reveal", async function () {
+    it("Should give prereveal metadata for minted token as randomNumber is 0", async function () {
+      const { BOTV, quantity } = await loadFixture(afterOneSaleFixture);
+
+      expect(await BOTV.tokenURI(0)).to.be.equal(`${BASE_URI}prereveal`);
+      expect(await BOTV.tokenURI(1)).to.be.equal(`${BASE_URI}prereveal`);
+      await expect(BOTV.tokenURI(quantity)).to.be.revertedWithCustomError(
+        BOTV,
+        "URIQueryForNonexistentToken"
+      );
+    });
+
+    it("Should give random metadata once reveal function is executed", async function () {
+      const { BOTV, quantity, vrfCoordinatorV2Mock, subscriptionId, keyHash } =
+        await loadFixture(afterOneSaleFixture);
+
+      await expect(BOTV.reveal(keyHash, subscriptionId, 40000)).to.emit(
+        vrfCoordinatorV2Mock,
+        "RandomWordsRequested"
+      );
+      const requestId = await BOTV.requestId();
 
       await expect(
-        DSponsorNFT.connect(controller).setPrice(
-          ERC20Mock.address,
-          false,
-          newERC20Amount
-        )
-      )
-        .to.emit(DSponsorNFT, 'MintPriceChange')
-        .withArgs(ERC20Mock.address, false, newERC20Amount)
+        vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV.address)
+      ).to.emit(BOTV, "RevealRandomNumber");
 
-        expect(
-        await DSponsorNFT.getMintPriceForCurrency(ERC20Mock.address)
-      ).to.be.deep.equal([false, BigNumber.from(newERC20Amount)])
+      const randomNumber = await BOTV.randomNumber();
 
-      expect(
-        await DSponsorNFT.getMintPriceForCurrency(ZERO_ADDRESS)
-      ).to.be.deep.equal([true, value])
-    })
+      const tokenUri0 = `${BASE_URI}${BigNumber.from(randomNumber).mod(
+        MAX_SUPPLY
+      )}`;
+      expect(await BOTV.tokenURI(0)).to.be.equal(tokenUri0);
+      const tokenUri1 = `${BASE_URI}${BigNumber.from(randomNumber)
+        .add(1)
+        .mod(MAX_SUPPLY)}`;
+      expect(await BOTV.tokenURI(1)).to.be.equal(tokenUri1);
+      const tokenUriLast = `${BASE_URI}${BigNumber.from(randomNumber)
+        .add(quantity - 1)
+        .mod(MAX_SUPPLY)}`;
+      expect(await BOTV.tokenURI(quantity - 1)).to.be.equal(tokenUriLast);
 
-    it('Sets royalty correctly', async function () {
-      const { DSponsorNFT, controller, tokenId } = await loadFixture(
-        initFixture
-      )
+      await expect(BOTV.tokenURI(quantity)).to.be.revertedWithCustomError(
+        BOTV,
+        "URIQueryForNonexistentToken"
+      );
+    });
 
-      const treasury = await DSponsorNFT.getTreasury()
-      const salePrice = 100
+    it("Should revert if `reveal` function is executed more than once", async function () {
+      const { BOTV, vrfCoordinatorV2Mock, subscriptionId, keyHash } =
+        await loadFixture(afterOneSaleFixture);
 
-      expect(
-        await DSponsorNFT.royaltyInfo(tokenId, salePrice)
-      ).to.be.deep.equal([ZERO_ADDRESS, 0])
+      await expect(BOTV.reveal(keyHash, subscriptionId, 40000)).to.emit(
+        vrfCoordinatorV2Mock,
+        "RandomWordsRequested"
+      );
 
-      const newFee = 500
+      await expect(
+        BOTV.reveal(keyHash, subscriptionId, 40000)
+      ).to.be.revertedWithCustomError(BOTV, "RevealAlreadyRequested");
 
-      let tx = await DSponsorNFT.connect(controller).setRoyalty(newFee)
-      await tx.wait()
+      const requestId = await BOTV.requestId();
 
-      expect(
-        await DSponsorNFT.royaltyInfo(tokenId, salePrice)
-      ).to.be.deep.equal([treasury, 5])
-    })
-  })
-})
+      await expect(
+        vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV.address)
+      ).to.emit(BOTV, "RevealRandomNumber");
+
+      await expect(BOTV.resetVrfRequest()).to.be.revertedWithCustomError(
+        BOTV,
+        "AlreadyRevealed"
+      );
+    });
+
+    describe("Chainlink errors", async function () {
+      it("Should be able to retry if is not funded", async function () {
+        const { BOTV, vrfCoordinatorV2Mock, keyHash } = await loadFixture(
+          initFixture
+        );
+
+        let tx = await vrfCoordinatorV2Mock.createSubscription();
+        const transactionReceipt = await tx.wait();
+        const subscriptionId2 = BigNumber.from(
+          transactionReceipt.events[0].topics[1]
+        );
+        await vrfCoordinatorV2Mock.addConsumer(subscriptionId2, BOTV.address);
+
+        await expect(BOTV.reveal(keyHash, subscriptionId2, 40000)).to.not.be
+          .reverted;
+
+        let requestId = await BOTV.requestId();
+
+        await expect(
+          vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV.address)
+        ).to.be.reverted;
+
+        tx = await vrfCoordinatorV2Mock.fundSubscription(
+          subscriptionId2,
+          parseEther("7")
+        );
+        await tx.wait();
+
+        tx = await BOTV.resetVrfRequest();
+        await tx.wait();
+
+        await expect(BOTV.reveal(keyHash, subscriptionId2, 40000)).to.emit(
+          vrfCoordinatorV2Mock,
+          "RandomWordsRequested"
+        );
+        requestId = await BOTV.requestId();
+
+        await expect(
+          vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV.address)
+        ).to.emit(BOTV, "RevealRandomNumber");
+      });
+
+      it("Should be able to retry if not added as consumer", async function () {
+        const { BOTV, vrfCoordinatorV2Mock, keyHash } = await loadFixture(
+          initFixture
+        );
+
+        let tx = await vrfCoordinatorV2Mock.createSubscription();
+        const transactionReceipt = await tx.wait();
+        const subscriptionId2 = BigNumber.from(
+          transactionReceipt.events[0].topics[1]
+        );
+        tx = await vrfCoordinatorV2Mock.fundSubscription(
+          subscriptionId2,
+          parseEther("7")
+        );
+        await tx.wait();
+
+        await expect(BOTV.reveal(keyHash, subscriptionId2, 40000)).to.be
+          .reverted;
+
+        await vrfCoordinatorV2Mock.addConsumer(subscriptionId2, BOTV.address);
+
+        await expect(BOTV.reveal(keyHash, subscriptionId2, 40000)).to.emit(
+          vrfCoordinatorV2Mock,
+          "RandomWordsRequested"
+        );
+        let requestId = await BOTV.requestId();
+
+        await expect(
+          vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV.address)
+        ).to.emit(BOTV, "RevealRandomNumber");
+      });
+
+      it("Should be able to retry if bad subscription", async function () {
+        const { BOTV, vrfCoordinatorV2Mock, subscriptionId, keyHash } =
+          await loadFixture(initFixture);
+
+        await expect(BOTV.reveal(keyHash, 40000, 40000)).to.be.reverted;
+
+        await expect(BOTV.reveal(keyHash, subscriptionId, 40000)).to.emit(
+          vrfCoordinatorV2Mock,
+          "RandomWordsRequested"
+        );
+        const requestId = await BOTV.requestId();
+
+        await expect(
+          vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV.address)
+        ).to.emit(BOTV, "RevealRandomNumber");
+      });
+
+      it("Should be able to retry if callbackGasLimit is too low", async function () {
+        const { BOTV, vrfCoordinatorV2Mock, subscriptionId, keyHash } =
+          await loadFixture(initFixture);
+
+        await expect(BOTV.reveal(keyHash, subscriptionId, 10000)).to.emit(
+          vrfCoordinatorV2Mock,
+          "RandomWordsRequested"
+        );
+
+        let requestId = await BOTV.requestId();
+
+        await expect(
+          vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV.address)
+        ).to.not.emit(BOTV, "RevealRandomNumber");
+
+        let tx = await BOTV.resetVrfRequest();
+        await tx.wait();
+
+        await expect(BOTV.reveal(keyHash, subscriptionId, 40000)).to.emit(
+          vrfCoordinatorV2Mock,
+          "RandomWordsRequested"
+        );
+        requestId = await BOTV.requestId();
+
+        await expect(
+          vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV.address)
+        ).to.emit(BOTV, "RevealRandomNumber");
+      });
+    });
+  });
+
+  describe("Protected operations", async function () {
+    async function testProtectedFunction(functionName, functionArgs) {
+      const { BOTV, publicUser1 } = await loadFixture(initFixture);
+      await expect(BOTV[functionName](...functionArgs)).to.not.be.reverted;
+      await expect(
+        BOTV.connect(publicUser1)[functionName](...functionArgs)
+      ).to.be.revertedWith("Ownable: caller is not the owner");
+    }
+
+    it("Should revert if `resetVrfRequest` function is not executed by owner", async function () {
+      await testProtectedFunction("resetVrfRequest", []);
+    });
+
+    it("Should revert if `reveal` function is not executed by owner", async function () {
+      await testProtectedFunction("reveal", [
+        "0xd89b2bf150e3b9e13446986e571fb9cab24b13cea0a43ea20a6049a85cc807cc",
+        1,
+        40000
+      ]);
+    });
+
+    it("Should revert if `setPrice` function is not executed by owner", async function () {
+      await testProtectedFunction("setPrice", [ZERO_ADDRESS, true, 40000]);
+    });
+
+    it("Should revert if `setPrivateSale` is not executed by owner", async function () {
+      await testProtectedFunction("setPrivateSale", [true]);
+    });
+
+    it("Should revert if `setPublicSale` is not executed by owner", async function () {
+      await testProtectedFunction("setPublicSale", [true]);
+    });
+  });
+});

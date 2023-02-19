@@ -89,7 +89,9 @@ Result files can be found inside the `data/results` folder
 
 🔲 ERC721A contract for skull NFTs
 
-- Minting price & private sale access with Merkle proof verification
+- ERC4907 rentable NFT token standard and ERC2981 royalties implementations
+- Minting price configurable for any ERC20 and/or blockchain's native coin
+- Discounts & private sale access with Merkle proof verification
 - Hat, trench coat & skull wearable transfers on mint
 - Reveal with random assignation using Chainlink
 

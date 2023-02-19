@@ -1,5 +1,5 @@
-const hre = require('hardhat')
-const { ethers } = hre
+const hre = require("hardhat");
+const { ethers } = hre;
 
 async function main() {
   // @TODO
@@ -11,17 +11,17 @@ async function main() {
   // 6. deploy Music NFT contract
   // 7. deploy staking contract
 
-  const BOTVDeployer = await ethers.getContractFactory('BOTV')
-  const BOTVContract = await BOTVDeployer.deploy()
+  const BOTVDeployer = await ethers.getContractFactory("BOTV");
+  const BOTVContract = await BOTVDeployer.deploy();
 
-  await BOTVContract.deployed()
+  await BOTVContract.deployed();
 
-  console.log('BOTV Skulls collection deployed to:', BOTVContract.address)
+  console.log("BOTV Skulls collection deployed to:", BOTVContract.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
 main().catch((error) => {
-  console.error(error)
-  process.exitCode = 1
-})
+  console.error(error);
+  process.exitCode = 1;
+});
