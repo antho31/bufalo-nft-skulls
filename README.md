@@ -76,8 +76,8 @@ Result files can be found inside the `data/results` folder
 
 You can fetch `https://bufalo-api.anthonygourraud.workers.dev/merkleproofs/:addr` to get the merkle proofs for an address `addr`.
 
-```json
-/// Result from https://bufalo-api.anthonygourraud.workers.dev/merkleproofs/0x64E8f7C2B4fd33f5E8470F3C6Df04974F90fc2cA
+```js
+// Result from https://bufalo-api.anthonygourraud.workers.dev/merkleproofs/0x64E8f7C2B4fd33f5E8470F3C6Df04974F90fc2cA
 {
   "addr": "0x64e8f7c2b4fd33f5e8470f3c6df04974f90fc2ca",
 

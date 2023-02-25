@@ -1,0 +1,40 @@
+{
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "Light Pink"
+    },
+    {
+      "trait_type": "Eyes",
+      "value": "Grey Marble"
+    },
+    {
+      "trait_type": "Horns",
+      "value": "Camo Black & Gold"
+    },
+    {
+      "trait_type": "Mask",
+      "value": "PInk & Yellow Bandana"
+    },
+    {
+      "trait_type": "Music",
+      "value": "Bufalo - The Train (Song 6)"
+    },
+    {
+      "trait_type": "Skull",
+      "value": "Grey Marble"
+    },
+    {
+      "trait_type": "Legendary",
+      "value": "No"
+    },
+    {
+      "trait_type": "Text",
+      "value": "None"
+    }
+  ],
+  "animation_url": "ipfs://bafybeig2ov6c5wbmdpcmdc5barky2rgx2b2n33noihldiensblbzf2zute/Bufalo - The Train (Song 6).wav",
+  "description": "",
+  "image": "ipfs://bafybeicgk7uqmmfhcopoyh7rwvqgiva7ebr6u6osqbeviel7o4x3suaiee/802.png",
+  "name": "BOTV Skull #802"
+}

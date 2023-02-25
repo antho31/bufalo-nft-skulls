@@ -79,12 +79,14 @@ contract BOTV is ERC2981, ERC4907A, Ownable, VRFConsumerBaseV2 {
     /** @notice Opensea-comptatible off-chain metadata base URI for each ERC721 token,
      * See https://docs.opensea.io/docs/metadata-standards
      */
-    string public constant baseURI = "@TODO-ipfs://base-uri-to-replace/";
+    string public constant baseURI =
+        "ipfs://bafybeigbkru6w5yyim3wrkuisayq3hk66cgxcatjtqk2xpyjrfv5avoici/tokens/";
 
     /** @notice Opensea-comptatible storefront-level metadata,
      * See https://docs.opensea.io/docs/contract-level-metadata
      */
-    string public constant contractURI = "@TODO-ipfs://contract-uri-to-replace";
+    string public constant contractURI =
+        "ipfs://bafkreid2ll6xenucqrbjpaqhrhweqizl4txpg7i2ejbzvrprgzl4du6zom";
 
     // Chainlink VRF configuration, see https://docs.chain.link/vrf/v2/subscription/supported-networks/
     VRFCoordinatorV2Interface private immutable _VRF_COORDINATOR;
@@ -350,10 +352,6 @@ contract BOTV is ERC2981, ERC4907A, Ownable, VRFConsumerBaseV2 {
 
     function getTreasury() external view returns (address payable) {
         return TREASURY;
-    }
-
-    function getContractURI() external pure returns (string memory) {
-        return contractURI;
     }
 
     function getMaxSupply() external pure returns (uint256) {

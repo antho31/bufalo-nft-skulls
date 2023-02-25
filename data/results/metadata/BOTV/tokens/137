@@ -1,0 +1,40 @@
+{
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "Blue"
+    },
+    {
+      "trait_type": "Eyes",
+      "value": "Grey Marble"
+    },
+    {
+      "trait_type": "Horns",
+      "value": "Dark Porcelaine"
+    },
+    {
+      "trait_type": "Mask",
+      "value": "Blue & Black Bandana"
+    },
+    {
+      "trait_type": "Music",
+      "value": "Bufalo - Ollie Mcguire (Song 4)"
+    },
+    {
+      "trait_type": "Skull",
+      "value": "Gold"
+    },
+    {
+      "trait_type": "Legendary",
+      "value": "No"
+    },
+    {
+      "trait_type": "Text",
+      "value": "Hiho Bufalo"
+    }
+  ],
+  "animation_url": "ipfs://bafybeig2ov6c5wbmdpcmdc5barky2rgx2b2n33noihldiensblbzf2zute/Bufalo - Ollie Mcguire (Song 4).wav",
+  "description": "",
+  "image": "ipfs://bafybeicgk7uqmmfhcopoyh7rwvqgiva7ebr6u6osqbeviel7o4x3suaiee/137.png",
+  "name": "BOTV Skull #137"
+}

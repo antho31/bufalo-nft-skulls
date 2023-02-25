@@ -1,0 +1,40 @@
+{
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "Yellow"
+    },
+    {
+      "trait_type": "Eyes",
+      "value": "Grey Marble"
+    },
+    {
+      "trait_type": "Horns",
+      "value": "Camo Black & Gold"
+    },
+    {
+      "trait_type": "Mask",
+      "value": "None"
+    },
+    {
+      "trait_type": "Music",
+      "value": "Bufalo - Ollie Mcguire (Song 4)"
+    },
+    {
+      "trait_type": "Skull",
+      "value": "Dark Porcelaine"
+    },
+    {
+      "trait_type": "Legendary",
+      "value": "No"
+    },
+    {
+      "trait_type": "Text",
+      "value": "Home On The Range"
+    }
+  ],
+  "animation_url": "ipfs://bafybeig2ov6c5wbmdpcmdc5barky2rgx2b2n33noihldiensblbzf2zute/Bufalo - Ollie Mcguire (Song 4).wav",
+  "description": "",
+  "image": "ipfs://bafybeicgk7uqmmfhcopoyh7rwvqgiva7ebr6u6osqbeviel7o4x3suaiee/342.png",
+  "name": "BOTV Skull #342"
+}

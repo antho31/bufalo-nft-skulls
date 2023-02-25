@@ -1,0 +1,40 @@
+{
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "Gradient Black"
+    },
+    {
+      "trait_type": "Eyes",
+      "value": "Dark Porcelaine"
+    },
+    {
+      "trait_type": "Horns",
+      "value": "Molten Gold"
+    },
+    {
+      "trait_type": "Mask",
+      "value": "Grey & Black Bandana"
+    },
+    {
+      "trait_type": "Music",
+      "value": "Bufalo - Billy Bob (Song 2)"
+    },
+    {
+      "trait_type": "Skull",
+      "value": "Dusty Black & Gold"
+    },
+    {
+      "trait_type": "Legendary",
+      "value": "No"
+    },
+    {
+      "trait_type": "Text",
+      "value": "Tatanka"
+    }
+  ],
+  "animation_url": "ipfs://bafybeig2ov6c5wbmdpcmdc5barky2rgx2b2n33noihldiensblbzf2zute/Bufalo - Billy Bob (Song 2).wav",
+  "description": "",
+  "image": "ipfs://bafybeicgk7uqmmfhcopoyh7rwvqgiva7ebr6u6osqbeviel7o4x3suaiee/853.png",
+  "name": "BOTV Skull #853"
+}

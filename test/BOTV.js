@@ -12,7 +12,8 @@ const { getMerkleDataFromAllowlistArray } = require("../utils/merkle");
 const MAX_SUPPLY = 1000;
 const MINT_LIMIT_PER_WALLET = 10;
 
-const BASE_URI = "@TODO-ipfs://base-uri-to-replace/";
+const BASE_URI =
+  "ipfs://bafybeigbkru6w5yyim3wrkuisayq3hk66cgxcatjtqk2xpyjrfv5avoici/tokens/";
 
 describe("BOTV", function () {
   // We define a fixture to reuse the same setup in every test.

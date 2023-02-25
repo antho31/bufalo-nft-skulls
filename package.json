@@ -14,6 +14,7 @@
     "deploy-api": "wrangler publish",
     "deploy-contracts": "npx hardhat run scripts/deploy.js --network",
     "dev-api": "wrangler dev",
+    "metadata": "rm -f data/results/metadata/BOTV/*.car && node scripts/tokenMetadata.js && npx ipfs-car --pack data/results/metadata/BOTV/tokens --output data/results/metadata/BOTV/botvmetadata.car",
     "snapshot": "node scripts/privateSaleLists.js && node scripts/merkleLists.js && npm run deploy-api",
     "sizes": "npx hardhat size-contracts",
     "test-api": "jest api/*.test.js",

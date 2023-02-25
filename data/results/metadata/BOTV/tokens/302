@@ -1,0 +1,40 @@
+{
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "FWM"
+    },
+    {
+      "trait_type": "Eyes",
+      "value": "Bushy Bufalo"
+    },
+    {
+      "trait_type": "Horns",
+      "value": "Bushy Bufalo"
+    },
+    {
+      "trait_type": "Mask",
+      "value": "None"
+    },
+    {
+      "trait_type": "Music",
+      "value": "Bufalo - Master Nelson (Song 10)"
+    },
+    {
+      "trait_type": "Skull",
+      "value": "Bushy Bufalo"
+    },
+    {
+      "trait_type": "Legendary",
+      "value": "1/1"
+    },
+    {
+      "trait_type": "Text",
+      "value": "FWM"
+    }
+  ],
+  "animation_url": "ipfs://bafybeig2ov6c5wbmdpcmdc5barky2rgx2b2n33noihldiensblbzf2zute/Bufalo - Master Nelson (Song 10).wav",
+  "description": "",
+  "image": "ipfs://bafybeicgk7uqmmfhcopoyh7rwvqgiva7ebr6u6osqbeviel7o4x3suaiee/302.png",
+  "name": "Bushy Bufalo - BOTV Skull #302"
+}

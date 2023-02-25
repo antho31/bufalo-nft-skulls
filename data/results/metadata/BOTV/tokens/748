@@ -1,0 +1,40 @@
+{
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "FWM"
+    },
+    {
+      "trait_type": "Eyes",
+      "value": "Blue Neon Bufalo"
+    },
+    {
+      "trait_type": "Horns",
+      "value": "Blue Neon Bufalo"
+    },
+    {
+      "trait_type": "Mask",
+      "value": "None"
+    },
+    {
+      "trait_type": "Music",
+      "value": "Bufalo - Legion (Song 9)"
+    },
+    {
+      "trait_type": "Skull",
+      "value": "Blue Neon Bufalo"
+    },
+    {
+      "trait_type": "Legendary",
+      "value": "1/1"
+    },
+    {
+      "trait_type": "Text",
+      "value": "FWM"
+    }
+  ],
+  "animation_url": "ipfs://bafybeig2ov6c5wbmdpcmdc5barky2rgx2b2n33noihldiensblbzf2zute/Bufalo - Legion (Song 9).wav",
+  "description": "",
+  "image": "ipfs://bafybeicgk7uqmmfhcopoyh7rwvqgiva7ebr6u6osqbeviel7o4x3suaiee/748.png",
+  "name": "Blue Neon Bufalo - BOTV Skull #748"
+}

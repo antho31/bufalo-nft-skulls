@@ -1,0 +1,40 @@
+{
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "Blue"
+    },
+    {
+      "trait_type": "Eyes",
+      "value": "Broken Black & Gold"
+    },
+    {
+      "trait_type": "Horns",
+      "value": "Dark Porcelaine"
+    },
+    {
+      "trait_type": "Mask",
+      "value": "PInk & Yellow Bandana"
+    },
+    {
+      "trait_type": "Music",
+      "value": "Bufalo - Santana (Song 1)"
+    },
+    {
+      "trait_type": "Skull",
+      "value": "Camo Black & Gold"
+    },
+    {
+      "trait_type": "Legendary",
+      "value": "No"
+    },
+    {
+      "trait_type": "Text",
+      "value": "None"
+    }
+  ],
+  "animation_url": "ipfs://bafybeig2ov6c5wbmdpcmdc5barky2rgx2b2n33noihldiensblbzf2zute/Bufalo - Santana (Song 1).wav",
+  "description": "",
+  "image": "ipfs://bafybeicgk7uqmmfhcopoyh7rwvqgiva7ebr6u6osqbeviel7o4x3suaiee/255.png",
+  "name": "BOTV Skull #255"
+}

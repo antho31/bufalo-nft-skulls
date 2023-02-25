@@ -1,0 +1,40 @@
+{
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "Gradient Black"
+    },
+    {
+      "trait_type": "Eyes",
+      "value": "Cyber Gold"
+    },
+    {
+      "trait_type": "Horns",
+      "value": "Cyber Gold"
+    },
+    {
+      "trait_type": "Mask",
+      "value": "Blue & Black Bandana"
+    },
+    {
+      "trait_type": "Music",
+      "value": "Bufalo - Jack O'Connell (Song 3)"
+    },
+    {
+      "trait_type": "Skull",
+      "value": "Molten Gold"
+    },
+    {
+      "trait_type": "Legendary",
+      "value": "No"
+    },
+    {
+      "trait_type": "Text",
+      "value": "BuckWild on the V"
+    }
+  ],
+  "animation_url": "ipfs://bafybeig2ov6c5wbmdpcmdc5barky2rgx2b2n33noihldiensblbzf2zute/Bufalo - Jack O'Connell (Song 3).wav",
+  "description": "",
+  "image": "ipfs://bafybeicgk7uqmmfhcopoyh7rwvqgiva7ebr6u6osqbeviel7o4x3suaiee/821.png",
+  "name": "BOTV Skull #821"
+}

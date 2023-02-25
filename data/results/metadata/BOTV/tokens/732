@@ -1,0 +1,40 @@
+{
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "Gold"
+    },
+    {
+      "trait_type": "Eyes",
+      "value": "Crystal"
+    },
+    {
+      "trait_type": "Horns",
+      "value": "Gold Ore"
+    },
+    {
+      "trait_type": "Mask",
+      "value": "None"
+    },
+    {
+      "trait_type": "Music",
+      "value": "Bufalo - Master Nelson (Song 10)"
+    },
+    {
+      "trait_type": "Skull",
+      "value": "Gold Ore"
+    },
+    {
+      "trait_type": "Legendary",
+      "value": "No"
+    },
+    {
+      "trait_type": "Text",
+      "value": "Tatanka"
+    }
+  ],
+  "animation_url": "ipfs://bafybeig2ov6c5wbmdpcmdc5barky2rgx2b2n33noihldiensblbzf2zute/Bufalo - Master Nelson (Song 10).wav",
+  "description": "",
+  "image": "ipfs://bafybeicgk7uqmmfhcopoyh7rwvqgiva7ebr6u6osqbeviel7o4x3suaiee/732.png",
+  "name": "BOTV Skull #732"
+}
