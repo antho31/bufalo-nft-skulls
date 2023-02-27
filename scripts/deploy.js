@@ -8,9 +8,15 @@ const privateListMerkle = require("../data/results/merkleAllowlists/community.js
 const discountListMerkle = require("../data/results/merkleAllowlists/fans.json");
 
 const VRFCoordinatorV2ABI = require("@chainlink/contracts/abi/v0.8/VRFCoordinatorV2.json");
-
+const DclERC721CollectionABI = require("../abis/DCL-ERC721CollectionV2.json");
 const MAX_SUPPLY = 5;
 
+/* 
+Deployed on mumbai : 
+"0xb6ca5f227cc536680762822f0660c6c5adb79fbe",
+"0xea83f517864560ace8ee2290fcf4b18c22a15617",
+"0x9c5d825e7071f4655f5cbe037bc39016ead35cd3"
+*/
 async function deployFakeERC721(address) {
   const ERC721MockDeployer = await ethers.getContractFactory("ERC721Mock");
   const AirdropTokensContract1 = await ERC721MockDeployer.deploy(
@@ -111,15 +117,22 @@ async function main() {
   });
   console.log("BOTV Skulls collection verified on Polygonscan");
 
+  for (let addr of [deployBOTVArgs.wearablesAddresses]) {
+    const ERC721CollectionV2 = await ethers.getContractAt(
+      DclERC721CollectionABI,
+      addr
+    );
+    await ERC721CollectionV2.setApprovalForAll(BOTVContractAddress, true);
+  }
+
   // @TODO
-  //  - set approuval for all wearables --> nftContractAddress.setApprovalForAll(BOTVContractAddress,   true  )
   // - deploy BUFA contract
   // - deploy Music NFT contract
   // - deploy staking contract
   // verify all contracts !
 
   fs.writeFileSync(
-    `./data/results/deployment/${network.name}`,
+    `./data/results/deployment/${network.name}.json`,
     JSON.stringify({ BOTVContractAddress }, null, 2)
   );
 }
