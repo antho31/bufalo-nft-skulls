@@ -11,4 +11,4 @@ typechain-types
 cache
 artifacts
 
-./**/*.car
+**.car

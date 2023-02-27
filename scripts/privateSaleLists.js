@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const { Alchemy, Network } = require("alchemy-sdk");
 const fs = require("fs");
-const { Parser } = "@json2csv/plainjs";
+const { Parser } = require("@json2csv/plainjs");
 
 const superagent = require("superagent");
 const Throttle = require("superagent-throttle");
@@ -273,6 +273,7 @@ async function main() {
 
     // Let's generate a spreadsheet (CSV) for the sales, ordered by total spending amount
     let totalSales = [];
+
     for (const allowlistedAddress in allowlistsData) {
       const {
         sales: { usdSpent, tokens }
@@ -287,6 +288,7 @@ async function main() {
     totalSales.sort(function (a, b) {
       return b.usdSpent - a.usdSpent;
     });
+
     const parser = new Parser();
     const csv = parser.parse(totalSales);
 

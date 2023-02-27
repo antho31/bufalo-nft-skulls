@@ -1,5 +1,4 @@
 {
-  "snapshotDate": "2023-01-26T17:49:19.259Z",
   "0x2bd420f22c3d88439cc7713023267e5ead575630": {
     "sales": {
       "usdSpent": 0,
@@ -94,7 +93,7 @@
       ]
     },
     "collections": {
-      "totalOwned": 8,
+      "totalOwned": 9,
       "tokens": [
         {
           "tokenId": "36350066171751915763166281007467485449586398269626739187466691435271687241828",
@@ -106,6 +105,11 @@
           "tokenId": "36350066171751915763166281007467485449586398269626739187466691436371198869534",
           "name": "Bufalo & Stoney Eye - Blazing Outlaws",
           "contractAddress": "0x2953399124f0cbb46d2cbacd8a89cf0599974963",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
           "chain": "MATIC"
         },
         {
@@ -238,7 +242,7 @@
       ]
     },
     "collections": {
-      "totalOwned": 13,
+      "totalOwned": 14,
       "tokens": [
         {
           "tokenId": "36350066171751915763166281007467485449586398269626739187466691384694152364033",
@@ -274,6 +278,11 @@
           "tokenId": "36350066171751915763166281007467485449586398269626739187466691440769245380618",
           "name": "Bufalo - Molt",
           "contractAddress": "0x2953399124f0cbb46d2cbacd8a89cf0599974963",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
           "chain": "MATIC"
         },
         {
@@ -357,7 +366,7 @@
       ]
     },
     "collections": {
-      "totalOwned": 8,
+      "totalOwned": 9,
       "tokens": [
         {
           "tokenId": "36350066171751915763166281007467485449586398269626739187466691392390733758465",
@@ -370,6 +379,11 @@
           "name": "\"Renaissance\" By Bufalo - 8/10 (BOTW 1-30 Music Theme)",
           "contractAddress": "0x495f947276749ce646f68ac8c248420045cb7b5e",
           "chain": "ETHEREUM"
+        },
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
+          "chain": "MATIC"
         },
         {
           "name": "Bufalo Cowboy Line Dance",
@@ -500,7 +514,7 @@
       ]
     },
     "collections": {
-      "totalOwned": 7,
+      "totalOwned": 8,
       "tokens": [
         {
           "tokenId": "36350066171751915763166281007467485449586398269626739187466691427575105847297",
@@ -524,6 +538,11 @@
           "tokenId": "36350066171751915763166281007467485449586398269626739187466691439669733752837",
           "name": "Mirage",
           "contractAddress": "0x2953399124f0cbb46d2cbacd8a89cf0599974963",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
           "chain": "MATIC"
         },
         {
@@ -889,7 +908,7 @@
       "tokens": [
         {
           "tokenId": "105312291668557186697918027683670432318895095400549111254310977547",
-          "name": "(DCL item)",
+          "name": "Bufalo - Pony Up!",
           "contractAddress": "0xa8c3733e25a9f5e1f5f238660701546e70ae3c89",
           "chain": "MATIC",
           "price_usd": 6.605629935779436,
@@ -898,7 +917,7 @@
         },
         {
           "tokenId": "11",
-          "name": "(DCL item)",
+          "name": "Bufalo - Pony Up!",
           "contractAddress": "0xa8c3733e25a9f5e1f5f238660701546e70ae3c89",
           "chain": "MATIC",
           "price_usd": 6.605629935779436,
@@ -908,12 +927,17 @@
       ]
     },
     "collections": {
-      "totalOwned": 5,
+      "totalOwned": 6,
       "tokens": [
         {
           "tokenId": "36350066171751915763166281007467485449586398269626739187466691435271687241828",
           "name": "Bufalo & Stoney Eye - \"Marie - Jeanne\"",
           "contractAddress": "0x2953399124f0cbb46d2cbacd8a89cf0599974963",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
           "chain": "MATIC"
         },
         {
@@ -1506,17 +1530,12 @@
       ]
     },
     "collections": {
-      "totalOwned": 4,
+      "totalOwned": 3,
       "tokens": [
         {
           "tokenId": "36350066171751915763166281007467485449586398269626739187466691436371198869534",
           "name": "Bufalo & Stoney Eye - Blazing Outlaws",
           "contractAddress": "0x2953399124f0cbb46d2cbacd8a89cf0599974963",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo Cowboy Bandana & Colts",
-          "contractAddress": "0x204D55735990dEd4405d200A16A4d24c38cbe5CF",
           "chain": "MATIC"
         },
         {
@@ -2241,7 +2260,7 @@
       ]
     },
     "collections": {
-      "totalOwned": 3,
+      "totalOwned": 5,
       "tokens": [
         {
           "tokenId": "36350066171751915763166281007467485449586398269626739187466691440769245380618",
@@ -2250,8 +2269,823 @@
           "chain": "MATIC"
         },
         {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
+          "chain": "MATIC"
+        },
+        {
           "name": "Bufalo Cowboy Bandana & Colts",
           "contractAddress": "0x204D55735990dEd4405d200A16A4d24c38cbe5CF",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Trench Coat",
+          "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0x01583b793668442f8e206514eda684cd5fc72885": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 3,
+      "tokens": [
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Trench Coat",
+          "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0x0a4bfa6da2e7d94e43f4fbb296b24278009d3673": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 3,
+      "tokens": [
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Line Dance",
+          "contractAddress": "0x6123758f0Da7df3d61E6f8307eF12e3E9e3DED8E",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0x116d7fd799d794e7fc6512d72e6d5f7b5f912229": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 1,
+      "tokens": [
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0x154620ddfdcd6ab15dd9c1682386debad1eef536": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 5,
+      "tokens": [
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Bandana & Colts",
+          "contractAddress": "0x204D55735990dEd4405d200A16A4d24c38cbe5CF",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Trench Coat",
+          "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo BOTW Genesis Skulls",
+          "contractAddress": "0xE939a98D4FA55a57d3F5aeA98A83fd1ea4D5E619",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0x2469112bf8fc4453bee47d1739b06a4417b0aff7": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 4,
+      "tokens": [
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Diamond Set",
+          "contractAddress": "0xcEd8c8A0a7641F91Ad7cF9A065899a97971A41EC",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Trench Coat",
+          "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0x336685bb3a96e13b77e909d7c52e8afcff1e859e": {
+    "sales": {
+      "usdSpent": 1.4091369808404564,
+      "tokens": [
+        {
+          "tokenId": "426",
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xfded171d346107c1d4eb20f37484e8dd65beac9b",
+          "chain": "MATIC",
+          "price_usd": 1.4091369808404564,
+          "transaction_hash": "0x7781786cf62871a3bca8a3017df7a14cec85678c8d7c74baba64babd891eb6da",
+          "transaction_date": "5-10-2022"
+        }
+      ]
+    },
+    "collections": {
+      "totalOwned": 1,
+      "tokens": [
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0x44bc7fa4eadac0964a5d162e4b88fdf57352ed6c": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 3,
+      "tokens": [
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Trench Coat",
+          "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0x505d688a38b8cb9190b4f671d98a37a784e92c1f": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 8,
+      "tokens": [
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
+          "chain": "MATIC"
+        },
+        {
+          "name": "The Bufalo Charge Emote",
+          "contractAddress": "0xBD1622479260eF17514385dE53EDB587f711bbE2",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Line Dance",
+          "contractAddress": "0x6123758f0Da7df3d61E6f8307eF12e3E9e3DED8E",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Diamond Set",
+          "contractAddress": "0xcEd8c8A0a7641F91Ad7cF9A065899a97971A41EC",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Bandana & Colts",
+          "contractAddress": "0x204D55735990dEd4405d200A16A4d24c38cbe5CF",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Trench Coat",
+          "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo BOTW Genesis Skulls",
+          "contractAddress": "0xE939a98D4FA55a57d3F5aeA98A83fd1ea4D5E619",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0x56d947fa1ae6d6293b307b489540c156af628f0f": {
+    "sales": {
+      "usdSpent": 6.922133443814409,
+      "tokens": [
+        {
+          "tokenId": "105312291668557186697918027683670432318895095400549111254310977550",
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9f5e1f5f238660701546e70ae3c89",
+          "chain": "MATIC",
+          "price_usd": 6.922133443814409,
+          "transaction_hash": "0x74835b822cbbce53b0ba3ce51b8230ebaeb835fca31758d3223bc5ec9a8db937",
+          "transaction_date": "26-1-2023"
+        }
+      ]
+    },
+    "collections": {
+      "totalOwned": 2,
+      "tokens": [
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Bandana & Colts",
+          "contractAddress": "0x204D55735990dEd4405d200A16A4d24c38cbe5CF",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0x5d30d01e92fcfde549042e25fe78c65bfd4789cc": {
+    "sales": {
+      "usdSpent": 3.0320310751991526,
+      "tokens": [
+        {
+          "tokenId": "58",
+          "name": "Bufalo Cowboy Line Dance",
+          "contractAddress": "0x6123758f0da7df3d61e6f8307ef12e3e9e3ded8e",
+          "chain": "MATIC",
+          "price_usd": 3.0320310751991526,
+          "transaction_hash": "0xb3d637f8069d49db7a9e3ec7b1ab78795611ff50cb05dc96b2c0830e2f0c4286",
+          "transaction_date": "20-12-2022"
+        }
+      ]
+    },
+    "collections": {
+      "totalOwned": 4,
+      "tokens": [
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
+          "chain": "MATIC"
+        },
+        {
+          "name": "The Bufalo Charge Emote",
+          "contractAddress": "0xBD1622479260eF17514385dE53EDB587f711bbE2",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Line Dance",
+          "contractAddress": "0x6123758f0Da7df3d61E6f8307eF12e3E9e3DED8E",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Bandana & Colts",
+          "contractAddress": "0x204D55735990dEd4405d200A16A4d24c38cbe5CF",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0x60d2b7bc992c88351b00e03e624bbc900078946e": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 3,
+      "tokens": [
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo BOTW Genesis Skulls",
+          "contractAddress": "0xE939a98D4FA55a57d3F5aeA98A83fd1ea4D5E619",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0x6d5e5ba88861df8dba0eb53ebad1ba89eb4b238b": {
+    "sales": {
+      "usdSpent": 7.498041369055359,
+      "tokens": [
+        {
+          "tokenId": "105312291668557186697918027683670432318895095400549111254310977559",
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9f5e1f5f238660701546e70ae3c89",
+          "chain": "MATIC",
+          "price_usd": 7.498041369055359,
+          "transaction_hash": "0x8a25145d48821f42534f3b9cdfd36f6d16b793779cbc2038eeedc75fd6e0d087",
+          "transaction_date": "1-2-2023"
+        }
+      ]
+    },
+    "collections": {
+      "totalOwned": 2,
+      "tokens": [
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0x6f7f123b86e85dc30dc3bfdba20c4c5ed0bede1a": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 5,
+      "tokens": [
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Diamond Set",
+          "contractAddress": "0xcEd8c8A0a7641F91Ad7cF9A065899a97971A41EC",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Bandana & Colts",
+          "contractAddress": "0x204D55735990dEd4405d200A16A4d24c38cbe5CF",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Trench Coat",
+          "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0x706b5e2e84f606d7e98abe70017dc6f805ebb82f": {
+    "sales": {
+      "usdSpent": 33.51663655921924,
+      "tokens": [
+        {
+          "tokenId": "21",
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9f5e1f5f238660701546e70ae3c89",
+          "chain": "MATIC",
+          "price_usd": 6.785786147974,
+          "transaction_hash": "0xa74c5dc68881cd91b7812ec4bc3b7802bf1319cc43596c22f1fcc6d4daaccbfd",
+          "transaction_date": "27-1-2023"
+        },
+        {
+          "tokenId": "105312291668557186697918027683670432318895095400549111254310977558",
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9f5e1f5f238660701546e70ae3c89",
+          "chain": "MATIC",
+          "price_usd": 6.785786147974,
+          "transaction_hash": "0x63ee78f31fe462dca34f6fb7aa1fff8c1e20fa90d0b965305258fd5a3eeea93f",
+          "transaction_date": "27-1-2023"
+        },
+        {
+          "tokenId": "31",
+          "name": "Bufalo Diamond Set",
+          "contractAddress": "0xced8c8a0a7641f91ad7cf9a065899a97971a41ec",
+          "chain": "MATIC",
+          "price_usd": 9.972532131635623,
+          "transaction_hash": "0x288dd23622da9758a7234230acc17979797b4e094fdb2ce254de8ffdac89a1ce",
+          "transaction_date": "12-11-2022"
+        },
+        {
+          "tokenId": "84",
+          "name": "Bufalo Cowboy Bandana & Colts",
+          "contractAddress": "0x204d55735990ded4405d200a16a4d24c38cbe5cf",
+          "chain": "MATIC",
+          "price_usd": 4.986266065817811,
+          "transaction_hash": "0x6f21921e60365ebde823a30964b8466af7309548c5f1f73a30f222326456e5b9",
+          "transaction_date": "12-11-2022"
+        },
+        {
+          "tokenId": "45",
+          "name": "Bufalo Cowboy Line Dance",
+          "contractAddress": "0x6123758f0da7df3d61e6f8307ef12e3e9e3ded8e",
+          "chain": "MATIC",
+          "price_usd": 4.986266065817811,
+          "transaction_hash": "0x82962bd45cb9194b4bb1ff4cb9e92192104e4fb81c532351f2f95c907975fd35",
+          "transaction_date": "12-11-2022"
+        }
+      ]
+    },
+    "collections": {
+      "totalOwned": 5,
+      "tokens": [
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Line Dance",
+          "contractAddress": "0x6123758f0Da7df3d61E6f8307eF12e3E9e3DED8E",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Diamond Set",
+          "contractAddress": "0xcEd8c8A0a7641F91Ad7cF9A065899a97971A41EC",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Bandana & Colts",
+          "contractAddress": "0x204D55735990dEd4405d200A16A4d24c38cbe5CF",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0x7b45b843f7c2b5af04f555675fe162e69d33ab2e": {
+    "sales": {
+      "usdSpent": 6.605629935779436,
+      "tokens": [
+        {
+          "tokenId": "105312291668557186697918027683670432318895095400549111254310977549",
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9f5e1f5f238660701546e70ae3c89",
+          "chain": "MATIC",
+          "price_usd": 6.605629935779436,
+          "transaction_hash": "0xb3af5137a40ab610c578e731f639cfd869afd49a1aa459f8b9ce7ce7a30fad68",
+          "transaction_date": "25-1-2023"
+        }
+      ]
+    },
+    "collections": {
+      "totalOwned": 1,
+      "tokens": [
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0x7ff9b266f8777cf6b779164eba5165b07fa18447": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 2,
+      "tokens": [
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0xa83f02acfa87526f0ac12008e017184803f6243a": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 5,
+      "tokens": [
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
+          "chain": "MATIC"
+        },
+        {
+          "name": "The Bufalo Charge Emote",
+          "contractAddress": "0xBD1622479260eF17514385dE53EDB587f711bbE2",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Diamond Set",
+          "contractAddress": "0xcEd8c8A0a7641F91Ad7cF9A065899a97971A41EC",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Trench Coat",
+          "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0xd6e62a97a55537cd04847bb73e22208bd20106aa": {
+    "sales": {
+      "usdSpent": 17.65224817169916,
+      "tokens": [
+        {
+          "tokenId": "23",
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9f5e1f5f238660701546e70ae3c89",
+          "chain": "MATIC",
+          "price_usd": 6.789326219884292,
+          "transaction_hash": "0x1d5a4081f274b8df24f00bf5b66503ee3aeb6977e1103678980a635722686190",
+          "transaction_date": "15-2-2023"
+        },
+        {
+          "tokenId": "105312291668557186697918027683670432318895095400549111254310977561",
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9f5e1f5f238660701546e70ae3c89",
+          "chain": "MATIC",
+          "price_usd": 6.789326219884292,
+          "transaction_hash": "0xc56828a2913c03a1c3c1759d72d8f23ab0eb64dba166db2a07120999a2063846",
+          "transaction_date": "15-2-2023"
+        },
+        {
+          "tokenId": "1665",
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xfded171d346107c1d4eb20f37484e8dd65beac9b",
+          "chain": "MATIC",
+          "price_usd": 4.073595731930575,
+          "transaction_hash": "0x0ac5502d8a75140fa860e704603ee763fff0daf6e37262fed9a2121fa1cb6598",
+          "transaction_date": "15-2-2023"
+        }
+      ]
+    },
+    "collections": {
+      "totalOwned": 2,
+      "tokens": [
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0xd7af2caf8f8ce8261a5622574b0ea8f1b3e704a9": {
+    "sales": {
+      "usdSpent": 26.201283833035404,
+      "tokens": [
+        {
+          "tokenId": "105312291668557186697918027683670432318895095400549111254310977548",
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9f5e1f5f238660701546e70ae3c89",
+          "chain": "MATIC",
+          "price_usd": 6.605629935779436,
+          "transaction_hash": "0x21adb89028e23441cb584912823a4a6f3f182b024951fadc38ceef221178ec24",
+          "transaction_date": "25-1-2023"
+        },
+        {
+          "tokenId": "12",
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9f5e1f5f238660701546e70ae3c89",
+          "chain": "MATIC",
+          "price_usd": 6.605629935779436,
+          "transaction_hash": "0xf4e057bbea461e1fdb88cd185da2d3b3698be40ef2393ffd764f331f14471c00",
+          "transaction_date": "25-1-2023"
+        },
+        {
+          "tokenId": "51",
+          "name": "Bufalo Cowboy Line Dance",
+          "contractAddress": "0x6123758f0da7df3d61e6f8307ef12e3e9e3ded8e",
+          "chain": "MATIC",
+          "price_usd": 3.931333905753264,
+          "transaction_hash": "0x9d12d63eb5f0204384236ee1df77f8b0ea837b9a4a0b0d3c4b61665e2528ccf9",
+          "transaction_date": "26-11-2022"
+        },
+        {
+          "tokenId": "42",
+          "name": "The Bufalo Charge Emote",
+          "contractAddress": "0xbd1622479260ef17514385de53edb587f711bbe2",
+          "chain": "MATIC",
+          "price_usd": 1.965666952876632,
+          "transaction_hash": "0x54d7a599230183d06a73a34011585b1efb83cc3ac0e80febc682de28ebf35046",
+          "transaction_date": "26-11-2022"
+        },
+        {
+          "tokenId": "42",
+          "name": "Bufalo Cowboy Line Dance",
+          "contractAddress": "0x6123758f0da7df3d61e6f8307ef12e3e9e3ded8e",
+          "chain": "MATIC",
+          "price_usd": 7.093023102846638,
+          "transaction_hash": "0xc0c0f35a70601774c1c936730ee307354f4479d2b6d57f9611ea753b4cb0f6c0",
+          "transaction_date": "6-11-2022"
+        }
+      ]
+    },
+    "collections": {
+      "totalOwned": 5,
+      "tokens": [
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
+          "chain": "MATIC"
+        },
+        {
+          "name": "The Bufalo Charge Emote",
+          "contractAddress": "0xBD1622479260eF17514385dE53EDB587f711bbE2",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Line Dance",
+          "contractAddress": "0x6123758f0Da7df3d61E6f8307eF12e3E9e3DED8E",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Trench Coat",
+          "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0xdb760099f0f3359131e08716848f23c014d35b9e": {
+    "sales": {
+      "usdSpent": 15.328605373759759,
+      "tokens": [
+        {
+          "tokenId": "14",
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9f5e1f5f238660701546e70ae3c89",
+          "chain": "MATIC",
+          "price_usd": 6.785786147974,
+          "transaction_hash": "0xbd7312ce44e87172603c58ce8c25c37c64da781b14349c9c461133f89314df47",
+          "transaction_date": "27-1-2023"
+        },
+        {
+          "tokenId": "452",
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xfded171d346107c1d4eb20f37484e8dd65beac9b",
+          "chain": "MATIC",
+          "price_usd": 1.6206204729939053,
+          "transaction_hash": "0x965b92a1fa382c8b08c61ee4e142cbb62b2c7ee52a817e4b7e9accd860def789",
+          "transaction_date": "27-11-2022"
+        },
+        {
+          "tokenId": "23",
+          "name": "Bufalo Cowboy Line Dance",
+          "contractAddress": "0x6123758f0da7df3d61e6f8307ef12e3e9e3ded8e",
+          "chain": "MATIC",
+          "price_usd": 6.922198752791854,
+          "transaction_hash": "0x4cc8564a87f6b13b7a151516d7a7c6f62d00a06538bef08e49be24bf30682d39",
+          "transaction_date": "9-10-2022"
+        }
+      ]
+    },
+    "collections": {
+      "totalOwned": 4,
+      "tokens": [
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
+          "chain": "MATIC"
+        },
+        {
+          "name": "The Bufalo Charge Emote",
+          "contractAddress": "0xBD1622479260eF17514385dE53EDB587f711bbE2",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Line Dance",
+          "contractAddress": "0x6123758f0Da7df3d61E6f8307eF12e3E9e3DED8E",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0xdf2f5d811c0f3ec88b6cf2384629ab354cf738ec": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 2,
+      "tokens": [
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0xf605e3257c5662406b8baa9e6040dc393d05922f": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 3,
+      "tokens": [
+        {
+          "name": "Bufalo - Pony Up!",
+          "contractAddress": "0xa8c3733e25a9F5E1f5F238660701546e70aE3c89",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Line Dance",
+          "contractAddress": "0x6123758f0Da7df3d61E6f8307eF12e3E9e3DED8E",
           "chain": "MATIC"
         },
         {
@@ -2316,6 +3150,32 @@
         {
           "name": "Bufalo Cowboy Trench Coat",
           "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0x169bccc205c868d297c18e9532a09769df9caff5": {
+    "sales": {
+      "usdSpent": 3.489791998998623,
+      "tokens": [
+        {
+          "tokenId": "46",
+          "name": "The Bufalo Charge Emote",
+          "contractAddress": "0xbd1622479260ef17514385de53edb587f711bbe2",
+          "chain": "MATIC",
+          "price_usd": 3.489791998998623,
+          "transaction_hash": "0x335630708e55fbd1653f41f80a6af415ab62cf6c90b341b2ccf8d721df5fbe1d",
+          "transaction_date": "29-1-2023"
+        }
+      ]
+    },
+    "collections": {
+      "totalOwned": 1,
+      "tokens": [
+        {
+          "name": "The Bufalo Charge Emote",
+          "contractAddress": "0xBD1622479260eF17514385dE53EDB587f711bbE2",
           "chain": "MATIC"
         }
       ]
@@ -2454,7 +3314,7 @@
       "tokens": []
     },
     "collections": {
-      "totalOwned": 7,
+      "totalOwned": 5,
       "tokens": [
         {
           "name": "The Bufalo Charge Emote",
@@ -2467,11 +3327,6 @@
           "chain": "MATIC"
         },
         {
-          "name": "Bufalo Diamond Set",
-          "contractAddress": "0xcEd8c8A0a7641F91Ad7cF9A065899a97971A41EC",
-          "chain": "MATIC"
-        },
-        {
           "name": "Bufalo Cowboy Bandana & Colts",
           "contractAddress": "0x204D55735990dEd4405d200A16A4d24c38cbe5CF",
           "chain": "MATIC"
@@ -2479,11 +3334,6 @@
         {
           "name": "Bufalo BFL Genesis Hats",
           "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo Cowboy Trench Coat",
-          "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
           "chain": "MATIC"
         },
         {
@@ -2515,83 +3365,6 @@
         {
           "name": "The Bufalo Charge Emote",
           "contractAddress": "0xBD1622479260eF17514385dE53EDB587f711bbE2",
-          "chain": "MATIC"
-        }
-      ]
-    }
-  },
-  "0x505d688a38b8cb9190b4f671d98a37a784e92c1f": {
-    "sales": {
-      "usdSpent": 0,
-      "tokens": []
-    },
-    "collections": {
-      "totalOwned": 7,
-      "tokens": [
-        {
-          "name": "The Bufalo Charge Emote",
-          "contractAddress": "0xBD1622479260eF17514385dE53EDB587f711bbE2",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo Cowboy Line Dance",
-          "contractAddress": "0x6123758f0Da7df3d61E6f8307eF12e3E9e3DED8E",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo Diamond Set",
-          "contractAddress": "0xcEd8c8A0a7641F91Ad7cF9A065899a97971A41EC",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo Cowboy Bandana & Colts",
-          "contractAddress": "0x204D55735990dEd4405d200A16A4d24c38cbe5CF",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo BFL Genesis Hats",
-          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo Cowboy Trench Coat",
-          "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo BOTW Genesis Skulls",
-          "contractAddress": "0xE939a98D4FA55a57d3F5aeA98A83fd1ea4D5E619",
-          "chain": "MATIC"
-        }
-      ]
-    }
-  },
-  "0x5d30d01e92fcfde549042e25fe78c65bfd4789cc": {
-    "sales": {
-      "usdSpent": 3.0320310751991526,
-      "tokens": [
-        {
-          "tokenId": "58",
-          "name": "Bufalo Cowboy Line Dance",
-          "contractAddress": "0x6123758f0da7df3d61e6f8307ef12e3e9e3ded8e",
-          "chain": "MATIC",
-          "price_usd": 3.0320310751991526,
-          "transaction_hash": "0xb3d637f8069d49db7a9e3ec7b1ab78795611ff50cb05dc96b2c0830e2f0c4286",
-          "transaction_date": "20-12-2022"
-        }
-      ]
-    },
-    "collections": {
-      "totalOwned": 2,
-      "tokens": [
-        {
-          "name": "The Bufalo Charge Emote",
-          "contractAddress": "0xBD1622479260eF17514385dE53EDB587f711bbE2",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo Cowboy Line Dance",
-          "contractAddress": "0x6123758f0Da7df3d61E6f8307eF12e3E9e3DED8E",
           "chain": "MATIC"
         }
       ]
@@ -2917,32 +3690,6 @@
       ]
     }
   },
-  "0xa83f02acfa87526f0ac12008e017184803f6243a": {
-    "sales": {
-      "usdSpent": 0,
-      "tokens": []
-    },
-    "collections": {
-      "totalOwned": 3,
-      "tokens": [
-        {
-          "name": "The Bufalo Charge Emote",
-          "contractAddress": "0xBD1622479260eF17514385dE53EDB587f711bbE2",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo BFL Genesis Hats",
-          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo Cowboy Trench Coat",
-          "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
-          "chain": "MATIC"
-        }
-      ]
-    }
-  },
   "0xb472567256479bf6181707ee3c7575079432631d": {
     "sales": {
       "usdSpent": 13.966757493881694,
@@ -3085,7 +3832,7 @@
       ]
     },
     "collections": {
-      "totalOwned": 5,
+      "totalOwned": 4,
       "tokens": [
         {
           "name": "The Bufalo Charge Emote",
@@ -3095,11 +3842,6 @@
         {
           "name": "Bufalo Cowboy Line Dance",
           "contractAddress": "0x6123758f0Da7df3d61E6f8307eF12e3E9e3DED8E",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo Cowboy Bandana & Colts",
-          "contractAddress": "0x204D55735990dEd4405d200A16A4d24c38cbe5CF",
           "chain": "MATIC"
         },
         {
@@ -3126,128 +3868,6 @@
         {
           "name": "The Bufalo Charge Emote",
           "contractAddress": "0xBD1622479260eF17514385dE53EDB587f711bbE2",
-          "chain": "MATIC"
-        }
-      ]
-    }
-  },
-  "0xd7af2caf8f8ce8261a5622574b0ea8f1b3e704a9": {
-    "sales": {
-      "usdSpent": 26.201283833035404,
-      "tokens": [
-        {
-          "tokenId": "105312291668557186697918027683670432318895095400549111254310977548",
-          "name": "(DCL item)",
-          "contractAddress": "0xa8c3733e25a9f5e1f5f238660701546e70ae3c89",
-          "chain": "MATIC",
-          "price_usd": 6.605629935779436,
-          "transaction_hash": "0x21adb89028e23441cb584912823a4a6f3f182b024951fadc38ceef221178ec24",
-          "transaction_date": "25-1-2023"
-        },
-        {
-          "tokenId": "12",
-          "name": "(DCL item)",
-          "contractAddress": "0xa8c3733e25a9f5e1f5f238660701546e70ae3c89",
-          "chain": "MATIC",
-          "price_usd": 6.605629935779436,
-          "transaction_hash": "0xf4e057bbea461e1fdb88cd185da2d3b3698be40ef2393ffd764f331f14471c00",
-          "transaction_date": "25-1-2023"
-        },
-        {
-          "tokenId": "51",
-          "name": "Bufalo Cowboy Line Dance",
-          "contractAddress": "0x6123758f0da7df3d61e6f8307ef12e3e9e3ded8e",
-          "chain": "MATIC",
-          "price_usd": 3.931333905753264,
-          "transaction_hash": "0x9d12d63eb5f0204384236ee1df77f8b0ea837b9a4a0b0d3c4b61665e2528ccf9",
-          "transaction_date": "26-11-2022"
-        },
-        {
-          "tokenId": "42",
-          "name": "The Bufalo Charge Emote",
-          "contractAddress": "0xbd1622479260ef17514385de53edb587f711bbe2",
-          "chain": "MATIC",
-          "price_usd": 1.965666952876632,
-          "transaction_hash": "0x54d7a599230183d06a73a34011585b1efb83cc3ac0e80febc682de28ebf35046",
-          "transaction_date": "26-11-2022"
-        },
-        {
-          "tokenId": "42",
-          "name": "Bufalo Cowboy Line Dance",
-          "contractAddress": "0x6123758f0da7df3d61e6f8307ef12e3e9e3ded8e",
-          "chain": "MATIC",
-          "price_usd": 7.093023102846638,
-          "transaction_hash": "0xc0c0f35a70601774c1c936730ee307354f4479d2b6d57f9611ea753b4cb0f6c0",
-          "transaction_date": "6-11-2022"
-        }
-      ]
-    },
-    "collections": {
-      "totalOwned": 4,
-      "tokens": [
-        {
-          "name": "The Bufalo Charge Emote",
-          "contractAddress": "0xBD1622479260eF17514385dE53EDB587f711bbE2",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo Cowboy Line Dance",
-          "contractAddress": "0x6123758f0Da7df3d61E6f8307eF12e3E9e3DED8E",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo BFL Genesis Hats",
-          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo Cowboy Trench Coat",
-          "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
-          "chain": "MATIC"
-        }
-      ]
-    }
-  },
-  "0xdb760099f0f3359131e08716848f23c014d35b9e": {
-    "sales": {
-      "usdSpent": 8.54281922578576,
-      "tokens": [
-        {
-          "tokenId": "452",
-          "name": "Bufalo BFL Genesis Hats",
-          "contractAddress": "0xfded171d346107c1d4eb20f37484e8dd65beac9b",
-          "chain": "MATIC",
-          "price_usd": 1.6206204729939053,
-          "transaction_hash": "0x965b92a1fa382c8b08c61ee4e142cbb62b2c7ee52a817e4b7e9accd860def789",
-          "transaction_date": "27-11-2022"
-        },
-        {
-          "tokenId": "23",
-          "name": "Bufalo Cowboy Line Dance",
-          "contractAddress": "0x6123758f0da7df3d61e6f8307ef12e3e9e3ded8e",
-          "chain": "MATIC",
-          "price_usd": 6.922198752791854,
-          "transaction_hash": "0x4cc8564a87f6b13b7a151516d7a7c6f62d00a06538bef08e49be24bf30682d39",
-          "transaction_date": "9-10-2022"
-        }
-      ]
-    },
-    "collections": {
-      "totalOwned": 3,
-      "tokens": [
-        {
-          "name": "The Bufalo Charge Emote",
-          "contractAddress": "0xBD1622479260eF17514385dE53EDB587f711bbE2",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo Cowboy Line Dance",
-          "contractAddress": "0x6123758f0Da7df3d61E6f8307eF12e3E9e3DED8E",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo BFL Genesis Hats",
-          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
           "chain": "MATIC"
         }
       ]
@@ -3432,6 +4052,22 @@
         {
           "name": "Bufalo BFL Genesis Hats",
           "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0xf9501cb34f6c2f075019d12e376bc49fda706c76": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 1,
+      "tokens": [
+        {
+          "name": "The Bufalo Charge Emote",
+          "contractAddress": "0xBD1622479260eF17514385dE53EDB587f711bbE2",
           "chain": "MATIC"
         }
       ]
@@ -3648,11 +4284,16 @@
       "tokens": []
     },
     "collections": {
-      "totalOwned": 4,
+      "totalOwned": 5,
       "tokens": [
         {
           "name": "Bufalo Cowboy Line Dance",
           "contractAddress": "0x6123758f0Da7df3d61E6f8307eF12e3E9e3DED8E",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Diamond Set",
+          "contractAddress": "0xcEd8c8A0a7641F91Ad7cF9A065899a97971A41EC",
           "chain": "MATIC"
         },
         {
@@ -3776,37 +4417,6 @@
       ]
     }
   },
-  "0x5b310b6837a32da144355d63b4558b59d378393d": {
-    "sales": {
-      "usdSpent": 0,
-      "tokens": []
-    },
-    "collections": {
-      "totalOwned": 4,
-      "tokens": [
-        {
-          "name": "Bufalo Cowboy Line Dance",
-          "contractAddress": "0x6123758f0Da7df3d61E6f8307eF12e3E9e3DED8E",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo Cowboy Bandana & Colts",
-          "contractAddress": "0x204D55735990dEd4405d200A16A4d24c38cbe5CF",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo BFL Genesis Hats",
-          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo Cowboy Trench Coat",
-          "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
-          "chain": "MATIC"
-        }
-      ]
-    }
-  },
   "0x63209811f7010b31942b3465b648c2c49d049df1": {
     "sales": {
       "usdSpent": 0,
@@ -3864,65 +4474,6 @@
         {
           "name": "Bufalo Cowboy Trench Coat",
           "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
-          "chain": "MATIC"
-        }
-      ]
-    }
-  },
-  "0x706b5e2e84f606d7e98abe70017dc6f805ebb82f": {
-    "sales": {
-      "usdSpent": 19.945064263271245,
-      "tokens": [
-        {
-          "tokenId": "31",
-          "name": "Bufalo Diamond Set",
-          "contractAddress": "0xced8c8a0a7641f91ad7cf9a065899a97971a41ec",
-          "chain": "MATIC",
-          "price_usd": 9.972532131635623,
-          "transaction_hash": "0x288dd23622da9758a7234230acc17979797b4e094fdb2ce254de8ffdac89a1ce",
-          "transaction_date": "12-11-2022"
-        },
-        {
-          "tokenId": "84",
-          "name": "Bufalo Cowboy Bandana & Colts",
-          "contractAddress": "0x204d55735990ded4405d200a16a4d24c38cbe5cf",
-          "chain": "MATIC",
-          "price_usd": 4.986266065817811,
-          "transaction_hash": "0x6f21921e60365ebde823a30964b8466af7309548c5f1f73a30f222326456e5b9",
-          "transaction_date": "12-11-2022"
-        },
-        {
-          "tokenId": "45",
-          "name": "Bufalo Cowboy Line Dance",
-          "contractAddress": "0x6123758f0da7df3d61e6f8307ef12e3e9e3ded8e",
-          "chain": "MATIC",
-          "price_usd": 4.986266065817811,
-          "transaction_hash": "0x82962bd45cb9194b4bb1ff4cb9e92192104e4fb81c532351f2f95c907975fd35",
-          "transaction_date": "12-11-2022"
-        }
-      ]
-    },
-    "collections": {
-      "totalOwned": 4,
-      "tokens": [
-        {
-          "name": "Bufalo Cowboy Line Dance",
-          "contractAddress": "0x6123758f0Da7df3d61E6f8307eF12e3E9e3DED8E",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo Diamond Set",
-          "contractAddress": "0xcEd8c8A0a7641F91Ad7cF9A065899a97971A41EC",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo Cowboy Bandana & Colts",
-          "contractAddress": "0x204D55735990dEd4405d200A16A4d24c38cbe5CF",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo BFL Genesis Hats",
-          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
           "chain": "MATIC"
         }
       ]
@@ -4118,6 +4669,22 @@
       ]
     }
   },
+  "0xd3e5d76763db46fe9e4ee25fa8d815c276b06c27": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 1,
+      "tokens": [
+        {
+          "name": "Bufalo Cowboy Line Dance",
+          "contractAddress": "0x6123758f0Da7df3d61E6f8307eF12e3E9e3DED8E",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
   "0xd4cdcf8a66b2eceb2c6db131b8cbefeeaa18d8ab": {
     "sales": {
       "usdSpent": 6.421645133990581,
@@ -4254,27 +4821,6 @@
       ]
     }
   },
-  "0xf605e3257c5662406b8baa9e6040dc393d05922f": {
-    "sales": {
-      "usdSpent": 0,
-      "tokens": []
-    },
-    "collections": {
-      "totalOwned": 2,
-      "tokens": [
-        {
-          "name": "Bufalo Cowboy Line Dance",
-          "contractAddress": "0x6123758f0Da7df3d61E6f8307eF12e3E9e3DED8E",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo BFL Genesis Hats",
-          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
-          "chain": "MATIC"
-        }
-      ]
-    }
-  },
   "0xfab9a3d37999e12252b47468d2ffd4be15936012": {
     "sales": {
       "usdSpent": 6.36012450330965,
@@ -4384,6 +4930,27 @@
         {
           "name": "Bufalo BOTW Genesis Skulls",
           "contractAddress": "0xE939a98D4FA55a57d3F5aeA98A83fd1ea4D5E619",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0x424d668aca4f9a5af289c0dbb555ca7d4a5326b7": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 2,
+      "tokens": [
+        {
+          "name": "Bufalo Diamond Set",
+          "contractAddress": "0xcEd8c8A0a7641F91Ad7cF9A065899a97971A41EC",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Trench Coat",
+          "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
           "chain": "MATIC"
         }
       ]
@@ -4678,6 +5245,27 @@
         {
           "name": "Bufalo Diamond Set",
           "contractAddress": "0xcEd8c8A0a7641F91Ad7cF9A065899a97971A41EC",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0xa7849cfb61d0c0e688b0540a27cc5b4451d4ffc9": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 2,
+      "tokens": [
+        {
+          "name": "Bufalo Diamond Set",
+          "contractAddress": "0xcEd8c8A0a7641F91Ad7cF9A065899a97971A41EC",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Trench Coat",
+          "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
           "chain": "MATIC"
         }
       ]
@@ -4988,37 +5576,6 @@
       ]
     }
   },
-  "0x154620ddfdcd6ab15dd9c1682386debad1eef536": {
-    "sales": {
-      "usdSpent": 0,
-      "tokens": []
-    },
-    "collections": {
-      "totalOwned": 4,
-      "tokens": [
-        {
-          "name": "Bufalo Cowboy Bandana & Colts",
-          "contractAddress": "0x204D55735990dEd4405d200A16A4d24c38cbe5CF",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo BFL Genesis Hats",
-          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo Cowboy Trench Coat",
-          "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo BOTW Genesis Skulls",
-          "contractAddress": "0xE939a98D4FA55a57d3F5aeA98A83fd1ea4D5E619",
-          "chain": "MATIC"
-        }
-      ]
-    }
-  },
   "0x20acb0fd8634edae33b3e82f527fa5f806dc5a3a": {
     "sales": {
       "usdSpent": 0,
@@ -5197,27 +5754,48 @@
       ]
     }
   },
-  "0x56d947fa1ae6d6293b307b489540c156af628f0f": {
+  "0x5b310b6837a32da144355d63b4558b59d378393d": {
     "sales": {
-      "usdSpent": 6.922133443814409,
-      "tokens": [
-        {
-          "tokenId": "105312291668557186697918027683670432318895095400549111254310977550",
-          "name": "(DCL item)",
-          "contractAddress": "0xa8c3733e25a9f5e1f5f238660701546e70ae3c89",
-          "chain": "MATIC",
-          "price_usd": 6.922133443814409,
-          "transaction_hash": "0x74835b822cbbce53b0ba3ce51b8230ebaeb835fca31758d3223bc5ec9a8db937",
-          "transaction_date": "26-1-2023"
-        }
-      ]
+      "usdSpent": 0,
+      "tokens": []
     },
     "collections": {
-      "totalOwned": 1,
+      "totalOwned": 3,
       "tokens": [
         {
           "name": "Bufalo Cowboy Bandana & Colts",
           "contractAddress": "0x204D55735990dEd4405d200A16A4d24c38cbe5CF",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Trench Coat",
+          "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0x5d327dcd9b4dae70ebf9c4ebb0576a1de97da520": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 2,
+      "tokens": [
+        {
+          "name": "Bufalo Cowboy Bandana & Colts",
+          "contractAddress": "0x204D55735990dEd4405d200A16A4d24c38cbe5CF",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
           "chain": "MATIC"
         }
       ]
@@ -5820,27 +6398,6 @@
       ]
     }
   },
-  "0x01583b793668442f8e206514eda684cd5fc72885": {
-    "sales": {
-      "usdSpent": 0,
-      "tokens": []
-    },
-    "collections": {
-      "totalOwned": 2,
-      "tokens": [
-        {
-          "name": "Bufalo BFL Genesis Hats",
-          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo Cowboy Trench Coat",
-          "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
-          "chain": "MATIC"
-        }
-      ]
-    }
-  },
   "0x02c71d547534c27b2886750e2889d42827d213a7": {
     "sales": {
       "usdSpent": 0,
@@ -6000,6 +6557,22 @@
       ]
     }
   },
+  "0x07aba5df13c6e781fa9adb980298c797efdc9f9f": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 1,
+      "tokens": [
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
   "0x07d6fb9043aa9320936937e94bbeab8b6d6752f4": {
     "sales": {
       "usdSpent": 0,
@@ -6106,6 +6679,27 @@
       ]
     }
   },
+  "0x0b83e83f1ec0ee09191fab0ec10dd362ba0b29df": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 2,
+      "tokens": [
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Trench Coat",
+          "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
   "0x0bce3238fb72ece1e0ec7cac2cf4ee6c5ba2ff48": {
     "sales": {
       "usdSpent": 0,
@@ -6133,6 +6727,27 @@
         {
           "name": "Bufalo BFL Genesis Hats",
           "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0x0dd51fb6bcda54203056e9666299ab9cd453ef82": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 2,
+      "tokens": [
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Trench Coat",
+          "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
           "chain": "MATIC"
         }
       ]
@@ -7396,16 +8011,11 @@
       ]
     },
     "collections": {
-      "totalOwned": 2,
+      "totalOwned": 1,
       "tokens": [
         {
           "name": "Bufalo BFL Genesis Hats",
           "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo Cowboy Trench Coat",
-          "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
           "chain": "MATIC"
         }
       ]
@@ -7907,27 +8517,6 @@
       ]
     }
   },
-  "0x60d2b7bc992c88351b00e03e624bbc900078946e": {
-    "sales": {
-      "usdSpent": 0,
-      "tokens": []
-    },
-    "collections": {
-      "totalOwned": 2,
-      "tokens": [
-        {
-          "name": "Bufalo BFL Genesis Hats",
-          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo BOTW Genesis Skulls",
-          "contractAddress": "0xE939a98D4FA55a57d3F5aeA98A83fd1ea4D5E619",
-          "chain": "MATIC"
-        }
-      ]
-    }
-  },
   "0x60e5ebedc587dce993d58acd29175f6d420b6a75": {
     "sales": {
       "usdSpent": 0,
@@ -8399,27 +8988,6 @@
       ]
     }
   },
-  "0x762aa70e1a9e48822e9ecf4d23e8d6a0a529ed7e": {
-    "sales": {
-      "usdSpent": 0,
-      "tokens": []
-    },
-    "collections": {
-      "totalOwned": 2,
-      "tokens": [
-        {
-          "name": "Bufalo BFL Genesis Hats",
-          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
-          "chain": "MATIC"
-        },
-        {
-          "name": "Bufalo Cowboy Trench Coat",
-          "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
-          "chain": "MATIC"
-        }
-      ]
-    }
-  },
   "0x7697f6729dc3beb75b297574fa67d868082f1ebf": {
     "sales": {
       "usdSpent": 0,
@@ -8810,6 +9378,27 @@
         {
           "name": "Bufalo BFL Genesis Hats",
           "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0x8218a2445679e38f358e42f88fe2125c98440d59": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 2,
+      "tokens": [
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Trench Coat",
+          "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
           "chain": "MATIC"
         }
       ]
@@ -9499,6 +10088,22 @@
       ]
     }
   },
+  "0xa95723952eaaac967a55f81a216608590e43147f": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 1,
+      "tokens": [
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
   "0xa988612376214e731de1d2cbe9c16515374caeb2": {
     "sales": {
       "usdSpent": 0,
@@ -9711,6 +10316,22 @@
       ]
     }
   },
+  "0xb30dc9f107f79c3fbd658a6ebe9e4c396029dc48": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 1,
+      "tokens": [
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
   "0xb343880dc01517dcfcbb528864d567e3389753e1": {
     "sales": {
       "usdSpent": 0,
@@ -9844,6 +10465,27 @@
         {
           "name": "Bufalo BFL Genesis Hats",
           "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0xb9f2c26856734dd306fe33d4b284a0d215a2e10f": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 2,
+      "tokens": [
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        },
+        {
+          "name": "Bufalo Cowboy Trench Coat",
+          "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
           "chain": "MATIC"
         }
       ]
@@ -10277,6 +10919,22 @@
         {
           "name": "Bufalo Cowboy Trench Coat",
           "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0xcf7b735a70a10c9b0b2b01a016db4e5ece754bac": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 1,
+      "tokens": [
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
           "chain": "MATIC"
         }
       ]
@@ -10832,6 +11490,22 @@
       ]
     }
   },
+  "0xe55167d3945cd52f426b4c20780ce551789f0914": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 1,
+      "tokens": [
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
   "0xe6275174f3d5d2ae08679cce87045fb1552d4782": {
     "sales": {
       "usdSpent": 0,
@@ -10849,6 +11523,22 @@
     }
   },
   "0xe6dcfdfa7667a6856d929e0ef980a22e2420c0ad": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 1,
+      "tokens": [
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0xe77ac722cdd041e7bc5ab0de0dc2f5976e2d869c": {
     "sales": {
       "usdSpent": 0,
       "tokens": []
@@ -11288,6 +11978,32 @@
       ]
     }
   },
+  "0xff3327cc139449fa111ad87351bb300e9cc7607c": {
+    "sales": {
+      "usdSpent": 6.783100306179081,
+      "tokens": [
+        {
+          "tokenId": "30",
+          "name": "(DCL item)",
+          "contractAddress": "0xbae8b89b8865a6c22f28d39ca7d3bf2baebb384a",
+          "chain": "MATIC",
+          "price_usd": 6.783100306179081,
+          "transaction_hash": "0x8a83a78e902a7a32a4980816d1b7aacc1705062c5be50869a2d8a2fc32502946",
+          "transaction_date": "14-3-2022"
+        }
+      ]
+    },
+    "collections": {
+      "totalOwned": 1,
+      "tokens": [
+        {
+          "name": "Bufalo BFL Genesis Hats",
+          "contractAddress": "0xFdeD171D346107C1d4eB20F37484e8dD65BeaC9B",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
   "0xff9dfb14dcdace65493bacf56908673c8bd1ba9b": {
     "sales": {
       "usdSpent": 4.904428642598339,
@@ -11376,6 +12092,22 @@
           "transaction_date": "2-3-2022"
         }
       ]
+    },
+    "collections": {
+      "totalOwned": 1,
+      "tokens": [
+        {
+          "name": "Bufalo Cowboy Trench Coat",
+          "contractAddress": "0xdf60e4F253003B01F8C6863A996B080D0A9f03de",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
+  "0x2d3296c8e4c925382b874bcc0023ea9d897a8dc2": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
     },
     "collections": {
       "totalOwned": 1,
@@ -11494,7 +12226,7 @@
       "tokens": [
         {
           "tokenId": "105312291668557186697918027683670432318895095400549111254310977551",
-          "name": "(DCL item)",
+          "name": "Bufalo - Pony Up!",
           "contractAddress": "0xa8c3733e25a9f5e1f5f238660701546e70ae3c89",
           "chain": "MATIC",
           "price_usd": 6.922133443814409,
@@ -11503,7 +12235,7 @@
         },
         {
           "tokenId": "13",
-          "name": "(DCL item)",
+          "name": "Bufalo - Pony Up!",
           "contractAddress": "0xa8c3733e25a9f5e1f5f238660701546e70ae3c89",
           "chain": "MATIC",
           "price_usd": 6.922133443814409,
@@ -11745,6 +12477,22 @@
       ]
     }
   },
+  "0x3427a5828a815610b1b5ccbf2e2dd1ccad3a0a96": {
+    "sales": {
+      "usdSpent": 0,
+      "tokens": []
+    },
+    "collections": {
+      "totalOwned": 1,
+      "tokens": [
+        {
+          "name": "Bufalo BOTW Genesis Skulls",
+          "contractAddress": "0xE939a98D4FA55a57d3F5aeA98A83fd1ea4D5E619",
+          "chain": "MATIC"
+        }
+      ]
+    }
+  },
   "0x813237fdb0c5f046575c6cd4650077923c8e4039": {
     "sales": {
       "usdSpent": 0,
@@ -11825,18 +12573,18 @@
       ]
     }
   },
-  "0x7b45b843f7c2b5af04f555675fe162e69d33ab2e": {
+  "0x931daa0bda490dcd4f15bad66720f12943375713": {
     "sales": {
-      "usdSpent": 6.605629935779436,
+      "usdSpent": 6.777408164568169,
       "tokens": [
         {
-          "tokenId": "105312291668557186697918027683670432318895095400549111254310977549",
-          "name": "(DCL item)",
-          "contractAddress": "0xa8c3733e25a9f5e1f5f238660701546e70ae3c89",
+          "tokenId": "60",
+          "name": "Bufalo Cowboy Line Dance",
+          "contractAddress": "0x6123758f0da7df3d61e6f8307ef12e3e9e3ded8e",
           "chain": "MATIC",
-          "price_usd": 6.605629935779436,
-          "transaction_hash": "0xb3af5137a40ab610c578e731f639cfd869afd49a1aa459f8b9ce7ce7a30fad68",
-          "transaction_date": "25-1-2023"
+          "price_usd": 6.777408164568169,
+          "transaction_hash": "0x6a2841c2f54f439e26d0bafd0c79db4edf2740649d74d7e9b4c55ea397c95361",
+          "transaction_date": "10-2-2023"
         }
       ]
     },
@@ -11961,26 +12709,6 @@
       "tokens": []
     }
   },
-  "0x336685bb3a96e13b77e909d7c52e8afcff1e859e": {
-    "sales": {
-      "usdSpent": 1.4091369808404564,
-      "tokens": [
-        {
-          "tokenId": "426",
-          "name": "Bufalo BFL Genesis Hats",
-          "contractAddress": "0xfded171d346107c1d4eb20f37484e8dd65beac9b",
-          "chain": "MATIC",
-          "price_usd": 1.4091369808404564,
-          "transaction_hash": "0x7781786cf62871a3bca8a3017df7a14cec85678c8d7c74baba64babd891eb6da",
-          "transaction_date": "5-10-2022"
-        }
-      ]
-    },
-    "collections": {
-      "totalOwned": 0,
-      "tokens": []
-    }
-  },
   "0x5cecdcf8a2f107d5e69326993ad6d56f1dafa1b9": {
     "sales": {
       "usdSpent": 15.087727354246717,
@@ -12073,26 +12801,6 @@
           "price_usd": 2.2736870844261436,
           "transaction_hash": "0x73af9b9157d8a74422e7828517e305af03cf63e1802351ec2b5f1f2ac5c96270",
           "transaction_date": "16-3-2022"
-        }
-      ]
-    },
-    "collections": {
-      "totalOwned": 0,
-      "tokens": []
-    }
-  },
-  "0xff3327cc139449fa111ad87351bb300e9cc7607c": {
-    "sales": {
-      "usdSpent": 6.783100306179081,
-      "tokens": [
-        {
-          "tokenId": "30",
-          "name": "(DCL item)",
-          "contractAddress": "0xbae8b89b8865a6c22f28d39ca7d3bf2baebb384a",
-          "chain": "MATIC",
-          "price_usd": 6.783100306179081,
-          "transaction_hash": "0x8a83a78e902a7a32a4980816d1b7aacc1705062c5be50869a2d8a2fc32502946",
-          "transaction_date": "14-3-2022"
         }
       ]
     },
@@ -12369,5 +13077,6 @@
       "totalOwned": 0,
       "tokens": []
     }
-  }
+  },
+  "snapshotDate": "2023-02-27T14:50:33.975Z"
 }

@@ -24,7 +24,7 @@ A staking program gives the opportunity to get :
 
 🔢 Supply : 1000 tokens
 
-🖼️ A unique art skull with seven traits (several rarities) and a 🎵 loop. Reveal date to be confirmed
+🖼️ A unique art skull with seven traits (several rarities) and a 🎵 loop. Reveal date to be confirmed. Token assignations will be perfectly random, with no cheating possible from anyone thanks to the use of Chainlink VRF
 
 📅 Private sale (wallets on "Community" allowlist only) and public sale dates to be confirmed
 
@@ -119,9 +119,9 @@ API route is updated and deployed after generating allowlists. It can be deploye
 
 ✅ Generate allowlists (addresses arrays & merkle data), from token ownerships and sales
 
-🔲 NFT metadata (skull images) & uploads on IPFS
+✅ NFT metadata (skull images) & uploads on IPFS
 
-🔲 ERC721A contract for skull NFTs
+✅ ERC721A contract for skull NFTs
 
 - ERC4907 rentable NFT token standard and ERC2981 royalties implementations
 - Minting price configurable for any ERC20 and/or blockchain's native coin
@@ -158,15 +158,16 @@ nano .env
 
 ### Environment Variables
 
-| Parameter                      | Type     | Description                                                                                                                                                             |
-| :----------------------------- | :------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ALCHEMY_API_KEY`              | `string` | **Required to regenerate allowlists**. API key from [Alchemy](https://docs.alchemy.com/docs/alchemy-quickstart-guide#1key-create-an-alchemy-key)                        |
-| `COINMARKETCAP_KEY`            | `string` | **Required for gas report**. API key from [CoinMarketCap](https://coinmarketcap.com/api/)                                                                               |
-| `DEPLOYER_ADDRESS`             | `string` | **Required to test & deploy contracts**. The address to use to deploy contracts. Should also be owner of NFTs to airdrop.                                               |
-| `DEPLOYER_PRIVATE_KEY`         | `string` | **Required to test & deploy contracts** Private key of the address to use to deploy contracts.                                                                          |
-| `NFT_PORT_API_KEY`             | `string` | **Required to regenerate allowlists**. API key from [NFTPort](https://docs.nftport.xyz/)                                                                                |
-| `POLYGON_MAINNET_RPC_PROVIDER` | `string` | **Required to deploy contracts** RPC endpoint (Polygon Mainnet). You can get one for free with [Alchemy](https://www.alchemy.com/overviews/private-rpc-endpoint)        |
-| `POLYGON_MUMBAI_RPC_PROVIDER`  | `string` | **Required to deploy contracts** RPC endpoint (Polygon Mumbai Testnet). You can get one for free with [Alchemy](https://www.alchemy.com/overviews/private-rpc-endpoint) |
+| Parameter                      | Type     | Description                                                                                                                                                                    |
+| :----------------------------- | :------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `ALCHEMY_API_KEY`              | `string` | **Required to regenerate allowlists**. API key from [Alchemy](https://docs.alchemy.com/docs/alchemy-quickstart-guide#1key-create-an-alchemy-key)                               |
+| `COINMARKETCAP_KEY`            | `string` | **Required for gas report**. API key from [CoinMarketCap](https://coinmarketcap.com/api/)                                                                                      |
+| `DEPLOYER_ADDRESS`             | `string` | **Required to test & deploy contracts**. The address to use to deploy contracts. Should also be owner of NFTs to airdrop.                                                      |
+| `DEPLOYER_PRIVATE_KEY`         | `string` | **Required to test & deploy contracts** Private key of the address to use to deploy contracts.                                                                                 |
+| `NFT_PORT_API_KEY`             | `string` | **Required to regenerate allowlists**. API key from [NFTPort](https://docs.nftport.xyz/)                                                                                       |
+| `POLYGONSCAN_API_KEY`          | `string` | **Required to deploy contracts** To verify contracts on Polygonscan. [You can get API key for free](https://docs.polygonscan.com/getting-started/viewing-api-usage-statistics) |
+| `POLYGON_MAINNET_RPC_PROVIDER` | `string` | **Required to deploy contracts** RPC endpoint (Polygon Mainnet). You can get one for free with [Alchemy](https://www.alchemy.com/overviews/private-rpc-endpoint)               |
+| `POLYGON_MUMBAI_RPC_PROVIDER`  | `string` | **Required to deploy contracts** RPC endpoint (Polygon Mumbai Testnet). You can get one for free with [Alchemy](https://www.alchemy.com/overviews/private-rpc-endpoint)        |
 
 ### Smart contracts deployment
 

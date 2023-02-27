@@ -1,6 +1,6 @@
 const nftReleasesOpenseaCollection = require("./opensea-nftreleases.js");
 
-export default [
+module.exports = [
   ...nftReleasesOpenseaCollection,
   {
     name: "Bufalo - Pony Up!",

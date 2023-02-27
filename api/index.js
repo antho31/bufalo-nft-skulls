@@ -12,6 +12,23 @@ const discountMerkle = require("../data/results/merkleAllowlists/fans.json");
 // Create a new router
 const router = Router();
 
+router.get("/deployment/:network", ({ params: { network } }) => {
+  let data = {};
+  try {
+    data = require(`../data/results/deployment/${network}.json`);
+  } catch (e) {
+    // send nothing
+  }
+
+  const json = JSON.stringify(data, null, 2);
+
+  return new Response(json, {
+    headers: {
+      "content-type": "application/json;charset=UTF-8"
+    }
+  });
+});
+
 router.get("/merkleproofs/:addr", ({ params: { addr } }) => {
   addr = addr.toLocaleLowerCase();
 
