@@ -13,7 +13,7 @@ const MAX_SUPPLY = 1000;
 const MINT_LIMIT_PER_WALLET = 10;
 
 const BASE_URI =
-  "ipfs://bafybeigbkru6w5yyim3wrkuisayq3hk66cgxcatjtqk2xpyjrfv5avoici/tokens/";
+  "ipfs://bafybeibo35dz2wsz44ixiw3yudl6ulk4kvdsj7irbjwjn76gkg7msl3lzy/tokens/";
 
 const MINT_TREASURY = "0x3C0dABC82bf51d1bf994a54E70e7a7d19865f950";
 

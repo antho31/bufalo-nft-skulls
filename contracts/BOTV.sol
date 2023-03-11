@@ -91,7 +91,7 @@ contract BOTV is
      * See https://docs.opensea.io/docs/metadata-standards
      */
     string public constant baseURI =
-        "ipfs://bafybeigbkru6w5yyim3wrkuisayq3hk66cgxcatjtqk2xpyjrfv5avoici/tokens/";
+        "ipfs://bafybeibo35dz2wsz44ixiw3yudl6ulk4kvdsj7irbjwjn76gkg7msl3lzy/tokens/";
 
     // Chainlink VRF configuration, see https://docs.chain.link/vrf/v2/subscription/supported-networks/
     VRFCoordinatorV2Interface private immutable _VRF_COORDINATOR;

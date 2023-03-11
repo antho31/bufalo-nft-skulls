@@ -57,8 +57,8 @@ for (let i = 0; i < 1000; i++) {
     description: "",
     image: `ipfs://bafybeicgk7uqmmfhcopoyh7rwvqgiva7ebr6u6osqbeviel7o4x3suaiee/${i}.png`,
     name: name.includes(`BOTV Skulls`)
-      ? `BOTV Skull #${i}`
-      : `${name} - BOTV Skull #${i}`
+      ? `Bufalo BOTV Skull #${i}`
+      : `${name} - Bufalo BOTV Skull #${i}`
   };
 
   rank.push(Object.assign({ metadataId: i }, metadata));
@@ -78,7 +78,7 @@ fs.writeFileSync(
         "ipfs://bafybeieynlkerrdbukod3crekcvvrirqvrmux3sbi7wyyejkszalpyzcgy",
       description: "Reveal coming soon...",
       image: `ipfs://bafkreic3f2trpkplot2bk3d5g4q3tcszai2pckj7b6zq45eykv2wq6v7u4`,
-      name: "BOTV Skull unrevealed"
+      name: "Bufalo BOTV Skull unrevealed"
     },
     null,
     2
