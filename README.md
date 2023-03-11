@@ -36,7 +36,7 @@ A staking program gives the opportunity to get :
 
 👑 10 % royalties
 
-💵 Treasury (Oxsplits contract) : [0x0231339790F09B5F3d50a37D0dd82D66e82cA37D](https://app.0xsplits.xyz/accounts/0x0231339790F09B5F3d50a37D0dd82D66e82cA37D/?chainId=137)
+💵 Mint treasury : `0x3c0dabc82bf51d1bf994a54e70e7a7d19865f950`. Royalties treasury (Oxsplits contract) : [0x0231339790F09B5F3d50a37D0dd82D66e82cA37D](https://app.0xsplits.xyz/accounts/0x0231339790F09B5F3d50a37D0dd82D66e82cA37D/?chainId=137)
 
 💰 Collect points when staking an NFT
 

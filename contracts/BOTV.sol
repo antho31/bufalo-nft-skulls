@@ -52,8 +52,12 @@ contract BOTV is ERC2981, ERC4907A, Ownable, VRFConsumerBaseV2 {
     /// @notice Maximum number of tokens an address can mint
     uint256 public constant MINT_LIMIT_PER_WALLET = 10;
 
-    /// @notice Where goes funds from mint and second sales royalties
-    address payable public immutable TREASURY;
+    /// @notice Where goes funds from mint
+    address payable public constant MINT_TREASURY =
+        payable(0x3C0dABC82bf51d1bf994a54E70e7a7d19865f950);
+
+    /// @notice Where goes funds from second sales royalties
+    address payable public immutable ROYALTIES_TREASURY;
 
     /// @notice Merkle root to check if an address can get a discount
     bytes32 public immutable DISCOUNT_LIST_MERKLE_ROOT;
@@ -81,12 +85,6 @@ contract BOTV is ERC2981, ERC4907A, Ownable, VRFConsumerBaseV2 {
      */
     string public constant baseURI =
         "ipfs://bafybeigbkru6w5yyim3wrkuisayq3hk66cgxcatjtqk2xpyjrfv5avoici/tokens/";
-
-    /** @notice Opensea-comptatible storefront-level metadata,
-     * See https://docs.opensea.io/docs/contract-level-metadata
-     */
-    string public constant contractURI =
-        "ipfs://bafkreid2ll6xenucqrbjpaqhrhweqizl4txpg7i2ejbzvrprgzl4du6zom";
 
     // Chainlink VRF configuration, see https://docs.chain.link/vrf/v2/subscription/supported-networks/
     VRFCoordinatorV2Interface private immutable _VRF_COORDINATOR;
@@ -156,7 +154,7 @@ contract BOTV is ERC2981, ERC4907A, Ownable, VRFConsumerBaseV2 {
     /**
      * @param mintCurrency For example 0x7ceb23fd6bc0add59e62ac25578270cff1b9f619 to charge mint in WETH on Polygon. Set 0 to select the blockchain's native coin.
      * @param mintAmount Price per token minted, paid in token/coin specified with the `mintCurrency` parameter
-     * @param treasury Where to send funds from mints & royalties
+     * @param royaltiesTreasury Where to send funds from secondary sales
      * @param vrfCoordinator Chainlink VRF configuration, for example 0xAE975071Be8F8eE67addBC1A82488F1C24858067 on Polygon. See https://docs.chain.link/vrf/v2/subscription/supported-networks/
      * @param wearablesAddresses Contracts for wearable tokens to airdrop
      * @param wearablesTokenIdsOffset From which tokenIDs deployer is owner of wearables to airdrop
@@ -166,14 +164,14 @@ contract BOTV is ERC2981, ERC4907A, Ownable, VRFConsumerBaseV2 {
     constructor(
         address mintCurrency,
         uint256 mintAmount,
-        address payable treasury,
+        address payable royaltiesTreasury,
         address vrfCoordinator,
         address[] memory wearablesAddresses,
         uint256[] memory wearablesTokenIdsOffset,
         bytes32 discountListMerkleRoot,
         bytes32 privateListMerkleRoot
     ) ERC721A("BOTV Skulls", "BOTV") VRFConsumerBaseV2(vrfCoordinator) {
-        if (treasury == address(0)) revert CannotBeZeroAddress();
+        if (royaltiesTreasury == address(0)) revert CannotBeZeroAddress();
         if (vrfCoordinator == address(0)) revert CannotBeZeroAddress();
 
         if (wearablesAddresses.length != wearablesTokenIdsOffset.length)
@@ -195,7 +193,7 @@ contract BOTV is ERC2981, ERC4907A, Ownable, VRFConsumerBaseV2 {
 
         _setPrice(mintCurrency, true, mintAmount);
 
-        TREASURY = treasury;
+        ROYALTIES_TREASURY = royaltiesTreasury;
 
         _VRF_COORDINATOR = VRFCoordinatorV2Interface(vrfCoordinator);
 
@@ -206,7 +204,7 @@ contract BOTV is ERC2981, ERC4907A, Ownable, VRFConsumerBaseV2 {
         PRIVATE_LIST_MERKLE_ROOT = privateListMerkleRoot;
 
         // 10 % royalties fee
-        _setDefaultRoyalty(treasury, 1000);
+        _setDefaultRoyalty(royaltiesTreasury, 1000);
     }
 
     /* ******************
@@ -269,12 +267,12 @@ contract BOTV is ERC2981, ERC4907A, Ownable, VRFConsumerBaseV2 {
         if (currency == address(0)) {
             // if paid with MATIC on Polygon / ETH on Ethereum
             if (msg.value < price) revert AmountValueTooLow(msg.value);
-            Address.sendValue(TREASURY, price);
+            Address.sendValue(MINT_TREASURY, price);
         } else {
             // if paid with ERC20 tokens
             IERC20(currency).safeTransferFrom(
                 _msgSenderERC721A(),
-                TREASURY,
+                MINT_TREASURY,
                 price
             );
         }
@@ -344,18 +342,6 @@ contract BOTV is ERC2981, ERC4907A, Ownable, VRFConsumerBaseV2 {
     /// @param active Activate/deactivate public mint
     function setPublicSale(bool active) external onlyOwner {
         publicSaleActive = active;
-    }
-
-    /* ****************
-     *  EXTERNAL  GETTERS
-     *****************/
-
-    function getTreasury() external view returns (address payable) {
-        return TREASURY;
-    }
-
-    function getMaxSupply() external pure returns (uint256) {
-        return MAX_SUPPLY;
     }
 
     /* ****************

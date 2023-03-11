@@ -15,6 +15,8 @@ const MINT_LIMIT_PER_WALLET = 10;
 const BASE_URI =
   "ipfs://bafybeigbkru6w5yyim3wrkuisayq3hk66cgxcatjtqk2xpyjrfv5avoici/tokens/";
 
+const MINT_TREASURY = "0x3C0dABC82bf51d1bf994a54E70e7a7d19865f950";
+
 describe("BOTV", function () {
   // We define a fixture to reuse the same setup in every test.
   // We use loadFixture to run this setup once, snapshot that state,
@@ -337,7 +339,6 @@ describe("BOTV", function () {
     describe("Public mint", async function () {
       it("Should mint as expected with ERC20 currency payment", async function () {
         const {
-          treasury,
           publicUser1,
           publicUser2,
           publicUser3,
@@ -371,7 +372,7 @@ describe("BOTV", function () {
           )
         ).to.changeTokenBalances(
           ERC20Mock,
-          [publicUser1.address, treasury.address, publicUser2.address],
+          [publicUser1.address, MINT_TREASURY, publicUser2.address],
           [-price, price, 0]
         );
 
@@ -387,7 +388,7 @@ describe("BOTV", function () {
           )
         ).to.changeTokenBalances(
           BOTV,
-          [publicUser1.address, treasury.address, publicUser2.address],
+          [publicUser1.address, MINT_TREASURY, publicUser2.address],
           [0, 0, quantity]
         );
 
@@ -402,7 +403,7 @@ describe("BOTV", function () {
             )
           ).to.changeTokenBalances(
             wearableContract,
-            [publicUser1.address, treasury.address, publicUser3.address],
+            [publicUser1.address, MINT_TREASURY, publicUser3.address],
             [0, 0, quantity]
           );
         }
@@ -432,7 +433,6 @@ describe("BOTV", function () {
 
       it("Should mint as expected with native currency payment", async function () {
         const {
-          treasury,
           publicUser1,
           publicUser2,
           publicUser3,
@@ -463,7 +463,7 @@ describe("BOTV", function () {
             { value }
           )
         ).to.changeEtherBalances(
-          [publicUser1.address, treasury.address],
+          [publicUser1.address, MINT_TREASURY],
           [parseEther(`-${etherValue}`), value]
         );
 
@@ -478,7 +478,7 @@ describe("BOTV", function () {
           )
         ).to.changeTokenBalances(
           BOTV,
-          [publicUser1.address, treasury.address, publicUser2.address],
+          [publicUser1.address, MINT_TREASURY, publicUser2.address],
           [0, 0, quantity]
         );
 
@@ -494,7 +494,7 @@ describe("BOTV", function () {
             )
           ).to.changeTokenBalances(
             wearableContract,
-            [publicUser1.address, treasury.address, publicUser3.address],
+            [publicUser1.address, MINT_TREASURY, publicUser3.address],
             [0, 0, quantity]
           );
         }
@@ -524,8 +524,9 @@ describe("BOTV", function () {
       });
 
       it("Should mint even if pricing is set as free", async function () {
-        const { treasury, publicUser1, publicUser2, ERC20Mock, BOTV } =
-          await loadFixture(activeSaleFixture);
+        const { publicUser1, publicUser2, ERC20Mock, BOTV } = await loadFixture(
+          activeSaleFixture
+        );
 
         const value = 0;
 
@@ -548,7 +549,7 @@ describe("BOTV", function () {
           )
         ).to.changeTokenBalances(
           ERC20Mock,
-          [publicUser1.address, treasury.address, publicUser2.address],
+          [publicUser1.address, MINT_TREASURY, publicUser2.address],
           [0, 0, 0]
         );
 
@@ -579,10 +580,7 @@ describe("BOTV", function () {
             [],
             { value }
           )
-        ).to.changeEtherBalances(
-          [publicUser1.address, treasury.address],
-          [0, 0]
-        );
+        ).to.changeEtherBalances([publicUser1.address, MINT_TREASURY], [0, 0]);
 
         await expect(
           BOTV.connect(publicUser1).mint(
@@ -1125,7 +1123,6 @@ describe("BOTV", function () {
     describe("Discount", async function () {
       it("Should have a discount if tokenOwner is in the allowlist and is minting a second token", async function () {
         const {
-          treasury,
           publicUser1,
           discountUser1,
           discountUser2,
@@ -1169,7 +1166,7 @@ describe("BOTV", function () {
           )
         ).to.changeTokenBalances(
           ERC20Mock,
-          [publicUser1.address, treasury.address, discountUser2.address],
+          [publicUser1.address, MINT_TREASURY, discountUser2.address],
           [-ERC20Amount, ERC20Amount, 0]
         );
 
@@ -1189,7 +1186,7 @@ describe("BOTV", function () {
             { value: BigNumber.from(value).div(2) }
           )
         ).to.changeEtherBalances(
-          [publicUser1.address, treasury.address],
+          [publicUser1.address, MINT_TREASURY],
           [parseEther(`-${etherValue}`).div(2), BigNumber.from(value).div(2)]
         );
 
@@ -1203,7 +1200,7 @@ describe("BOTV", function () {
             { value }
           )
         ).to.changeEtherBalances(
-          [publicUser1.address, treasury.address],
+          [publicUser1.address, MINT_TREASURY],
           [parseEther(`-${etherValue}`), value]
         );
         await expect(
@@ -1216,7 +1213,7 @@ describe("BOTV", function () {
           )
         ).to.changeTokenBalances(
           ERC20Mock,
-          [publicUser1.address, treasury.address, discountPrivateUser.address],
+          [publicUser1.address, MINT_TREASURY, discountPrivateUser.address],
           [
             -BigNumber.from(ERC20Amount).mul(5).sub(discount),
             BigNumber.from(ERC20Amount).mul(5).sub(discount),
@@ -1227,7 +1224,6 @@ describe("BOTV", function () {
 
       it("Should not have a discount for tokenOwner in the allowlist if he is not minting a second token", async function () {
         const {
-          treasury,
           publicUser1,
           discountUser1,
           discountUser2,
@@ -1270,7 +1266,7 @@ describe("BOTV", function () {
           )
         ).to.changeTokenBalances(
           ERC20Mock,
-          [publicUser1.address, treasury.address, discountUser2.address],
+          [publicUser1.address, MINT_TREASURY, discountUser2.address],
           [-ERC20Amount, ERC20Amount, 0]
         );
 
@@ -1290,7 +1286,7 @@ describe("BOTV", function () {
             { value }
           )
         ).to.changeEtherBalances(
-          [publicUser1.address, treasury.address],
+          [publicUser1.address, MINT_TREASURY],
           [parseEther(`-${etherValue}`), value]
         );
 
@@ -1304,7 +1300,7 @@ describe("BOTV", function () {
             { value: BigNumber.from(value).div(2) }
           )
         ).to.changeEtherBalances(
-          [publicUser1.address, treasury.address],
+          [publicUser1.address, MINT_TREASURY],
           [parseEther(`-${etherValue}`).div(2), BigNumber.from(value).div(2)]
         );
 
@@ -1329,7 +1325,7 @@ describe("BOTV", function () {
           )
         ).to.changeTokenBalances(
           ERC20Mock,
-          [publicUser1.address, treasury.address, discountUser2.address],
+          [publicUser1.address, MINT_TREASURY, discountUser2.address],
           [
             -BigNumber.from(ERC20Amount).mul(5),
             BigNumber.from(ERC20Amount).mul(5),
@@ -1340,7 +1336,6 @@ describe("BOTV", function () {
 
       it("Should not have a discount if tokenOwner is not in the discount allowlist", async function () {
         const {
-          treasury,
           publicUser1,
           publicUser2,
 
@@ -1384,7 +1379,7 @@ describe("BOTV", function () {
           )
         ).to.changeTokenBalances(
           ERC20Mock,
-          [publicUser1.address, treasury.address, privateUser1.address],
+          [publicUser1.address, MINT_TREASURY, privateUser1.address],
           [-ERC20Amount, ERC20Amount, 0]
         );
 
@@ -1426,7 +1421,7 @@ describe("BOTV", function () {
             { value }
           )
         ).to.changeEtherBalances(
-          [publicUser1.address, treasury.address],
+          [publicUser1.address, MINT_TREASURY],
           [parseEther(`-${etherValue}`), value]
         );
       });
