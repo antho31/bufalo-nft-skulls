@@ -5,6 +5,7 @@ import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/common/ERC2981.sol";
@@ -37,7 +38,13 @@ import "erc721a/contracts/extensions/ERC4907A.sol";
  * - Once the contract deployed, the deployer should call for each collection
  *   the {ERC721-setApprovalForAll} function to allow the contract to airdrop the tokens
  */
-contract BOTV is ERC2981, ERC4907A, Ownable, VRFConsumerBaseV2 {
+contract BOTV is
+    ERC2981,
+    ERC4907A,
+    Ownable,
+    ReentrancyGuard,
+    VRFConsumerBaseV2
+{
     struct MintPriceSettings {
         bool enabled;
         uint256 amount;
@@ -121,6 +128,7 @@ contract BOTV is ERC2981, ERC4907A, Ownable, VRFConsumerBaseV2 {
     error IncompleteAirdropParameter();
     error InvalidAirdropParameter();
     error InvalidMerkleRoot();
+    error InvalidMintParameters();
     error MaxSupplyExceeded();
     error NoActiveSale();
     error NotAllowedForPrivateSale();
@@ -170,7 +178,7 @@ contract BOTV is ERC2981, ERC4907A, Ownable, VRFConsumerBaseV2 {
         uint256[] memory wearablesTokenIdsOffset,
         bytes32 discountListMerkleRoot,
         bytes32 privateListMerkleRoot
-    ) ERC721A("BOTV Skulls", "BOTV") VRFConsumerBaseV2(vrfCoordinator) {
+    ) ERC721A("Bufalo BOTV Skulls", "BOTV") VRFConsumerBaseV2(vrfCoordinator) {
         if (royaltiesTreasury == address(0)) revert CannotBeZeroAddress();
         if (vrfCoordinator == address(0)) revert CannotBeZeroAddress();
 
@@ -223,7 +231,7 @@ contract BOTV is ERC2981, ERC4907A, Ownable, VRFConsumerBaseV2 {
      * - Payment with provided `currency` should have been enabled with {setPrice} function
      * - Will revert if the contract do not succeed to charge  
      * (this contract should have spending allowance if `currency` is ERC20, see {IERC20-approve})
-     * - Checks Effects pattern & reetrancy protection from ERC721A contract  
+     * - Checks Effects pattern & reetrancy protection 
      *
      * Emits a {Mint} and {IERC721-Transfer} events.
      */
@@ -233,7 +241,7 @@ contract BOTV is ERC2981, ERC4907A, Ownable, VRFConsumerBaseV2 {
         address currency,
         bytes32[] calldata privateSaleMerkleProof,
         bytes32[] calldata discountMerkleProof
-    ) external payable {
+    ) external payable nonReentrant {
         // check quantity validity
         // {_safeMint} function below will revert if quantity = 0
         if ((_totalMinted() + quantity) > MAX_SUPPLY)
@@ -289,6 +297,47 @@ contract BOTV is ERC2981, ERC4907A, Ownable, VRFConsumerBaseV2 {
     /* ****************************************
      *  EXTERNAL FUNCTIONS, RESTRICTED TO OWNER
      ******************************************/
+
+    /**
+     * @notice Mint/airdrop tokens
+     * @param recipients Transfer minted token(s) theses addresses
+     * @param quantities Number of tokens to mint per address
+     *
+     * Emits {Mint} and {IERC721-Transfer} events.
+     */
+    function mintForFree(
+        address[] calldata recipients,
+        uint256[] calldata quantities
+    ) external onlyOwner nonReentrant {
+        if (recipients.length == 0 || recipients.length != quantities.length)
+            revert InvalidMintParameters();
+
+        uint256 totalQty = 0;
+        for (uint256 i = 0; i < recipients.length; i++) {
+            // check beneficiary validity
+            if (recipients[i] == address(0)) revert CannotBeZeroAddress();
+
+            // check quantity validity
+            if (quantities[i] == 0) revert InvalidMintParameters();
+            totalQty = totalQty + quantities[i];
+        }
+
+        if ((_totalMinted() + totalQty) > MAX_SUPPLY)
+            revert MaxSupplyExceeded();
+
+        for (uint256 i = 0; i < recipients.length; i++) {
+            // mint `quantity` tokens and transfer to `recipient`
+            super._safeMint(recipients[i], quantities[i]);
+
+            emit Mint(
+                recipients[i],
+                quantities[i],
+                0,
+                address(0),
+                _msgSenderERC721A()
+            );
+        }
+    }
 
     function resetVrfRequest() external onlyOwner {
         if (randomNumber != 0) revert AlreadyRevealed();

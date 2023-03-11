@@ -225,7 +225,7 @@ describe("BOTV", function () {
   }
 
   describe("Deployment", async function () {
-    it("Should support ERC2981 and ERC721 interfaces", async function () {
+    it("Should support ERC4907, ERC2981 and ERC721 interfaces", async function () {
       const { BOTV } = await loadFixture(initFixture);
 
       const supportsDummy = await BOTV.supportsInterface("0x80ac58cf");
@@ -336,6 +336,138 @@ describe("BOTV", function () {
   });
 
   describe("Minting", async function () {
+    describe("Mint by contract owner", async function () {
+      it("Should mint for free as expected", async function () {
+        const {
+          deployer,
+          publicUser1,
+          publicUser2,
+          publicUser3,
+
+          BOTV
+        } = await loadFixture(initFixture);
+
+        const totalQty = 10;
+
+        const totalSupply = await BOTV.totalSupply();
+
+        await expect(
+          BOTV.mintForFree(
+            [publicUser1.address, publicUser2.address, publicUser3.address],
+
+            [1, 8, 1]
+          )
+        ).to.changeTokenBalances(
+          BOTV,
+
+          [publicUser1.address, publicUser2.address, publicUser3.address],
+
+          [1, 8, 1]
+        );
+
+        expect(await BOTV.totalSupply()).to.be.equal(totalSupply.add(totalQty));
+
+        await expect(
+          BOTV.mintForFree(
+            [publicUser1.address, publicUser2.address, publicUser3.address],
+
+            [1, 8, 1]
+          )
+        )
+          .to.emit(BOTV, "Mint")
+          .withArgs(publicUser2.address, 8, 0, ZERO_ADDRESS, deployer.address);
+      });
+
+      it("Should reject if max supply exceed", async function () {
+        const {
+          publicUser1,
+          publicUser2,
+          publicUser3,
+
+          BOTV
+        } = await loadFixture(initFixture);
+
+        await expect(
+          BOTV.mintForFree(
+            [publicUser1.address],
+
+            [MAX_SUPPLY - 3]
+          )
+        ).to.changeTokenBalances(BOTV, [publicUser1.address], [MAX_SUPPLY - 3]);
+
+        await expect(
+          BOTV.mintForFree(
+            [publicUser1.address, publicUser2.address, publicUser3.address],
+
+            [1, 2, 1]
+          )
+        ).to.revertedWithCustomError(BOTV, "MaxSupplyExceeded");
+
+        expect(await BOTV.balanceOf(publicUser1.address)).to.be.equal(
+          MAX_SUPPLY - 3
+        );
+      });
+
+      it("Should reject if not same parameters length", async function () {
+        const {
+          publicUser1,
+          publicUser2,
+          publicUser3,
+
+          BOTV
+        } = await loadFixture(initFixture);
+
+        await expect(
+          BOTV.mintForFree(
+            [publicUser1.address, publicUser2.address, publicUser3.address],
+
+            [1, 2, 1, 2]
+          )
+        ).to.revertedWithCustomError(BOTV, "InvalidMintParameters");
+      });
+
+      it("Should reject if 0 as quantity provided", async function () {
+        const {
+          publicUser1,
+          publicUser2,
+          publicUser3,
+
+          BOTV
+        } = await loadFixture(initFixture);
+
+        await expect(
+          BOTV.mintForFree(
+            [publicUser1.address, publicUser2.address, publicUser3.address],
+
+            [1, 2, 0]
+          )
+        ).to.revertedWithCustomError(BOTV, "InvalidMintParameters");
+      });
+
+      it("Should reject if no address provided", async function () {
+        const { BOTV } = await loadFixture(initFixture);
+
+        await expect(BOTV.mintForFree([], [])).to.revertedWithCustomError(
+          BOTV,
+          "InvalidMintParameters"
+        );
+      });
+
+      it("Should reject if zero address provided", async function () {
+        const { publicUser1, BOTV } = await loadFixture(initFixture);
+
+        await expect(
+          BOTV.mintForFree(
+            [publicUser1.address, ZERO_ADDRESS],
+
+            [1, 2]
+          )
+        ).to.revertedWithCustomError(BOTV, "CannotBeZeroAddress");
+
+        expect(await BOTV.balanceOf(publicUser1.address)).to.be.equal(0);
+      });
+    });
+
     describe("Public mint", async function () {
       it("Should mint as expected with ERC20 currency payment", async function () {
         const {
@@ -863,6 +995,16 @@ describe("BOTV", function () {
             []
           )
         ).to.be.revertedWithCustomError(BOTV, "TokenMintingLimitExceeded");
+
+        await expect(
+          BOTV.connect(publicUser1).mint(
+            publicUser2.address,
+            0,
+            ERC20Mock.address,
+            [],
+            []
+          )
+        ).to.be.reverted; // revertedWithCustomError(ERC721A, "MintZeroQuantity");
 
         const quantity = MINT_LIMIT_PER_WALLET;
 
@@ -1630,6 +1772,13 @@ describe("BOTV", function () {
         BOTV.connect(publicUser1)[functionName](...functionArgs)
       ).to.be.revertedWith("Ownable: caller is not the owner");
     }
+
+    it("Should revert if `mintForFree` function is not executed by owner", async function () {
+      await testProtectedFunction("mintForFree", [
+        ["0x64E8f7C2B4fd33f5E8470F3C6Df04974F90fc2cA"],
+        [1]
+      ]);
+    });
 
     it("Should revert if `resetVrfRequest` function is not executed by owner", async function () {
       await testProtectedFunction("resetVrfRequest", []);
