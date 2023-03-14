@@ -62,6 +62,8 @@ async function main() {
   let deployBOTVArgs;
   let subscriptionId;
   if (network.name === "polygon") {
+    // 500 gwei keyHash = 0xcc294a196eeeb44da2888d17c0625cc88d70d9760a69d58d853ba6581a9ab0cd
+    // callbackGasLimit = 100000
     subscriptionId = 651;
     deployBOTVArgs = {
       mintCurrency: "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619", // WETH https://polygonscan.com/token/0x7ceb23fd6bc0add59e62ac25578270cff1b9f619
@@ -70,14 +72,16 @@ async function main() {
       vrfCoordinator: "0xAE975071Be8F8eE67addBC1A82488F1C24858067", // https://docs.chain.link/vrf/v2/subscription/supported-networks/#polygon-matic-mainnet
       wearablesAddresses: [
         "0xdf60e4f253003b01f8c6863a996b080d0a9f03de", // Bufalo Cowboy Trench Coat [301,1600] https://polygonscan.com/token/0xdf60e4f253003b01f8c6863a996b080d0a9f03de?a=0x0b83e83f1ec0ee09191fab0ec10dd362ba0b29df
-        "0xfded171d346107c1d4eb20f37484e8dd65beac9b" // Bufalo BFL Genesis Hats [510,1659] https://polygonscan.com/token/0xfded171d346107c1d4eb20f37484e8dd65beac9b?a=0x0b83e83f1ec0ee09191fab0ec10dd362ba0b29df
-        // @todo skull wearable
+        "0xfded171d346107c1d4eb20f37484e8dd65beac9b", // Bufalo BFL Genesis Hats [510,1659] https://polygonscan.com/token/0xfded171d346107c1d4eb20f37484e8dd65beac9b?a=0x0b83e83f1ec0ee09191fab0ec10dd362ba0b29df
+        "0x78D37B7D47b3915685FA6c5E85A01E166296F95C" // Bufalo BOTV Crystal Skull [11,1000]
       ],
-      wearablesTokenIdsOffset: [301, 510],
+      wearablesTokenIdsOffset: [301, 510, 11],
       discountListMerkleRoot: discountListMerkle.root,
       privateListMerkleRoot: privateListMerkle.root
     };
   } else if (network.name === "mumbai") {
+    // keyHash = 0x4b09e658ed251bcafeebbc69400383d49f344ace09b9576fe248bb02c003fe9f
+    // callbackGasLimit = 100000
     subscriptionId = 3447;
     const { wearablesAddresses, wearablesTokenIdsOffset } =
       await deployFakeERC721(deployerAddress);
@@ -117,7 +121,7 @@ async function main() {
   });
   console.log("BOTV Skulls collection verified on Polygonscan");
 
-  for (let addr of [deployBOTVArgs.wearablesAddresses]) {
+  for (let addr of deployBOTVArgs.wearablesAddresses) {
     const ERC721CollectionV2 = await ethers.getContractAt(
       DclERC721CollectionABI,
       addr
@@ -141,3 +145,5 @@ main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
 });
+
+//https://testnets-api.opensea.io/asset/mumbai/0x07a11e9a2d219831d5b0695ab45d86a3af35c023/124/validate

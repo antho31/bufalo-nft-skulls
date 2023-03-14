@@ -84,14 +84,14 @@ contract BOTV is
      */
     uint256 public randomNumber;
 
-    /// @notice Request ID from Chainlink VRF
-    uint256 public requestId;
-
     /** @notice Opensea-comptatible off-chain metadata base URI for each ERC721 token,
      * See https://docs.opensea.io/docs/metadata-standards
      */
     string public constant baseURI =
         "ipfs://bafybeibo35dz2wsz44ixiw3yudl6ulk4kvdsj7irbjwjn76gkg7msl3lzy/tokens/";
+
+    // Request ID from Chainlink VRF
+    uint256 private _requestId;
 
     // Chainlink VRF configuration, see https://docs.chain.link/vrf/v2/subscription/supported-networks/
     VRFCoordinatorV2Interface private immutable _VRF_COORDINATOR;
@@ -341,7 +341,7 @@ contract BOTV is
 
     function resetVrfRequest() external onlyOwner {
         if (randomNumber != 0) revert AlreadyRevealed();
-        requestId = 0;
+        _requestId = 0;
     }
 
     /** @param keyHash See https://docs.chain.link/vrf/v2/subscription/supported-networks/#configurations
@@ -354,13 +354,13 @@ contract BOTV is
         uint64 subscriptionId,
         uint32 callbackGasLimit
     ) external onlyOwner {
-        if (requestId != 0) revert RevealAlreadyRequested();
+        if (_requestId != 0) revert RevealAlreadyRequested();
 
         uint32 numWords = 1;
         uint16 requestConfirmations = 3;
 
         // Will revert if subscription is not set and funded.
-        requestId = _VRF_COORDINATOR.requestRandomWords(
+        _requestId = _VRF_COORDINATOR.requestRandomWords(
             keyHash,
             subscriptionId,
             requestConfirmations,

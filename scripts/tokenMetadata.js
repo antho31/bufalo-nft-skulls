@@ -1,73 +1,11 @@
 const fs = require("fs");
+const { Parser } = require("@json2csv/plainjs");
+const { scoreCollection } = require("openrarityjs");
+const keccak256 = require("keccak256");
+const { MerkleTree } = require("merkletreejs");
+const Web3 = require("web3");
 
-const itemTraitsBase = {
-  Background: null,
-  Eyes: null,
-  Horns: null,
-  Mask: null,
-  Music: null,
-  Skull: null,
-  Legendary: null,
-  Text: null
-};
-
-const rarities = {};
-Object.keys(itemTraitsBase).forEach((trait) => {
-  rarities[trait] = {};
-});
-
-const rank = [];
-
-for (let i = 0; i < 1000; i++) {
-  const { attributes, name } = require(`../data/inputs/metadata/${i}.json`);
-
-  let animation_url;
-  const itemTraits = {
-    ...itemTraitsBase
-  };
-
-  for (const { value, trait_type } of attributes) {
-    if (!rarities[trait_type][value]) rarities[trait_type][value] = { ids: [] };
-
-    if (!itemTraits[trait_type]) {
-      itemTraits[trait_type] = value;
-      rarities[trait_type][value].ids.push(i);
-      if (trait_type == "Music") {
-        animation_url = `ipfs://bafybeig2ov6c5wbmdpcmdc5barky2rgx2b2n33noihldiensblbzf2zute/${value}.wav`;
-      }
-    } else if (itemTraits[trait_type] != value) {
-      throw new Error(`not same values for ${trait_type} - metadata ${i}`);
-    }
-  }
-
-  const metadata = {
-    attributes: Object.keys(itemTraits).map((trait_type) => {
-      let value;
-      if (itemTraits[trait_type]) {
-        value = itemTraits[trait_type];
-      } else {
-        value = trait_type === "Legendary" ? "No" : "None";
-        if (!rarities[trait_type][value])
-          rarities[trait_type][value] = { ids: [] };
-        rarities[trait_type][value].ids.push(i);
-      }
-      return { trait_type, value };
-    }),
-    animation_url,
-    description: "",
-    image: `ipfs://bafybeicgk7uqmmfhcopoyh7rwvqgiva7ebr6u6osqbeviel7o4x3suaiee/${i}.png`,
-    name: name.includes(`BOTV Skulls`)
-      ? `Bufalo BOTV Skull #${i}`
-      : `${name} - Bufalo BOTV Skull #${i}`
-  };
-
-  rank.push(Object.assign({ metadataId: i }, metadata));
-
-  fs.writeFileSync(
-    `./data/results/metadata/BOTV/tokens/${i}`,
-    JSON.stringify(metadata, null, 2)
-  );
-}
+const web3 = new Web3();
 
 fs.writeFileSync(
   `./data/results/metadata/BOTV/tokens/prereveal`,
@@ -85,33 +23,164 @@ fs.writeFileSync(
   )
 );
 
-for (const trait of Object.keys(rarities)) {
-  for (const value of Object.keys(rarities[trait])) {
-    rarities[trait][value].nbTokens = rarities[trait][value].ids.length;
-    rarities[trait][value].rarity = rarities[trait][value].nbTokens / 1000;
-  }
-}
+const itemTraitsBase = {
+  Background: null,
+  Eyes: null,
+  Horns: null,
+  Mask: null,
+  Music: null,
+  Skull: null,
+  Legendary: null,
+  Text: null
+};
+
+const metadatas = {};
+const raritiesDistribution = {};
+Object.keys(itemTraitsBase).forEach((trait) => {
+  raritiesDistribution[trait] = {};
+});
+
+let collectionToRank = [];
 
 for (let i = 0; i < 1000; i++) {
-  let rarityScore = 0;
-  const { attributes } = rank[i];
+  const { attributes, name } = require(`../data/inputs/metadata/${i}.json`);
+
+  let animation_url;
+  const itemTraits = {
+    ...itemTraitsBase
+  };
+
   for (const { value, trait_type } of attributes) {
-    rarityScore = rarityScore + rarities[trait_type][value].rarity;
+    if (!raritiesDistribution[trait_type][value])
+      raritiesDistribution[trait_type][value] = { ids: [] };
+
+    if (!itemTraits[trait_type]) {
+      itemTraits[trait_type] = value;
+      raritiesDistribution[trait_type][value].ids.push(i);
+      if (trait_type == "Music") {
+        animation_url = `ipfs://bafybeig2ov6c5wbmdpcmdc5barky2rgx2b2n33noihldiensblbzf2zute/${value}.wav`;
+      }
+    } else if (itemTraits[trait_type] != value) {
+      throw new Error(`not same values for ${trait_type} - metadata ${i}`);
+    }
   }
-  rank[i].rarityScore = rarityScore;
+
+  const metadata = {
+    attributes: Object.keys(itemTraits).map((trait_type) => {
+      let value;
+      if (itemTraits[trait_type]) {
+        value = itemTraits[trait_type];
+      } else {
+        value = trait_type === "Legendary" ? "No" : "None";
+        if (!raritiesDistribution[trait_type][value])
+          raritiesDistribution[trait_type][value] = { ids: [] };
+        raritiesDistribution[trait_type][value].ids.push(i);
+      }
+      return { trait_type, value };
+    }),
+    animation_url,
+    description: "",
+    image: `ipfs://bafybeicgk7uqmmfhcopoyh7rwvqgiva7ebr6u6osqbeviel7o4x3suaiee/${i}.png`,
+    image_url: `https://bafybeicgk7uqmmfhcopoyh7rwvqgiva7ebr6u6osqbeviel7o4x3suaiee.ipfs.nftstorage.link/${i}.png`,
+
+    name: name.includes(`BOTV Skulls`)
+      ? `Bufalo BOTV Skull #${i}`
+      : `${name} - Bufalo BOTV Skull #${i}`
+  };
+
+  metadatas[i] = metadata;
+
+  collectionToRank.push({
+    tokenID: i,
+    traits: metadata.attributes.map(({ trait_type, value }) => ({
+      //  traits: attributes.map(({ trait_type, value }) => ({
+      type: trait_type,
+      value
+    }))
+  });
+
+  fs.writeFileSync(
+    `./data/results/metadata/BOTV/tokens/${i}`,
+    JSON.stringify(metadata, null, 2)
+  );
 }
 
+const scores = scoreCollection(collectionToRank);
+
+for (const { tokenID, rank, score } of scores) {
+  metadatas[tokenID].rank = rank;
+  metadatas[tokenID].score = score;
+}
+
+let rank = Object.keys(metadatas).map((metadataId) => {
+  const { rank, image_url, name, score } = metadatas[metadataId];
+  return { metadataId, rank, image_url, name: `${name} `, score };
+});
+
 rank.sort((a, b) => {
-  if (a.rarityScore > b.rarityScore) {
+  if (a.rank > b.rank) {
     return 1;
   }
-  if (a.rarityScore < b.rarityScore) {
+  if (a.rank < b.rank) {
     return -1;
   }
   return 0;
 });
 
+rank = rank.map((r, i) => {
+  const bufaPerDay =
+    i > 799
+      ? 50
+      : i > 499
+      ? 75
+      : i > 199
+      ? 100
+      : i > 99
+      ? 150
+      : i > 9
+      ? 200
+      : 400;
+
+  metadatas[r.metadataId].bufaPerDay = bufaPerDay;
+
+  return Object.assign({}, r, {
+    bufaPerDay,
+    bufaPerDayEncoded: web3.eth.abi.encodeParameter("uint256", bufaPerDay),
+    metadataIdEncoded: web3.eth.abi.encodeParameter("uint256", r.metadataId)
+  });
+});
+
+const leafNodes = rank.map((r) =>
+  keccak256(
+    Buffer.concat([
+      Buffer.from(r.metadataIdEncoded.replace("0x", ""), "hex"),
+      Buffer.from(r.bufaPerDayEncoded.replace("0x", ""), "hex")
+    ])
+  )
+);
+
+const merkleTree = new MerkleTree(leafNodes, keccak256, { sortPairs: true });
+
+const bufaRewardsMerkle = { root: merkleTree.getHexRoot() };
+
+rank.forEach(({ bufaPerDay, metadataId }, i) => {
+  bufaRewardsMerkle[metadataId] = {
+    bufaPerDay,
+    merkleProofs: merkleTree.getHexProof(leafNodes[i])
+  };
+});
+
+const parser = new Parser();
+const csv = parser.parse(rank);
+
+fs.writeFileSync("./data/results/metadata/BOTV/rank.csv", csv);
+
 fs.writeFileSync(
   `./data/results/metadata/BOTV/rarities.json`,
-  JSON.stringify({ rank, rarities }, null, 2)
+  JSON.stringify({ rank, metadatas, raritiesDistribution }, null, 2)
+);
+
+fs.writeFileSync(
+  "./data/results/metadata/bufaRewardsMerkleData.json",
+  JSON.stringify(bufaRewardsMerkle, null, 2)
 );

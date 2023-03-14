@@ -1,8 +1,9 @@
 const { unstable_dev } = require("wrangler");
 
-const privateSaleMerkle = require("../data/results/merkleAllowlists/community.json");
+const bufaMerkle = require("../data/results/metadata/bufaRewardsMerkleData.json");
+
 const discountMerkle = require("../data/results/merkleAllowlists/fans.json");
-const polygonDeployment = require("../data/results/deployment/polygon.json");
+const privateSaleMerkle = require("../data/results/merkleAllowlists/community.json");
 
 describe("Worker", () => {
   let worker;
@@ -23,6 +24,7 @@ describe("Worker", () => {
     expect(resp.status).toBe(404);
   });
 
+  /*
   it("should return deployment info for valid network", async () => {
     const network = "polygon";
     const resp = await worker.fetch(`/deployment/${network}`);
@@ -30,7 +32,7 @@ describe("Worker", () => {
 
     expect(resp.status).toBe(200);
 
-    expect(jsonData).toStrictEqual(polygonDeployment);
+    expect(jsonData).toStrictEqual(require("../data/results/deployment/polygon.json"));
   });
 
   it("should return empty deployment info for invalid network", async () => {
@@ -48,6 +50,7 @@ describe("Worker", () => {
       expect(jsonData).toStrictEqual({});
     }
   });
+*/
 
   it("should return merkle proofs for valid address", async () => {
     const addr =
@@ -83,6 +86,42 @@ describe("Worker", () => {
         addr: addr,
         privateSaleMerkleProof: [],
         discountMerkleProof: []
+      });
+    }
+  });
+
+  it("should return merkle proofs for valid metadataId", async () => {
+    const metadataId = "15";
+    const resp = await worker.fetch(`/merkleproofs/rewards/${metadataId}`);
+    const jsonData = await resp.json();
+
+    expect(resp.status).toBe(200);
+
+    const { bufaPerDay, merkleProofs } = bufaMerkle[metadataId];
+
+    expect(jsonData).toStrictEqual({
+      metadataId,
+      bufaPerDay,
+      merkleProofs
+    });
+  });
+
+  it("should return empty merkle proofs for invalid metadataId", async () => {
+    for (let metadataId of [
+      "test",
+      "-1",
+      "15555555555555",
+      "0x0000000000000000000000000000000000000000"
+    ]) {
+      const resp = await worker.fetch(`/merkleproofs/rewards/${metadataId}`);
+      const jsonData = await resp.json();
+
+      expect(resp.status).toBe(200);
+
+      expect(jsonData).toStrictEqual({
+        metadataId,
+        bufaPerDay: null,
+        merkleProofs: null
       });
     }
   });

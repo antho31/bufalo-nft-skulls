@@ -13,10 +13,10 @@ The DJ / Producer / Visual Artist is launching an NFT collection for its communi
 - give VIP access into the Bufalo Saloon in Decentraland
 - receive a share of the income from deals with music labels
 
-A staking program gives the opportunity to get :
+Holding a Skull NFT gives the opportunity to continually claim rewards to get :
 
 - commercial rights for music releases produced by Bufalo
-- exclusive perks
+- exclusive perks like video tutorials
 
 ## Core information
 
@@ -24,11 +24,11 @@ A staking program gives the opportunity to get :
 
 🔢 Supply : 1000 tokens
 
-🖼️ A unique art skull with seven traits (several rarities) and a 🎵 loop. Reveal date to be confirmed. Token assignations will be perfectly random, with no cheating possible from anyone thanks to the use of Chainlink VRF
-
-📅 Private sale (wallets on "Community" allowlist only) and public sale dates to be confirmed
-
 🔖 Sale price : 0.05 WETH per token, 50 % discount on the second mint for wallets on the "Fans" allowlist
+
+📅 Private sale (wallets on "Community" allowlist only) : March 28. Public sale : March 29
+
+🖼️ A unique art skull with seven traits (several rarities) and a 🎵 loop. Reveal date : March 30. Token assignations perfectly random, with no cheating possible from anyone thanks to the use of Chainlink VRF
 
 🎁 Hat, trench coat & skull wearables offered on mint
 
@@ -38,7 +38,7 @@ A staking program gives the opportunity to get :
 
 💵 Mint treasury : `0x3c0dabc82bf51d1bf994a54e70e7a7d19865f950`. Royalties treasury (Oxsplits contract) : [0x0231339790F09B5F3d50a37D0dd82D66e82cA37D](https://app.0xsplits.xyz/accounts/0x0231339790F09B5F3d50a37D0dd82D66e82cA37D/?chainId=137)
 
-💰 Collect points when staking an NFT
+💰 Hold-to-earn : receive a certain amount of $BUFA tokens (depending on the rarity of the NFT's attributes) every day. Spend these against benefits.
 
 🌐 More info on the website coming soon [bufalomusic.com](https://bufalomusic.com)
 
@@ -55,15 +55,9 @@ Those who supported Bufalo up to $50 are on the "Fans" allowlist, and get a 50% 
 - Decentraland purchases
 - [Bufalo NFT realeases'](https://opensea.io/collection/bufalonftreleases) transactions on Opensea (Ethereum & Polygon). See the list of eligible tokens [here](./data/inputs/previous-collections/opensea-nftreleases.js).
 
-### Generate the allowlists
+### Generated allowlists
 
-```bash
-npm run snapshot
-```
-
-Result files can be found inside the `data/results` folder
-
-| Generated file                                                      | Description                                                                                                                                                        |
+| File                                                                | Description                                                                                                                                                        |
 | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | [Community allowlist](./data/results/allowlists/community.json)     | Array of addresses                                                                                                                                                 |
 | [Fan allowlist](./data/results/allowlists/fans.json)                | Array of addresses                                                                                                                                                 |
@@ -83,15 +77,8 @@ You can fetch `https://bufalo-api.anthonygourraud.workers.dev/merkleproofs/:addr
 
   // is from Community allowlist
   "privateSaleMerkleProof": [
-    "0xf806f5cd65739e428b11a3ea4315bede7d4b7db9c4adfccf29aa190bea93bb49",
-    "0x9be2234643f345ad2fc383d774cfb4ade9b95ddc3f775aa11f5d67cfc1a6f93d",
-    "0x026d169d9af6772c2640fff89fab8deb458135758da03f98ce79381ff6ed6ed5",
-    "0xff36a9202b7233e65e56593e7ca76ccfcb4694a7af2ee7bba08c0c76891aa65d",
-    "0x9b60f25ad7f6bb311720575cc493b42800646f2a9a4175a8043c5e6227ce67dd",
-    "0x19f8066e52454dcd09f56b5949bd3c236db0f2b83b5f184440de3b0f2444ed6f",
-    "0xa2f90180d7645840f22be763afb2455a4820700096ca5805f7fae3781cf69502",
-    "0xb3f11d608f709422e6a827fea3e1a4267f5109870d7166691de09ab391af812b",
-    "0xccfdf847c00a1ce4eadd7dde190dd65612d6efbf9056f3a39b43a2d2b3252042"
+    "0x....",
+    "0x....."
   ],
 
   // is not from Fans alllowlist
@@ -99,7 +86,42 @@ You can fetch `https://bufalo-api.anthonygourraud.workers.dev/merkleproofs/:addr
 }
 ```
 
-API route is updated and deployed after generating allowlists. It can be deployed manually with `npm run deploy-api`
+## Rarities & $BUFA rewards
+
+Rarity score is computed following [Open Rarity](https://www.openrarity.dev/) standard.
+All attributes are defined within the metadata JSON files for each token, available [here](./data/results/metadata/BOTV/tokens/). The rarer the attributes of the token, the more $BUFA tokens its owner can receive.
+
+### Generated score computations
+
+| File                                                                       | Description                                                                                                                                                                      |
+| -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Rank](./data/results/metadata/rank.csv)                                   | Rank, score and number of $BUFA per day for every token. ([see Google Spreadsheet version](https://docs.google.com/spreadsheets/d/1igOFN5aebsixi28IkVbI0plyBg_lg3uJtMb_bXB1DX4)) |
+| [$BUFA rewards merkle](./data/results/metadata/bufaRewardsMerkleData.json) | Merkle root & proofs to claim $BUFA                                                                                                                                              |
+
+### Claim $BUFA : get merkle proofs for a specific metadataId
+
+You can fetch `https://bufalo-api.anthonygourraud.workers.dev/merkleproofs/rewards/:metadataId` to get the merkle proofs for a specific `metadataId`, assigned to a token after the reveal.
+
+```js
+// Result from https://bufalo-api.anthonygourraud.workers.dev/merkleproofs/rewards/10
+{
+  "metadataId": "10",
+  "bufaPerDay": 100,
+  "merkleProofs": [
+    "0x....",
+    "0x....."
+  ]
+}
+```
+
+## Security
+
+- Contracts are not audited yet.
+
+- Note that the contract deployer has privileged access ([`Owner`](https://docs.openzeppelin.com/contracts/4.x/api/access#Ownable) role), including:
+
+  - the ability to mint Skulls NFT for free
+  - minting price modification at any time
 
 ## Tech Stack
 
@@ -113,13 +135,19 @@ API route is updated and deployed after generating allowlists. It can be deploye
 
 **Smart contract framework:** Hardhat
 
-**Smart contract libs and tools:** OpenZeppelin, Thirdweb, Chainlink
+**Smart contract libs and tools:** Chainlink, OpenZeppelin, Slither, Thirdweb
 
 ## Roadmap
 
-✅ Generate allowlists (addresses arrays & merkle data), from token ownerships and sales
+✅ Generate allowlists (addresses arrays & merkle data)
+
+- Previous collections' token ownerships snapshot
+- Decentraland & Opensea sales analysis
 
 ✅ NFT metadata (skull images) & uploads on IPFS
+
+- Rarity scores computation
+- Higest rewards according ranking
 
 ✅ ERC721A contract for skull NFTs
 
@@ -129,85 +157,16 @@ API route is updated and deployed after generating allowlists. It can be deploye
 - Hat, trench coat & skull wearable transfers on mint
 - Reveal with random assignation using Chainlink
 
-🔲 ERC20 and staking contracts
+🔲 $BUFA rewards
 
-- The longer you stake the skull NFT, the more ERC20 tokens you get. Get 80 BUFA every 6 hours in staking.
+- ERC20 contract, with minter role granted to the Skull NFT contract
+- Earn $BUFA tokens as long as you hold your Skull NFT
+- $BUFA minting with Merkle proof verification
 
 🔲 ERC721A for music NFTs
 
-- Can be purchased burning ERC20 tokens
+- Can be purchased with $BUFA
 - NFT holder get commercial rights to the related music
-
-## Development
-
-You need NodeJS installed on your computer.
-
-Clone the project and install the dependencies :
-
-```bash
-git clone git@github.com:antho31/bufalo-nft-skulls.git
-npm install
-```
-
-Then set your environment variables :
-
-```bash
-cp .env_example .env
-nano .env
-```
-
-### Environment Variables
-
-| Parameter                      | Type     | Description                                                                                                                                                                    |
-| :----------------------------- | :------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `ALCHEMY_API_KEY`              | `string` | **Required to regenerate allowlists**. API key from [Alchemy](https://docs.alchemy.com/docs/alchemy-quickstart-guide#1key-create-an-alchemy-key)                               |
-| `COINMARKETCAP_KEY`            | `string` | **Required for gas report**. API key from [CoinMarketCap](https://coinmarketcap.com/api/)                                                                                      |
-| `DEPLOYER_ADDRESS`             | `string` | **Required to test & deploy contracts**. The address to use to deploy contracts. Should also be owner of NFTs to airdrop.                                                      |
-| `DEPLOYER_PRIVATE_KEY`         | `string` | **Required to test & deploy contracts** Private key of the address to use to deploy contracts.                                                                                 |
-| `NFT_PORT_API_KEY`             | `string` | **Required to regenerate allowlists**. API key from [NFTPort](https://docs.nftport.xyz/)                                                                                       |
-| `POLYGONSCAN_API_KEY`          | `string` | **Required to deploy contracts** To verify contracts on Polygonscan. [You can get API key for free](https://docs.polygonscan.com/getting-started/viewing-api-usage-statistics) |
-| `POLYGON_MAINNET_RPC_PROVIDER` | `string` | **Required to deploy contracts** RPC endpoint (Polygon Mainnet). You can get one for free with [Alchemy](https://www.alchemy.com/overviews/private-rpc-endpoint)               |
-| `POLYGON_MUMBAI_RPC_PROVIDER`  | `string` | **Required to deploy contracts** RPC endpoint (Polygon Mumbai Testnet). You can get one for free with [Alchemy](https://www.alchemy.com/overviews/private-rpc-endpoint)        |
-
-### Smart contracts deployment
-
-You can use [Thirdweb](https://portal.thirdweb.com/release) to deploy contracts
-
-```bash
-  npx thirdweb release
-```
-
-### Tests
-
-```shell
-npm run test # with gas reports according hardhat.config.js
-```
-
-To ensure that any Solidity function is tested, run the `coverage` script :
-
-```shell
-npm run coverage
-```
-
-### Security
-
-/!\ Contracts are not audited yet.
-
-Slither runs a suite of vulnerability detectors, prints visual information about contract details.
-
-1. Install Slither
-
-```shell
-pip3 install slither-analyzer
-```
-
-See alternatives to install Slither on the [GitHub repo](https://github.com/crytic/slither)
-
-2. Run Slither
-
-```shell
-npm run analyze
-```
 
 ## Authors
 
