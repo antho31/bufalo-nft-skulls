@@ -14,6 +14,8 @@ import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 
 import "erc721a/contracts/extensions/ERC4907A.sol";
 
+import "./interfaces/IBUFA.sol";
+
 /**
  * @title Bufalo's NFT Collection - BOTV Skulls (BOTV)
  * @author Anthony Gourraud
@@ -26,17 +28,24 @@ import "erc721a/contracts/extensions/ERC4907A.sol";
  * Allowed addresses for the private sale and eligible addresses for a 50% discount on the second token minted
  * are verified with a merkle proof (see https://soliditydeveloper.com/merkle-tree)
  *
+ * When a user pays and mints X tokens, he also receives X tokens from each Bufalo collection of wearables.
+ * IMPORTANT :
+ * - Deployer should be owner of 1000 wearable tokens, for each collection to airdrop.
+ * - Once the contract deployed, the deployer should call for each collection
+ *   the {ERC721-setApprovalForAll} function to allow the contract to airdrop the tokens
+ *
  * Token metadata should be revealed by the contract's owner.
  * A mechanism using Chainlink VRF ensures that no cheating is possible.
  * IMPORTANT :
  * - Deployer should create and fund a Chainlink subscription
  * - Deployer should add the deployed contract as a consumer for the subscription
  *
- * When a user pays and mints X tokens, he also receives X tokens from each Bufalo collection of wearables.
+ * Once revealed, each token holder can claim rewards ($BUFA tokens) continously.
+ * The longer he holds and the rarer the NFT's attributes are,
+ * the higher reward amount he gets
  * IMPORTANT :
- * - Deployer should be owner of 1000 wearable tokens, for each collection to airdrop.
- * - Once the contract deployed, the deployer should call for each collection
- *   the {ERC721-setApprovalForAll} function to allow the contract to airdrop the tokens
+ * - Deployer should grant the contract the `MINTER_ROLE`
+ * - User should claim its rewards before transfering a token, or he will lose it
  */
 contract BOTV is
     ERC2981,
@@ -53,6 +62,12 @@ contract BOTV is
     using SafeERC20 for IERC20;
     using Strings for uint256;
 
+    /** @notice Opensea-comptatible off-chain metadata base URI for each ERC721 token,
+     * See https://docs.opensea.io/docs/metadata-standards
+     */
+    string public constant baseURI =
+        "ipfs://bafybeibo35dz2wsz44ixiw3yudl6ulk4kvdsj7irbjwjn76gkg7msl3lzy/tokens/";
+
     /// @notice Maximum number of tokens to mint
     uint256 public constant MAX_SUPPLY = 1000;
 
@@ -66,11 +81,8 @@ contract BOTV is
     /// @notice Where goes funds from second sales royalties
     address payable public immutable ROYALTIES_TREASURY;
 
-    /// @notice Merkle root to check if an address can get a discount
-    bytes32 public immutable DISCOUNT_LIST_MERKLE_ROOT;
-
-    /// @notice Merkle root to check if an address is on the private sale allowlist
-    bytes32 public immutable PRIVATE_LIST_MERKLE_ROOT;
+    /// @notice $BUFA contract address, rewards tokens holding NFT
+    IBUFA public immutable BUFA_CONTRACT_ADDRESS;
 
     /// @notice Boolean operator to activate/deactivate private sale
     bool public privateSaleActive = false;
@@ -84,17 +96,20 @@ contract BOTV is
      */
     uint256 public randomNumber;
 
-    /** @notice Opensea-comptatible off-chain metadata base URI for each ERC721 token,
-     * See https://docs.opensea.io/docs/metadata-standards
-     */
-    string public constant baseURI =
-        "ipfs://bafybeibo35dz2wsz44ixiw3yudl6ulk4kvdsj7irbjwjn76gkg7msl3lzy/tokens/";
-
-    // Request ID from Chainlink VRF
-    uint256 private _requestId;
+    /// @notice Request ID from Chainlink VRF
+    uint256 public requestId;
 
     // Chainlink VRF configuration, see https://docs.chain.link/vrf/v2/subscription/supported-networks/
     VRFCoordinatorV2Interface private immutable _VRF_COORDINATOR;
+
+    // Merkle root to check if an address can get a discount
+    bytes32 private immutable _DISCOUNT_LIST_MERKLE_ROOT;
+
+    // Merkle root to check if an address is on the private sale allowlist
+    bytes32 private immutable _PRIVATE_LIST_MERKLE_ROOT;
+
+    // Merkle root to check if an address is on the private sale allowlist
+    bytes32 private immutable _BUFA_REWARDS_MERKLE_ROOT;
 
     // Address from which to airdrop wearable tokens on mint
     address private immutable _WEARABLES_OWNER;
@@ -117,6 +132,9 @@ contract BOTV is
     // Keep track if mint is possible paying with a specific ERC20, and for which price per token
     mapping(IERC20 => MintPriceSettings) private _mintERC20Prices;
 
+    // Keep track of last claim date for each token - reset on transfer
+    mapping(uint256 => uint256) private _lastClaimTimestamps;
+
     /* ****************
      *  ERRORS
      *****************/
@@ -129,10 +147,19 @@ contract BOTV is
     error InvalidAirdropParameter();
     error InvalidMerkleRoot();
     error InvalidMintParameters();
+    error InvalidRewardsParameters();
+    error InvalidRewardsForToken(
+        uint256 tokenId,
+        uint256 metadataId,
+        uint256 rewardsPerDay
+    );
     error MaxSupplyExceeded();
     error NoActiveSale();
     error NotAllowedForPrivateSale();
+    error NotOwner(address tokenOwner, uint256 tokenId);
+    error NotRevealed();
     error RevealAlreadyRequested();
+    error TokenGivenTwice(uint256 tokenId);
     error TokenMintingLimitExceeded();
 
     /* ****************
@@ -155,6 +182,10 @@ contract BOTV is
 
     event RevealRandomNumber(uint256 randomNumber);
 
+    event PublicSaleStateChanged(bool active);
+
+    event PrivateSaleStateChanged(bool active);
+
     /* ****************
      *  CONTRACT CONSTRUCTOR
      *****************/
@@ -166,8 +197,13 @@ contract BOTV is
      * @param vrfCoordinator Chainlink VRF configuration, for example 0xAE975071Be8F8eE67addBC1A82488F1C24858067 on Polygon. See https://docs.chain.link/vrf/v2/subscription/supported-networks/
      * @param wearablesAddresses Contracts for wearable tokens to airdrop
      * @param wearablesTokenIdsOffset From which tokenIDs deployer is owner of wearables to airdrop
+     * @param rewardsToken ERC20 Contract for $BUFA
+     * @param rewardsMerkleRoot Merkle root computed from the rank/rarity scores to verify how much per day a token is eligible in $BUFA
      * @param discountListMerkleRoot Merkle root computed from array of eligible addresses for the 50% discount on second token minted
      * @param privateListMerkleRoot Merkle root computed from array of allowed addresses to mint during the private sale
+     *
+     * Merkle proofs can
+     *
      */
     constructor(
         address mintCurrency,
@@ -176,11 +212,14 @@ contract BOTV is
         address vrfCoordinator,
         address[] memory wearablesAddresses,
         uint256[] memory wearablesTokenIdsOffset,
+        address rewardsToken,
+        bytes32 rewardsMerkleRoot,
         bytes32 discountListMerkleRoot,
         bytes32 privateListMerkleRoot
     ) ERC721A("Bufalo BOTV Skulls", "BOTV") VRFConsumerBaseV2(vrfCoordinator) {
         if (royaltiesTreasury == address(0)) revert CannotBeZeroAddress();
         if (vrfCoordinator == address(0)) revert CannotBeZeroAddress();
+        if (rewardsToken == address(0)) revert CannotBeZeroAddress();
 
         if (wearablesAddresses.length != wearablesTokenIdsOffset.length)
             revert IncompleteAirdropParameter();
@@ -195,6 +234,7 @@ contract BOTV is
         }
 
         if (
+            rewardsMerkleRoot == bytes32(0) ||
             discountListMerkleRoot == bytes32(0) ||
             privateListMerkleRoot == bytes32(0)
         ) revert InvalidMerkleRoot();
@@ -208,8 +248,11 @@ contract BOTV is
         _WEARABLES_OWNER = _msgSenderERC721A();
         _WEARABLES_ADDRESSES = wearablesAddresses;
 
-        DISCOUNT_LIST_MERKLE_ROOT = discountListMerkleRoot;
-        PRIVATE_LIST_MERKLE_ROOT = privateListMerkleRoot;
+        BUFA_CONTRACT_ADDRESS = IBUFA(rewardsToken);
+        _BUFA_REWARDS_MERKLE_ROOT = rewardsMerkleRoot;
+
+        _DISCOUNT_LIST_MERKLE_ROOT = discountListMerkleRoot;
+        _PRIVATE_LIST_MERKLE_ROOT = privateListMerkleRoot;
 
         // 10 % royalties fee
         _setDefaultRoyalty(royaltiesTreasury, 1000);
@@ -224,14 +267,20 @@ contract BOTV is
      * @param tokenOwner Transfer minted tokens & airdrop wearables to this address
      * @param quantity Number of tokens to mint
      * @param currency ERC20 contract address to spend tokens, 0 to pay with the blockchain's native coin
-     * @param privateSaleMerkleProof Merkle proof to verify if `tokenOwner` is on the private sale allowlist 
-     * @param discountMerkleProof Merkle proof to verify if `tokenOwner` can have a 50% discount on the second token 
-
+     * @param privateSaleMerkleProof Merkle proof to verify if `tokenOwner` is on the private sale allowlist
+     * @param discountMerkleProof Merkle proof to verify if `tokenOwner` can have a 50% discount on the second token
+     *
+     * To get `privateSaleMerkleProof` and `discountMerkleProof` values,
+     * you should  fetch https://bufalo-api.anthonygourraud.workers.dev/merkleproofs/:tokenOwner
+     * All merkle proofs are available on Github :
+     * - Private sale => https://github.com/antho31/bufalo-nft-skulls/blob/main/data/results/merkleAllowlists/community.json
+     * - Discounts => https://github.com/antho31/bufalo-nft-skulls/blob/main/data/results/merkleAllowlists/fans.json
+     *
      * @dev External calls considerations :
      * - Payment with provided `currency` should have been enabled with {setPrice} function
-     * - Will revert if the contract do not succeed to charge  
+     * - Will revert if the contract do not succeed to charge
      * (this contract should have spending allowance if `currency` is ERC20, see {IERC20-approve})
-     * - Checks Effects pattern & reetrancy protection 
+     * - Checks Effects pattern & reetrancy protection
      *
      * Emits a {Mint} and {IERC721-Transfer} events.
      */
@@ -294,6 +343,57 @@ contract BOTV is
         emit Mint(tokenOwner, quantity, price, currency, _msgSenderERC721A());
     }
 
+    /**
+     * @notice Claim $BUFA tokens as a reward for token holding.
+     *
+     * @param tokenOwner Holder who will receive $BUFA rewards
+     * @param tokenIds Tokens holder owns
+     * @param rewardsPerDay Array of rewards number for each token holder can get.
+     * @param rewardsProofs Array of proofs regarding rewards holder can get
+     *
+     * To get `rewardsPerDay` and `rewardsProofs`values,
+     * you should execute {getMetadataIdsForTokens(tokenIds)}
+     * and then fetch https://bufalo-api.anthonygourraud.workers.dev/merkleproofs/rewards/:metadataIds
+     * All merkle proofs and rewards allocation per day for each metadataId are available here : https://github.com/antho31/bufalo-nft-skulls/blob/main/data/results/metadata/bufaRewardsMerkleData.json
+     *
+     * Emits {ERC20-Transfer} event
+     */
+    function claimRewards(
+        address tokenOwner,
+        uint256[] memory tokenIds,
+        uint256[] memory rewardsPerDay,
+        bytes32[][] calldata rewardsProofs
+    ) public {
+        uint256 amount;
+        if (isRevealed() == false) revert NotRevealed();
+        if (
+            tokenIds.length == 0 ||
+            tokenIds.length != rewardsProofs.length ||
+            tokenIds.length != rewardsProofs.length
+        ) revert InvalidRewardsParameters();
+
+        bool[] memory tokensChecked = new bool[](MAX_SUPPLY);
+
+        for (uint256 i = 0; i < tokenIds.length; i++) {
+            uint256 tokenId = tokenIds[i];
+            if (tokensChecked[tokenId]) revert TokenGivenTwice(tokenId);
+            tokensChecked[tokenId] = true;
+            uint256 rewardsPerDayForToken = rewardsPerDay[i];
+            bytes32[] memory rewardsProof = rewardsProofs[i];
+
+            amount =
+                amount +
+                _availableRewards(
+                    tokenOwner,
+                    tokenId,
+                    rewardsPerDayForToken,
+                    rewardsProof
+                );
+            _resetClaimTimestamp(i);
+        }
+        BUFA_CONTRACT_ADDRESS.mint(tokenOwner, amount);
+    }
+
     /* ****************************************
      *  EXTERNAL FUNCTIONS, RESTRICTED TO OWNER
      ******************************************/
@@ -303,7 +403,7 @@ contract BOTV is
      * @param recipients Transfer minted token(s) theses addresses
      * @param quantities Number of tokens to mint per address
      *
-     * Emits {Mint} and {IERC721-Transfer} events.
+     * Emits {Mint} and {ERC721-Transfer} events.
      */
     function mintForFree(
         address[] calldata recipients,
@@ -340,27 +440,30 @@ contract BOTV is
     }
 
     function resetVrfRequest() external onlyOwner {
-        if (randomNumber != 0) revert AlreadyRevealed();
-        _requestId = 0;
+        if (isRevealed()) revert AlreadyRevealed();
+        requestId = 0;
     }
 
-    /** @param keyHash See https://docs.chain.link/vrf/v2/subscription/supported-networks/#configurations
+    /**
+     *  @notice Random metadata attribution with Chainlink
+     *  @param keyHash See https://docs.chain.link/vrf/v2/subscription/supported-networks/#configurations
      *  @param subscriptionId Create a subscription here : https://vrf.chain.link/
      *  @param callbackGasLimit Storing each word costs about 20,000 gas. 40,000 is a safe default for this function
      *
+     * Emits {vrfCoordinatorV2-RandomWordsRequested"} event
      */
     function reveal(
         bytes32 keyHash,
         uint64 subscriptionId,
         uint32 callbackGasLimit
     ) external onlyOwner {
-        if (_requestId != 0) revert RevealAlreadyRequested();
+        if (requestId != 0) revert RevealAlreadyRequested();
 
         uint32 numWords = 1;
         uint16 requestConfirmations = 3;
 
         // Will revert if subscription is not set and funded.
-        _requestId = _VRF_COORDINATOR.requestRandomWords(
+        requestId = _VRF_COORDINATOR.requestRandomWords(
             keyHash,
             subscriptionId,
             requestConfirmations,
@@ -383,19 +486,100 @@ contract BOTV is
         _setPrice(currency, enabled, amount);
     }
 
-    /// @param active Activate/deactivate private mint
+    /**
+     * @param active Activate/deactivate private mint
+     *
+     * Emits {PrivateSaleStateChanged} event
+     */
     function setPrivateSale(bool active) external onlyOwner {
         privateSaleActive = active;
+        emit PrivateSaleStateChanged(active);
     }
 
-    /// @param active Activate/deactivate public mint
+    /**
+     * @param active Activate/deactivate public mint
+     *
+     * Emits {PublicSaleStateChanged} event
+     */
     function setPublicSale(bool active) external onlyOwner {
         publicSaleActive = active;
+        emit PublicSaleStateChanged(active);
+    }
+
+    /* ****************
+     *  EXTERNAL GETTERS
+     *****************/
+
+    /**
+     * @notice Comoute how much $BUFA tokens a holder can claim as a reward for token holding.
+     * The longer you hold and the rarer the NFT's attributes are,
+     * the higher reward amount you get
+     *
+     * @param tokenOwner Holder address
+     * @param tokenIds Tokens holder owns
+     * @param rewardsPerDay Array of rewards number for each token holder can get.
+     * @param rewardsProofs Array of proofs regarding rewards holder can get
+     *
+     * To get `rewardsPerDay` and `rewardsProofs`values,
+     * you should execute {getMetadataIdsForTokens(tokenIds)}
+     * and then fetch https://bufalo-api.anthonygourraud.workers.dev/merkleproofs/rewards/:metadataIds
+     */
+    function availableRewards(
+        address tokenOwner,
+        uint256[] memory tokenIds,
+        uint256[] memory rewardsPerDay,
+        bytes32[][] calldata rewardsProofs
+    ) external view returns (uint256 amount) {
+        if (isRevealed() == false) revert NotRevealed();
+        if (
+            tokenIds.length == 0 ||
+            tokenIds.length != rewardsProofs.length ||
+            tokenIds.length != rewardsProofs.length
+        ) revert InvalidRewardsParameters();
+
+        bool[] memory tokensChecked = new bool[](MAX_SUPPLY);
+
+        for (uint256 i = 0; i < tokenIds.length; i++) {
+            uint256 tokenId = tokenIds[i];
+            if (tokensChecked[tokenId]) revert TokenGivenTwice(tokenId);
+            tokensChecked[tokenId] = true;
+            uint256 rewardsPerDayForToken = rewardsPerDay[i];
+            bytes32[] memory rewardsProof = rewardsProofs[i];
+
+            amount =
+                amount +
+                _availableRewards(
+                    tokenOwner,
+                    tokenId,
+                    rewardsPerDayForToken,
+                    rewardsProof
+                );
+        }
     }
 
     /* ****************
      *  PUBLIC GETTERS
      *****************/
+
+    /**
+     * @notice If revealed Get metadataIds for tokens
+     * @param tokenIds Array of token ids
+     */
+    function getMetadataIdsForTokens(
+        uint256[] memory tokenIds
+    ) public view returns (bool, uint256[] memory) {
+        uint256[] memory metadataIds = new uint256[](tokenIds.length);
+
+        if (isRevealed() == false) {
+            return (false, metadataIds);
+        } else {
+            for (uint256 i = 0; i < tokenIds.length; i++) {
+                metadataIds[i] = _getMetadataForToken(tokenIds[i]);
+            }
+
+            return (true, metadataIds);
+        }
+    }
 
     /**
      * @notice  Get the price to pay for a provided `currency` and a number of tokens to mint
@@ -436,9 +620,16 @@ contract BOTV is
         return
             MerkleProof.verifyCalldata(
                 privateSaleMerkleProof,
-                PRIVATE_LIST_MERKLE_ROOT,
+                _PRIVATE_LIST_MERKLE_ROOT,
                 keccak256(abi.encodePacked(tokenOwner))
             );
+    }
+
+    /**
+     * @notice Check if metadata assignation is revealed
+     */
+    function isRevealed() public view returns (bool) {
+        return randomNumber != 0;
     }
 
     /* ****************
@@ -462,9 +653,6 @@ contract BOTV is
         return ERC721A.isApprovedForAll(owner, operator);
     }
 
-    /**
-     * @dev See {IERC165-supportsInterface}.
-     */
     function supportsInterface(
         bytes4 interfaceId
     ) public view virtual override(ERC4907A, ERC2981) returns (bool) {
@@ -476,14 +664,18 @@ contract BOTV is
     function tokenURI(
         uint256 tokenId
     ) public view virtual override(ERC721A, IERC721A) returns (string memory) {
-        if (!_exists(tokenId)) revert URIQueryForNonexistentToken();
+        uint256[] memory tokenIds = new uint256[](1);
+        tokenIds[0] = tokenId;
+        (bool revealed, uint256[] memory metadataIds) = getMetadataIdsForTokens(
+            tokenIds
+        );
 
-        if (randomNumber == 0) {
+        if (_exists(tokenId) == false) revert URIQueryForNonexistentToken();
+
+        if (revealed == false) {
             return string(abi.encodePacked(baseURI, "prereveal"));
         } else {
-            uint256 randomMetadataId = (tokenId + randomNumber) % MAX_SUPPLY;
-            return
-                string(abi.encodePacked(baseURI, randomMetadataId.toString()));
+            return string(abi.encodePacked(baseURI, metadataIds[0].toString()));
         }
     }
 
@@ -492,7 +684,7 @@ contract BOTV is
      *****************/
 
     /**
-     * @dev See {ERC721-_burn}. This override additionally clears the royalty information for the token.
+     * @notice See {ERC721-_burn}. This override additionally clears the royalty information for the token.
      */
     function _burn(uint256 tokenId) internal virtual override {
         super._burn(tokenId);
@@ -519,6 +711,20 @@ contract BOTV is
         emit RevealRandomNumber(randomNumber);
     }
 
+    /**
+     * @notice We use this hook to set/reset holding start period
+     */
+    function _beforeTokenTransfers(
+        address,
+        address,
+        uint256 startTokenId,
+        uint256 quantity
+    ) internal override {
+        for (uint256 i = startTokenId; i < startTokenId + quantity; i++) {
+            _resetClaimTimestamp(i);
+        }
+    }
+
     /* ****************
      *  PRIVATE FUNCTIONS
      *****************/
@@ -528,12 +734,7 @@ contract BOTV is
         address[] memory airdrops = _WEARABLES_ADDRESSES;
         uint256 airdropNbs = airdrops.length;
 
-        // @dev `quantity` will never be > 10 (cf. `MINT_LIMIT_PER_WALLET`)
         for (uint256 i = 0; i < quantity; i++) {
-            /** Airdrop wearables
-             * DCL wearables supports {batchTransferFrom},
-             * but we want to comply with any ERC721 contract
-             */
             for (uint256 j = 0; j < airdropNbs; j++) {
                 IERC721 airdropAddr = IERC721(airdrops[j]);
 
@@ -547,6 +748,10 @@ contract BOTV is
                 _wearablesTokenIds[airdropAddr] = currentId + 1;
             }
         }
+    }
+
+    function _resetClaimTimestamp(uint256 tokenId) private {
+        _lastClaimTimestamps[tokenId] = block.timestamp;
     }
 
     function _setPrice(address currency, bool enabled, uint256 amount) private {
@@ -566,15 +771,35 @@ contract BOTV is
      *  PRIVATE VIEW FUNCTIONS
      *****************/
 
-    /**
-     * @notice  Check if an address can have 50% off on the second token minted, and get the discount amount
-     * @param tokenOwner Beneficiary address
-     * @param amount Price per token
-     * @param quantity Number of tokens to mint
-     * @param discountMerkleProof Merkle proof to check if tokenOwner can have a 50% discount on the second token
-     *
-     * @return discount How much to subtract to normal price
-     */
+    function _availableRewards(
+        address tokenOwner,
+        uint256 tokenId,
+        uint256 rewardsPerDay,
+        bytes32[] memory rewardsProof
+    ) private view returns (uint256) {
+        if (ownerOf(tokenId) != tokenOwner)
+            revert NotOwner(tokenOwner, tokenId);
+
+        uint256 metadataId = _getMetadataForToken(tokenId);
+        if (
+            MerkleProof.verify(
+                rewardsProof,
+                _BUFA_REWARDS_MERKLE_ROOT,
+                keccak256(abi.encodePacked(metadataId, rewardsPerDay))
+            ) == false
+        ) revert InvalidRewardsForToken(tokenId, metadataId, rewardsPerDay);
+
+        assert(_lastClaimTimestamps[tokenId] > 0);
+        assert(block.timestamp > _lastClaimTimestamps[tokenId]);
+        uint256 nbSecondsToClaim = block.timestamp -
+            _lastClaimTimestamps[tokenId];
+
+        return
+            ((10 ** BUFA_CONTRACT_ADDRESS.decimals()) *
+                rewardsPerDay *
+                nbSecondsToClaim) / 86400;
+    }
+
     function _getDiscount(
         address tokenOwner,
         uint256 amount,
@@ -591,7 +816,7 @@ contract BOTV is
             if (
                 MerkleProof.verifyCalldata(
                     discountMerkleProof,
-                    DISCOUNT_LIST_MERKLE_ROOT,
+                    _DISCOUNT_LIST_MERKLE_ROOT,
                     keccak256(abi.encodePacked(tokenOwner))
                 )
             ) {
@@ -600,11 +825,13 @@ contract BOTV is
         }
     }
 
-    /** @param currency ERC20 contract address or 0 for native coin
-     *
-     * @return enabled {currency} is accepted as a paying method
-     * @return amount how much to pay in {currency} per token
-     */
+    function _getMetadataForToken(
+        uint256 tokenId
+    ) private view returns (uint256) {
+        if (!_exists(tokenId)) revert URIQueryForNonexistentToken();
+        return (tokenId + randomNumber) % MAX_SUPPLY;
+    }
+
     function _getMintPriceForCurrency(
         address currency
     ) private view returns (bool enabled, uint256 amount) {

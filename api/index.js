@@ -33,17 +33,29 @@ router.get("/deployment/:network", ({ params: { network } }) => {
 */
 
 router.get(
-  "/merkleproofs/rewards/:metadataId",
-  ({ params: { metadataId } }) => {
-    const { bufaPerDay, merkleProofs } = bufaMerkle[metadataId]
-      ? bufaMerkle[metadataId]
-      : { bufaPerDay: null, merkleProofs: null };
-
+  "/merkleproofs/rewards/:metadataIds",
+  ({ params: { metadataIds } }) => {
+    const metadataIdsArray = metadataIds.split(",");
     const data = {
-      metadataId,
-      bufaPerDay,
-      merkleProofs
+      error: false,
+      invalidIds: [],
+      metadataIds: metadataIdsArray,
+      rewardsPerDay: [],
+      rewardsProofs: []
     };
+
+    for (const metadataId of metadataIdsArray) {
+      if (bufaMerkle[metadataId]) {
+        const { bufaPerDay, merkleProofs } = bufaMerkle[metadataId];
+        data.rewardsPerDay.push(bufaPerDay);
+        data.rewardsProofs.push(merkleProofs);
+      } else {
+        data.error = true;
+        data.invalidIds.push(metadataId);
+        data.rewardsPerDay.push(null);
+        data.rewardsProofs.push(null);
+      }
+    }
 
     const json = JSON.stringify(data, null, 2);
 

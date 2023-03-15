@@ -100,29 +100,57 @@ describe("Worker", () => {
     const { bufaPerDay, merkleProofs } = bufaMerkle[metadataId];
 
     expect(jsonData).toStrictEqual({
-      metadataId,
-      bufaPerDay,
-      merkleProofs
+      error: false,
+      invalidIds: [],
+      metadataIds: [metadataId],
+      rewardsPerDay: [bufaPerDay],
+      rewardsProofs: [merkleProofs]
+    });
+  });
+
+  it("should return merkle proofs for valid metadataIds", async () => {
+    const metadataIds = "1,45,999";
+    const resp = await worker.fetch(`/merkleproofs/rewards/${metadataIds}`);
+    const jsonData = await resp.json();
+
+    expect(resp.status).toBe(200);
+
+    expect(jsonData).toStrictEqual({
+      error: false,
+      invalidIds: [],
+      metadataIds: ["1", "45", "999"],
+      rewardsPerDay: [400, 50, 75],
+      rewardsProofs: [
+        bufaMerkle["1"].merkleProofs,
+        bufaMerkle["45"].merkleProofs,
+        bufaMerkle["999"].merkleProofs
+      ]
     });
   });
 
   it("should return empty merkle proofs for invalid metadataId", async () => {
-    for (let metadataId of [
-      "test",
-      "-1",
-      "15555555555555",
-      "0x0000000000000000000000000000000000000000"
-    ]) {
-      const resp = await worker.fetch(`/merkleproofs/rewards/${metadataId}`);
-      const jsonData = await resp.json();
+    const metadataIds =
+      "string,85,0x0000000000000000000000000000000000000000,5000";
+    const resp = await worker.fetch(`/merkleproofs/rewards/${metadataIds}`);
+    const jsonData = await resp.json();
 
-      expect(resp.status).toBe(200);
+    expect(resp.status).toBe(200);
 
-      expect(jsonData).toStrictEqual({
-        metadataId,
-        bufaPerDay: null,
-        merkleProofs: null
-      });
-    }
+    expect(jsonData).toStrictEqual({
+      error: true,
+      invalidIds: [
+        "string",
+        "0x0000000000000000000000000000000000000000",
+        "5000"
+      ],
+      metadataIds: [
+        "string",
+        "85",
+        "0x0000000000000000000000000000000000000000",
+        "5000"
+      ],
+      rewardsPerDay: [null, 50, null, null],
+      rewardsProofs: [null, bufaMerkle["85"].merkleProofs, null, null]
+    });
   });
 });

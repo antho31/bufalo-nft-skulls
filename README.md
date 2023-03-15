@@ -36,7 +36,7 @@ Holding a Skull NFT gives the opportunity to continually claim rewards to get :
 
 👑 10 % royalties
 
-💵 Mint treasury : `0x3c0dabc82bf51d1bf994a54e70e7a7d19865f950`. Royalties treasury (Oxsplits contract) : [0x0231339790F09B5F3d50a37D0dd82D66e82cA37D](https://app.0xsplits.xyz/accounts/0x0231339790F09B5F3d50a37D0dd82D66e82cA37D/?chainId=137)
+💵 Mint treasury : [0x3c0dabc82bf51d1bf994a54e70e7a7d19865f950](https://debank.com/profile/0x3c0dabc82bf51d1bf994a54e70e7a7d19865f950). Royalties treasury (Oxsplits contract) : [0x0231339790F09B5F3d50a37D0dd82D66e82cA37D](https://app.0xsplits.xyz/accounts/0x0231339790F09B5F3d50a37D0dd82D66e82cA37D/?chainId=137)
 
 💰 Hold-to-earn : receive a certain amount of $BUFA tokens (depending on the rarity of the NFT's attributes) every day. Spend these against benefits.
 
@@ -81,7 +81,7 @@ You can fetch `https://bufalo-api.anthonygourraud.workers.dev/merkleproofs/:addr
     "0x....."
   ],
 
-  // is not from Fans alllowlist
+  // is not from Fans allowlist
   "discountMerkleProof": []
 }
 ```
@@ -95,22 +95,34 @@ All attributes are defined within the metadata JSON files for each token, availa
 
 | File                                                                       | Description                                                                                                                                                                      |
 | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Rank](./data/results/metadata/rank.csv)                                   | Rank, score and number of $BUFA per day for every token. ([see Google Spreadsheet version](https://docs.google.com/spreadsheets/d/1igOFN5aebsixi28IkVbI0plyBg_lg3uJtMb_bXB1DX4)) |
+| [Rank](./data/results/metadata/BOTV/rank.csv)                              | Rank, score and number of $BUFA per day for every token. ([see Google Spreadsheet version](https://docs.google.com/spreadsheets/d/1igOFN5aebsixi28IkVbI0plyBg_lg3uJtMb_bXB1DX4)) |
 | [$BUFA rewards merkle](./data/results/metadata/bufaRewardsMerkleData.json) | Merkle root & proofs to claim $BUFA                                                                                                                                              |
 
-### Claim $BUFA : get merkle proofs for a specific metadataId
+### Claim $BUFA : get merkle proofs for a specific `metadataIds`
 
-You can fetch `https://bufalo-api.anthonygourraud.workers.dev/merkleproofs/rewards/:metadataId` to get the merkle proofs for a specific `metadataId`, assigned to a token after the reveal.
+You can fetch `https://bufalo-api.anthonygourraud.workers.dev/merkleproofs/rewards/:metadataIds` to get the merkle proofs for `metadataIds`, assigned to tokens after the reveal.
 
 ```js
-// Result from https://bufalo-api.anthonygourraud.workers.dev/merkleproofs/rewards/10
+// Result from https://bufalo-api.anthonygourraud.workers.dev/merkleproofs/rewards/1,45,999
 {
-  "metadataId": "10",
-  "bufaPerDay": 100,
-  "merkleProofs": [
-    "0x....",
-    "0x....."
-  ]
+      error: false,
+      invalidIds: [],
+      metadataIds: ["1", "45", "999"],
+      rewardsPerDay: [400, 50, 75],
+      rewardsProofs: [
+        [
+          "0x....",
+          "0x....."
+        ],
+        [
+          "0x....",
+          "0x....."
+        ],
+        [
+          "0x....",
+          "0x....."
+        ]
+      ]
 }
 ```
 

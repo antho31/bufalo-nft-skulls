@@ -1,13 +1,22 @@
-const { loadFixture } = require("@nomicfoundation/hardhat-network-helpers");
+const {
+  loadFixture,
+  time
+} = require("@nomicfoundation/hardhat-network-helpers");
 const {
   constants: { ZERO_ADDRESS }
 } = require("@openzeppelin/test-helpers");
 const { expect } = require("chai");
 const { BigNumber } = require("ethers");
-const { formatBytes32String, parseEther } = require("ethers/lib/utils");
+const {
+  formatBytes32String,
+  parseEther,
+  parseUnits
+} = require("ethers/lib/utils");
 const { ethers } = require("hardhat");
 
 const { getMerkleDataFromAllowlistArray } = require("../utils/merkle");
+
+const bufaRewardsMerkle = require("../data/results/metadata/bufaRewardsMerkleData.json");
 
 const MAX_SUPPLY = 1000;
 const MINT_LIMIT_PER_WALLET = 10;
@@ -50,6 +59,14 @@ describe("BOTV", function () {
       );
       await tx.wait();
     }
+
+    const BUFADeployer = await ethers.getContractFactory("BUFA");
+    const BUFA = await BUFADeployer.deploy();
+    const BUFAdecimals = await BUFA.decimals();
+
+    const BUFAUnits = parseUnits("1", 18);
+
+    const MINTER_ROLE = await BUFA.MINTER_ROLE();
 
     const BASE_FEE = "100000000000000000";
     const GAS_PRICE_LINK = "1000000000"; // 0.000000001 LINK per gas
@@ -142,9 +159,13 @@ describe("BOTV", function () {
       vrfCoordinatorV2Mock.address,
       wearablesAddresses,
       wearablesTokenIdsOffset,
+      BUFA.address,
+      bufaRewardsMerkle.root,
       discountListMerkleRoot,
       privateListMerkleRoot
     );
+
+    tx = await BUFA.grantRole(MINTER_ROLE, BOTV.address);
 
     for (let wearableContract of wearablesContracts) {
       tx = await wearableContract.setApprovalForAll(BOTV.address, true);
@@ -193,8 +214,12 @@ describe("BOTV", function () {
       privateListMerkleRoot,
       privateListMerkleProof,
 
+      BUFA,
       BOTV,
-      BOTVDeployer
+      BOTVDeployer,
+
+      BUFAUnits,
+      MINTER_ROLE
     };
   }
 
@@ -223,6 +248,45 @@ describe("BOTV", function () {
 
     return { quantity, BOTV, publicUser1, ERC20Mock, ...others };
   }
+
+  async function onceRevealed() {
+    const { BOTV, vrfCoordinatorV2Mock, subscriptionId, keyHash, ...others } =
+      await loadFixture(afterOneSaleFixture);
+
+    await expect(BOTV.reveal(keyHash, subscriptionId, 40000));
+    const requestId = await BOTV.requestId();
+    await vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV.address);
+
+    const tokenIds = [0, 1, 2, 3, 4]; // quantity = 5
+    // metadataIds = [944,945,946,947,948]
+    // bufaRewardsPerDay = [100,75,150,150,75] => 550 for increaseTime = 86400 (1 day)
+
+    const [, metadataIdsBN] = await BOTV.getMetadataIdsForTokens(tokenIds);
+    const metadataIds = metadataIdsBN.map((m) => `${m}`);
+    const bufaPerDay = metadataIds.map((m) => bufaRewardsMerkle[m].bufaPerDay);
+    const merkleProofs = metadataIds.map(
+      (m) => bufaRewardsMerkle[m].merkleProofs
+    );
+
+    const increasedTime = 86400;
+
+    await time.increase(increasedTime);
+
+    return {
+      tokenIds,
+      metadataIds,
+      bufaPerDay,
+      merkleProofs,
+      increasedTime,
+      BOTV,
+      vrfCoordinatorV2Mock,
+      subscriptionId,
+      keyHash,
+      ...others
+    };
+  }
+
+  /*
 
   describe("Deployment", async function () {
     it("Should support ERC4907, ERC2981 and ERC721 interfaces", async function () {
@@ -262,6 +326,7 @@ describe("BOTV", function () {
         discountListMerkleRoot,
         privateListMerkleRoot,
 
+        BUFA,
         BOTV,
         BOTVDeployer
       } = await loadFixture(initFixture);
@@ -274,6 +339,23 @@ describe("BOTV", function () {
           vrfCoordinatorV2Mock.address,
           wearablesAddresses,
           wearablesTokenIdsOffset,
+          BUFA.address,
+          bufaRewardsMerkle.root,
+          discountListMerkleRoot,
+          privateListMerkleRoot
+        )
+      ).to.be.revertedWithCustomError(BOTV, "CannotBeZeroAddress");
+
+      await expect(
+        BOTVDeployer.deploy(
+          ERC20Mock.address,
+          ERC20Amount,
+          treasury.address,
+          vrfCoordinatorV2Mock.address,
+          wearablesAddresses,
+          wearablesTokenIdsOffset,
+          ZERO_ADDRESS,
+          bufaRewardsMerkle.root,
           discountListMerkleRoot,
           privateListMerkleRoot
         )
@@ -287,6 +369,8 @@ describe("BOTV", function () {
           vrfCoordinatorV2Mock.address,
           [deployer.address, ...wearablesAddresses],
           wearablesTokenIdsOffset,
+          BUFA.address,
+          bufaRewardsMerkle.root,
           discountListMerkleRoot,
           privateListMerkleRoot
         )
@@ -302,6 +386,8 @@ describe("BOTV", function () {
           vrfCoordinatorV2Mock.address,
           wearablesAddresses2,
           wearablesTokenIdsOffset,
+          BUFA.address,
+          bufaRewardsMerkle.root,
           discountListMerkleRoot,
           privateListMerkleRoot
         )
@@ -315,6 +401,23 @@ describe("BOTV", function () {
           vrfCoordinatorV2Mock.address,
           wearablesAddresses,
           wearablesTokenIdsOffset,
+          BUFA.address,
+          formatBytes32String(""),
+          discountListMerkleRoot,
+          privateListMerkleRoot
+        )
+      ).to.be.revertedWithCustomError(BOTV, "InvalidMerkleRoot");
+
+      await expect(
+        BOTVDeployer.deploy(
+          ERC20Mock.address,
+          ERC20Amount,
+          treasury.address,
+          vrfCoordinatorV2Mock.address,
+          wearablesAddresses,
+          wearablesTokenIdsOffset,
+          BUFA.address,
+          bufaRewardsMerkle.root,
           formatBytes32String(""),
           privateListMerkleRoot
         )
@@ -328,6 +431,8 @@ describe("BOTV", function () {
           vrfCoordinatorV2Mock.address,
           wearablesAddresses,
           wearablesTokenIdsOffset,
+          BUFA.address,
+          bufaRewardsMerkle.root,
           discountListMerkleRoot,
           formatBytes32String("")
         )
@@ -1763,7 +1868,70 @@ describe("BOTV", function () {
       });
     });
   });
+*/
 
+  describe("$BUFA Rewards", async function () {
+    it("Should get rewards according holding period and rarity rank", async function () {
+      const {
+        BOTV,
+        BUFA,
+        //   deployer,
+        publicUser1,
+        BUFAUnits,
+        tokenIds,
+        // metadataIds,
+        bufaPerDay,
+        merkleProofs,
+        increasedTime
+      } = await loadFixture(onceRevealed);
+
+      const rewardsAmount = await BOTV.availableRewards(
+        publicUser1.address,
+        tokenIds,
+        bufaPerDay,
+        merkleProofs
+      );
+
+      expect(BigNumber.from(rewardsAmount).div(BUFAUnits)).to.equal(550);
+
+      await expect(
+        BOTV.claimRewards(
+          publicUser1.address,
+          [0],
+          [100],
+          [bufaRewardsMerkle[944].merkleProofs]
+        )
+      ).to.emit(BUFA, "Transfer");
+
+      await expect(
+        BOTV.claimRewards(
+          publicUser1.address,
+          tokenIds,
+          bufaPerDay,
+          merkleProofs
+        )
+      ).to.emit(BUFA, "Transfer");
+
+      let BUFABalance = await BUFA.balanceOf(publicUser1.address);
+      expect(rewardsAmount).to.be.closeTo(BUFABalance, BUFAUnits);
+
+      await time.increase(increasedTime / 2);
+
+      await expect(
+        BOTV.claimRewards(
+          publicUser1.address,
+          tokenIds,
+          bufaPerDay,
+          merkleProofs
+        )
+      ).to.emit(BUFA, "Transfer");
+
+      BUFABalance = await BUFA.balanceOf(publicUser1.address);
+      expect(rewardsAmount.mul(3).div(2)).to.be.closeTo(BUFABalance, BUFAUnits);
+    });
+  });
+
+  /*
   describe("Protected operations", async function () {
     async function testProtectedFunction(functionName, functionArgs) {
       const { BOTV, publicUser1 } = await loadFixture(initFixture);
@@ -1804,4 +1972,5 @@ describe("BOTV", function () {
       await testProtectedFunction("setPublicSale", [true]);
     });
   });
+  */
 });

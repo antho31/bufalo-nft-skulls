@@ -4,21 +4,29 @@ const { ethers, network, run } = require("hardhat");
 const { BigNumber } = ethers;
 const fs = require("fs");
 
+const bufaMerkle = require("../data/results/metadata/bufaRewardsMerkleData.json");
 const privateListMerkle = require("../data/results/merkleAllowlists/community.json");
 const discountListMerkle = require("../data/results/merkleAllowlists/fans.json");
 
 const VRFCoordinatorV2ABI = require("@chainlink/contracts/abi/v0.8/VRFCoordinatorV2.json");
 const DclERC721CollectionABI = require("../abis/DCL-ERC721CollectionV2.json");
-const MAX_SUPPLY = 5;
 
-/* 
-Deployed on mumbai : 
-"0xb6ca5f227cc536680762822f0660c6c5adb79fbe",
-"0xea83f517864560ace8ee2290fcf4b18c22a15617",
-"0x9c5d825e7071f4655f5cbe037bc39016ead35cd3"
-*/
+async function verify(name, address, constructorArguments = []) {
+  try {
+    await run(`verify:verify`, {
+      address,
+      constructorArguments
+    });
+    console.log(`${name} verified on Polygonscan`);
+  } catch (e) {
+    console.error(`Cannot verify ${name}`, e);
+  }
+}
+
 async function deployFakeERC721(address) {
+  const MAX_SUPPLY = 5;
   const ERC721MockDeployer = await ethers.getContractFactory("ERC721Mock");
+
   const AirdropTokensContract1 = await ERC721MockDeployer.deploy(
     "AirdropTokensContract1",
     "A1"
@@ -26,6 +34,11 @@ async function deployFakeERC721(address) {
   const ACOffset1 = 301;
   let tx = await AirdropTokensContract1.mint(address, ACOffset1, MAX_SUPPLY);
   await tx.wait();
+  await verify("AirdropTokensContract1", AirdropTokensContract1.address, [
+    "AirdropTokensContract1",
+    "A1"
+  ]);
+
   const AirdropTokensContract2 = await ERC721MockDeployer.deploy(
     "AirdropTokensContract2",
     "A2"
@@ -33,6 +46,11 @@ async function deployFakeERC721(address) {
   const ACOffset2 = 510;
   tx = await AirdropTokensContract2.mint(address, ACOffset2, MAX_SUPPLY);
   await tx.wait();
+  await verify("AirdropTokensContract2", AirdropTokensContract1.address, [
+    "AirdropTokensContract2",
+    "A2"
+  ]);
+
   const AirdropTokensContract3 = await ERC721MockDeployer.deploy(
     "AirdropTokensContract3",
     "A3"
@@ -40,6 +58,10 @@ async function deployFakeERC721(address) {
   const ACOffset3 = 0;
   tx = await AirdropTokensContract3.mint(address, ACOffset3, MAX_SUPPLY);
   await tx.wait();
+  await verify("AirdropTokensContract3", AirdropTokensContract1.address, [
+    "AirdropTokensContract3",
+    "A3"
+  ]);
 
   const wearablesContracts = [
     AirdropTokensContract1,
@@ -57,14 +79,24 @@ async function main() {
 
   const [{ address: deployerAddress }] = await ethers.getSigners();
 
+  const BUFADeployer = await ethers.getContractFactory("BUFA");
+  const BUFAContract = await BUFADeployer.deploy();
+  await BUFAContract.deployed();
+  const BUFAContractAddress = BUFAContract.address;
+  const MINTER_ROLE = await BUFAContract.MINTER_ROLE();
+
   const BOTVDeployer = await ethers.getContractFactory("BOTV");
 
   let deployBOTVArgs;
   let subscriptionId;
   if (network.name === "polygon") {
+    /**
+     * Chainlink infos
+     */
     // 500 gwei keyHash = 0xcc294a196eeeb44da2888d17c0625cc88d70d9760a69d58d853ba6581a9ab0cd
     // callbackGasLimit = 100000
     subscriptionId = 651;
+
     deployBOTVArgs = {
       mintCurrency: "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619", // WETH https://polygonscan.com/token/0x7ceb23fd6bc0add59e62ac25578270cff1b9f619
       mintAmount: BigNumber.from("50000000000000000"), // 0.05, decimals = 18 ; 10 ** 18 = 1000000000000000000
@@ -76,13 +108,19 @@ async function main() {
         "0x78D37B7D47b3915685FA6c5E85A01E166296F95C" // Bufalo BOTV Crystal Skull [11,1000]
       ],
       wearablesTokenIdsOffset: [301, 510, 11],
+      BUFAContractAddress,
+      rewardsMerkleRoot: bufaMerkle.root,
       discountListMerkleRoot: discountListMerkle.root,
       privateListMerkleRoot: privateListMerkle.root
     };
   } else if (network.name === "mumbai") {
+    /**
+     * Chainlink infos
+     */
     // keyHash = 0x4b09e658ed251bcafeebbc69400383d49f344ace09b9576fe248bb02c003fe9f
     // callbackGasLimit = 100000
     subscriptionId = 3447;
+
     const { wearablesAddresses, wearablesTokenIdsOffset } =
       await deployFakeERC721(deployerAddress);
 
@@ -93,6 +131,8 @@ async function main() {
       vrfCoordinator: "0x7a1BaC17Ccc5b313516C5E16fb24f7659aA5ebed", // https://docs.chain.link/vrf/v2/subscription/supported-networks/#polygon-matic-mumbai-testnet
       wearablesAddresses,
       wearablesTokenIdsOffset,
+      BUFAContractAddress,
+      rewardsMerkleRoot: bufaMerkle.root,
       discountListMerkleRoot: discountListMerkle.root,
       privateListMerkleRoot: privateListMerkle.root
     };
@@ -113,13 +153,7 @@ async function main() {
 
   await vrfCoordinatorV2.addConsumer(subscriptionId, BOTVContractAddress);
 
-  console.log("Added as consiumer on Chainlink. To be verified on Polygonscan");
-
-  await run(`verify:verify`, {
-    address: BOTVContractAddress,
-    constructorArguments: deployBOTVArgs
-  });
-  console.log("BOTV Skulls collection verified on Polygonscan");
+  console.log("Added as consumer on Chainlink. To be verified on Polygonscan");
 
   for (let addr of deployBOTVArgs.wearablesAddresses) {
     const ERC721CollectionV2 = await ethers.getContractAt(
@@ -129,15 +163,18 @@ async function main() {
     await ERC721CollectionV2.setApprovalForAll(BOTVContractAddress, true);
   }
 
+  await BUFAContract.grantRole(MINTER_ROLE, BOTVContractAddress);
+
   // @TODO
-  // - deploy BUFA contract
-  // - deploy Music NFT contract
-  // - deploy staking contract
-  // verify all contracts !
+  // deploy Music NFT contract
+  // verify music nft contracts
+
+  await verify("BUFA", BUFAContractAddress);
+  await verify("BOTV", BOTVContractAddress, deployBOTVArgs);
 
   fs.writeFileSync(
     `./data/results/deployment/${network.name}.json`,
-    JSON.stringify({ BOTVContractAddress }, null, 2)
+    JSON.stringify({ BOTVContractAddress, BUFAContractAddress }, null, 2)
   );
 }
 
@@ -145,5 +182,3 @@ main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
 });
-
-//https://testnets-api.opensea.io/asset/mumbai/0x07a11e9a2d219831d5b0695ab45d86a3af35c023/124/validate
