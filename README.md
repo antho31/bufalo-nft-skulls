@@ -130,10 +130,11 @@ You can fetch `https://bufalo-api.anthonygourraud.workers.dev/merkleproofs/rewar
 
 - Contracts are not audited yet.
 
-- Note that the contract deployer has privileged access ([`Owner`](https://docs.openzeppelin.com/contracts/4.x/api/access#Ownable) role), including:
+- Note that the contract deployer has privileged access, including:
 
   - the ability to mint Skulls NFT for free
   - minting price modification at any time
+  - the ability to set any address as unlimited minter for $BUFA tokens, including himself
 
 ## Tech Stack
 
@@ -169,7 +170,7 @@ You can fetch `https://bufalo-api.anthonygourraud.workers.dev/merkleproofs/rewar
 - Hat, trench coat & skull wearable transfers on mint
 - Reveal with random assignation using Chainlink
 
-🔲 $BUFA rewards
+✅ $BUFA rewards
 
 - ERC20 contract, with minter role granted to the Skull NFT contract
 - Earn $BUFA tokens as long as you hold your Skull NFT
