@@ -16,6 +16,8 @@ import "erc721a/contracts/extensions/ERC4907A.sol";
 
 import "./interfaces/IBUFA.sol";
 
+// import "hardhat/console.sol";
+
 /**
  * @title Bufalo's NFT Collection - BOTV Skulls (BOTV)
  * @author Anthony Gourraud
@@ -372,12 +374,12 @@ contract BOTV is
             tokenIds.length != rewardsProofs.length
         ) revert InvalidRewardsParameters();
 
-        bool[] memory tokensChecked = new bool[](MAX_SUPPLY);
+        //   bool[] memory tokensChecked = new bool[](MAX_SUPPLY);
 
         for (uint256 i = 0; i < tokenIds.length; i++) {
             uint256 tokenId = tokenIds[i];
-            if (tokensChecked[tokenId]) revert TokenGivenTwice(tokenId);
-            tokensChecked[tokenId] = true;
+            //  if (tokensChecked[tokenId]) revert TokenGivenTwice(tokenId);
+            //   tokensChecked[tokenId] = true;
             uint256 rewardsPerDayForToken = rewardsPerDay[i];
             bytes32[] memory rewardsProof = rewardsProofs[i];
 
@@ -389,7 +391,7 @@ contract BOTV is
                     rewardsPerDayForToken,
                     rewardsProof
                 );
-            _resetClaimTimestamp(i);
+            _resetClaimTimestamp(tokenId);
         }
         BUFA_CONTRACT_ADDRESS.mint(tokenOwner, amount);
     }
@@ -715,14 +717,15 @@ contract BOTV is
      * @notice We use this hook to set/reset holding start period
      */
     function _beforeTokenTransfers(
-        address,
-        address,
+        address from,
+        address to,
         uint256 startTokenId,
         uint256 quantity
-    ) internal override {
+    ) internal virtual override {
         for (uint256 i = startTokenId; i < startTokenId + quantity; i++) {
             _resetClaimTimestamp(i);
         }
+        super._beforeTokenTransfers(from, to, startTokenId, quantity);
     }
 
     /* ****************
@@ -790,7 +793,7 @@ contract BOTV is
         ) revert InvalidRewardsForToken(tokenId, metadataId, rewardsPerDay);
 
         assert(_lastClaimTimestamps[tokenId] > 0);
-        assert(block.timestamp > _lastClaimTimestamps[tokenId]);
+        assert(block.timestamp >= _lastClaimTimestamps[tokenId]);
         uint256 nbSecondsToClaim = block.timestamp -
             _lastClaimTimestamps[tokenId];
 

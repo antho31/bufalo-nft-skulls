@@ -64,7 +64,7 @@ describe("BOTV", function () {
     const BUFA = await BUFADeployer.deploy();
     const BUFAdecimals = await BUFA.decimals();
 
-    const BUFAUnits = parseUnits("1", 18);
+    const BUFAUnits = parseUnits("1", BUFAdecimals);
 
     const MINTER_ROLE = await BUFA.MINTER_ROLE();
 
@@ -285,8 +285,6 @@ describe("BOTV", function () {
       ...others
     };
   }
-
-  /*
 
   describe("Deployment", async function () {
     it("Should support ERC4907, ERC2981 and ERC721 interfaces", async function () {
@@ -1868,18 +1866,91 @@ describe("BOTV", function () {
       });
     });
   });
-*/
 
   describe("$BUFA Rewards", async function () {
+    it("Should not allow rewarding if not revealed", async function () {
+      const {
+        publicUser1,
+        BUFAUnits,
+        BUFA,
+        BOTV,
+        vrfCoordinatorV2Mock,
+        subscriptionId,
+        keyHash
+      } = await loadFixture(afterOneSaleFixture);
+
+      const tokenIds = [0, 1, 2, 3, 4]; // quantity = 5
+
+      const metadataIds = [944, 945, 946, 947, 948];
+
+      // bufaRewardsPerDay = [100,75,150,150,75] => 550 for increaseTime = 86400 (1 day)
+
+      const bufaPerDay = metadataIds.map(
+        (m) => bufaRewardsMerkle[m].bufaPerDay
+      );
+      const merkleProofs = metadataIds.map(
+        (m) => bufaRewardsMerkle[m].merkleProofs
+      );
+
+      const increasedTime = 86400;
+
+      await time.increase(increasedTime);
+
+      await expect(
+        BOTV.availableRewards(
+          publicUser1.address,
+          tokenIds,
+          bufaPerDay,
+          merkleProofs
+        )
+      ).to.revertedWithCustomError(BOTV, "NotRevealed");
+
+      await expect(
+        BOTV.claimRewards(
+          publicUser1.address,
+          tokenIds,
+          bufaPerDay,
+          merkleProofs
+        )
+      ).to.revertedWithCustomError(BOTV, "NotRevealed");
+
+      expect(await BUFA.balanceOf(publicUser1.address)).to.equal(0);
+
+      await expect(BOTV.reveal(keyHash, subscriptionId, 40000));
+      const requestId = await BOTV.requestId();
+      await vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV.address);
+
+      await time.increase(increasedTime);
+
+      const rewardsAmount = await BOTV.availableRewards(
+        publicUser1.address,
+        tokenIds,
+        bufaPerDay,
+        merkleProofs
+      );
+
+      expect(BigNumber.from(rewardsAmount).div(BUFAUnits)).to.equal(550 * 2);
+
+      await expect(
+        BOTV.claimRewards(
+          publicUser1.address,
+          tokenIds,
+          bufaPerDay,
+          merkleProofs
+        )
+      ).to.emit(BUFA, "Transfer");
+
+      let BUFABalance = await BUFA.balanceOf(publicUser1.address);
+      expect(rewardsAmount).to.be.closeTo(BUFABalance, BUFAUnits);
+    });
+
     it("Should get rewards according holding period and rarity rank", async function () {
       const {
         BOTV,
         BUFA,
-        //   deployer,
         publicUser1,
         BUFAUnits,
         tokenIds,
-        // metadataIds,
         bufaPerDay,
         merkleProofs,
         increasedTime
@@ -1928,10 +1999,306 @@ describe("BOTV", function () {
 
       BUFABalance = await BUFA.balanceOf(publicUser1.address);
       expect(rewardsAmount.mul(3).div(2)).to.be.closeTo(BUFABalance, BUFAUnits);
+
+      await time.increase(increasedTime * 7);
+
+      await expect(
+        BOTV.claimRewards(
+          publicUser1.address,
+          [0],
+          [100],
+          [bufaRewardsMerkle[944].merkleProofs]
+        )
+      ).to.emit(BUFA, "Transfer");
+
+      expect(rewardsAmount.mul(3).div(2).add(700)).to.be.closeTo(
+        BUFABalance,
+        BUFAUnits
+      );
+    });
+
+    it("Should revert if bufaRewards value is not correct", async function () {
+      const { BOTV, BUFA, publicUser1, tokenIds, bufaPerDay, merkleProofs } =
+        await loadFixture(onceRevealed);
+
+      const newBufaPerDays = [...bufaPerDay];
+      newBufaPerDays[2] = 1000;
+
+      await expect(
+        BOTV.availableRewards(
+          publicUser1.address,
+          tokenIds,
+          newBufaPerDays,
+          merkleProofs
+        )
+      )
+        .to.revertedWithCustomError(BOTV, "InvalidRewardsForToken")
+        .withArgs(tokenIds[2], 946, 1000);
+
+      await expect(
+        BOTV.claimRewards(
+          publicUser1.address,
+          tokenIds,
+          newBufaPerDays,
+          merkleProofs
+        )
+      )
+        .to.revertedWithCustomError(BOTV, "InvalidRewardsForToken")
+        .withArgs(tokenIds[2], 946, 1000);
+
+      expect(await BUFA.balanceOf(publicUser1.address)).to.equal(0);
+    });
+
+    it("Should revert if tokenId does not exist", async function () {
+      const { BOTV, BUFA, publicUser1, tokenIds, bufaPerDay, merkleProofs } =
+        await loadFixture(onceRevealed);
+
+      const newTokenIds = [...tokenIds];
+      newTokenIds[2] = 900;
+
+      await expect(
+        BOTV.availableRewards(
+          publicUser1.address,
+          newTokenIds,
+          bufaPerDay,
+          merkleProofs
+        )
+      ).to.revertedWithCustomError(BOTV, "OwnerQueryForNonexistentToken");
+
+      await expect(
+        BOTV.claimRewards(
+          publicUser1.address,
+          newTokenIds,
+          bufaPerDay,
+          merkleProofs
+        )
+      ).to.revertedWithCustomError(BOTV, "OwnerQueryForNonexistentToken");
+
+      expect(await BUFA.balanceOf(publicUser1.address)).to.equal(0);
+    });
+
+    it("Should revert if not owner", async function () {
+      const {
+        BOTV,
+        BUFA,
+        deployer,
+        publicUser1,
+        BUFAUnits,
+        tokenIds,
+        bufaPerDay,
+        merkleProofs
+      } = await loadFixture(onceRevealed);
+
+      await expect(
+        BOTV.connect(publicUser1).availableRewards(
+          deployer.address,
+          tokenIds,
+          bufaPerDay,
+          merkleProofs
+        )
+      )
+        .to.revertedWithCustomError(BOTV, "NotOwner")
+        .withArgs(deployer.address, tokenIds[0]);
+
+      await expect(
+        BOTV.connect(publicUser1).claimRewards(
+          deployer.address,
+          tokenIds,
+          bufaPerDay,
+          merkleProofs
+        )
+      )
+        .to.revertedWithCustomError(BOTV, "NotOwner")
+        .withArgs(deployer.address, tokenIds[0]);
+      expect(await BUFA.balanceOf(deployer.address)).to.equal(0);
+      expect(await BUFA.balanceOf(publicUser1.address)).to.equal(0);
+
+      await BOTV.connect(publicUser1).claimRewards(
+        publicUser1.address,
+        tokenIds,
+        bufaPerDay,
+        merkleProofs
+      );
+
+      expect(await BUFA.balanceOf(deployer.address)).to.equal(0);
+      expect(
+        (await BUFA.balanceOf(publicUser1.address)).div(BUFAUnits)
+      ).to.equal(550);
+    });
+
+    it("Should reset on transfer", async function () {
+      const {
+        BOTV,
+        BUFA,
+        publicUser1,
+        publicUser2,
+        BUFAUnits,
+        tokenIds,
+        bufaPerDay,
+        merkleProofs,
+        increasedTime
+      } = await loadFixture(onceRevealed);
+
+      const rewardsAmount = await BOTV.availableRewards(
+        publicUser1.address,
+        tokenIds,
+        bufaPerDay,
+        merkleProofs
+      );
+
+      expect(BigNumber.from(rewardsAmount).div(BUFAUnits)).to.equal(550);
+
+      expect(await BOTV.ownerOf(0)).to.equal(publicUser1.address);
+      expect(await BOTV.ownerOf(1)).to.equal(publicUser1.address);
+      expect(await BOTV.ownerOf(2)).to.equal(publicUser1.address);
+
+      await BOTV.connect(publicUser1)[
+        "safeTransferFrom(address,address,uint256)"
+      ](publicUser1.address, publicUser2.address, 0);
+
+      await BOTV.connect(publicUser1).transferFrom(
+        publicUser1.address,
+        publicUser2.address,
+        1
+      );
+
+      expect(await BOTV.ownerOf(0)).to.equal(publicUser2.address);
+      expect(await BOTV.ownerOf(1)).to.equal(publicUser2.address);
+      expect(await BOTV.ownerOf(2)).to.equal(publicUser1.address);
+
+      await expect(
+        BOTV.connect(publicUser1).availableRewards(
+          publicUser1.address,
+          tokenIds,
+          bufaPerDay,
+          merkleProofs
+        )
+      )
+        .to.revertedWithCustomError(BOTV, "NotOwner")
+        .withArgs(publicUser1.address, tokenIds[0]);
+
+      const [tokenId0, tokenId1, ...otherTokenIds] = tokenIds;
+      const [bufaPerDay0, bufaPerDay1, ...otherBufaPerDays] = bufaPerDay;
+      const [merkleProofs0, merkleProofs1, ...othermerkleProofs] = merkleProofs;
+
+      await BOTV.connect(publicUser1).claimRewards(
+        publicUser1.address,
+        otherTokenIds,
+        otherBufaPerDays,
+        othermerkleProofs
+      );
+
+      await BOTV.connect(publicUser1).claimRewards(
+        publicUser2.address,
+        [tokenId0, tokenId1],
+        [bufaPerDay0, bufaPerDay1],
+        [merkleProofs0, merkleProofs1]
+      );
+
+      expect(
+        BigNumber.from(await BUFA.balanceOf(publicUser1.address)).div(BUFAUnits)
+      ).to.equal(550 - 100 - 75);
+
+      expect(await BUFA.balanceOf(publicUser2.address)).to.be.closeTo(
+        0,
+        BUFAUnits
+      );
+
+      time.increase(increasedTime);
+
+      await BOTV.connect(publicUser1).claimRewards(
+        publicUser1.address,
+        otherTokenIds,
+        otherBufaPerDays,
+        othermerkleProofs
+      );
+
+      await BOTV.connect(publicUser2).claimRewards(
+        publicUser2.address,
+        [tokenId0],
+        [bufaPerDay0],
+        [merkleProofs0]
+      );
+
+      expect(
+        BigNumber.from(await BUFA.balanceOf(publicUser1.address)).div(BUFAUnits)
+      ).to.equal((550 - 100 - 75) * 2);
+
+      expect(
+        BigNumber.from(await BUFA.balanceOf(publicUser2.address)).div(BUFAUnits)
+      ).to.equal(100);
+
+      await BOTV.connect(publicUser2).claimRewards(
+        publicUser2.address,
+        [tokenId1],
+        [bufaPerDay1],
+        [merkleProofs1]
+      );
+
+      expect(
+        BigNumber.from(await BUFA.balanceOf(publicUser2.address)).div(BUFAUnits)
+      ).to.equal(100 + 75);
+
+      time.increase(increasedTime * 1.5);
+
+      await BOTV.connect(publicUser2).claimRewards(
+        publicUser2.address,
+        [tokenId1, tokenId0],
+        [bufaPerDay1, bufaPerDay0],
+        [merkleProofs1, merkleProofs0]
+      );
+
+      expect(
+        BigNumber.from(await BUFA.balanceOf(publicUser2.address)).div(BUFAUnits)
+      ).to.be.closeTo(Math.trunc((100 + 75) * 2.5), 1);
+    });
+
+    it("Should ignore token provided multiples times", async function () {
+      const {
+        BOTV,
+        BUFA,
+        publicUser1,
+        BUFAUnits,
+        tokenIds,
+        bufaPerDay,
+        merkleProofs
+      } = await loadFixture(onceRevealed);
+
+      await expect(
+        BOTV.availableRewards(
+          publicUser1.address,
+          [tokenIds[2], ...tokenIds],
+          [bufaPerDay[2], ...bufaPerDay],
+          [merkleProofs[2], ...merkleProofs]
+        )
+      )
+        .to.revertedWithCustomError(BOTV, "TokenGivenTwice")
+        .withArgs(tokenIds[2]);
+
+      await expect(
+        BOTV.claimRewards(
+          publicUser1.address,
+          [tokenIds[2], ...tokenIds],
+          [bufaPerDay[2], ...bufaPerDay],
+          [merkleProofs[2], ...merkleProofs]
+        )
+      ).to.emit(BUFA, "Transfer");
+
+      await expect(
+        BOTV.claimRewards(
+          publicUser1.address,
+          [...tokenIds, tokenIds[2]],
+          [...bufaPerDay, bufaPerDay[2]],
+          [...merkleProofs, merkleProofs[2]]
+        )
+      ).to.emit(BUFA, "Transfer");
+
+      expect(
+        (await BUFA.balanceOf(publicUser1.address)).div(BUFAUnits)
+      ).to.equal(550);
     });
   });
 
-  /*
   describe("Protected operations", async function () {
     async function testProtectedFunction(functionName, functionArgs) {
       const { BOTV, publicUser1 } = await loadFixture(initFixture);
@@ -1972,5 +2339,4 @@ describe("BOTV", function () {
       await testProtectedFunction("setPublicSale", [true]);
     });
   });
-  */
 });
