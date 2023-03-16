@@ -57,14 +57,16 @@ Those who supported Bufalo up to $50 are on the "Fans" allowlist, and get a 50% 
 
 ### Generated allowlists
 
-| File                                                                | Description                                                                                                                                                        |
-| ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [Community allowlist](./data/results/allowlists/community.json)     | Array of addresses                                                                                                                                                 |
-| [Fan allowlist](./data/results/allowlists/fans.json)                | Array of addresses                                                                                                                                                 |
-| [Activity snapshot](./data/results/communityActivity/snapshot.json) | On-chain collected data                                                                                                                                            |
-| [Sales](./data/results/communityActivity/totalSales.csv)            | Paid transactions summary ([see Google Spreadsheet version](https://docs.google.com/spreadsheets/d/1jFPqO3S3dCODnYy4J-3v0ztPCuOTN7Qsvka_N4w_-K8/edit?usp=sharing)) |
-| [Community merkle](./data/results/merkleAllowlists/community.json)  | Merkle root & proofs for each address on the Community allowlist                                                                                                   |
-| [Fan merkle](./data/results/merkleAllowlists/community.json)        | Merkle root & proofs for each address on the Fan allowlist                                                                                                         |
+This ([Google Spreadsheet](https://docs.google.com/spreadsheets/d/1jFPqO3S3dCODnYy4J-3v0ztPCuOTN7Qsvka_N4w_-K8/edit?usp=sharing)) indicates which are the addresses on the allowlists.
+
+| File                                                                | Description                                                      |
+| ------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| [Community allowlist](./data/results/allowlists/community.json)     | Array of addresses                                               |
+| [Fan allowlist](./data/results/allowlists/fans.json)                | Array of addresses                                               |
+| [Activity snapshot](./data/results/communityActivity/snapshot.json) | On-chain collected data                                          |
+| [Sales](./data/results/communityActivity/totalSales.csv)            | Paid transactions summary                                        |
+| [Community merkle](./data/results/merkleAllowlists/community.json)  | Merkle root & proofs for each address on the Community allowlist |
+| [Fan merkle](./data/results/merkleAllowlists/community.json)        | Merkle root & proofs for each address on the Fan allowlist       |
 
 ### Mint : get merkle proofs for a specific address
 
