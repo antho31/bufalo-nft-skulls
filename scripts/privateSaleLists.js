@@ -25,8 +25,8 @@ const allowlistsData = {};
 
 const coingeckoThrottle = new Throttle({
   active: true,
-  rate: 10,
-  ratePer: 1000 * 60,
+  rate: 5,
+  ratePer: 1000 * 70,
   concurrent: 1
 });
 
