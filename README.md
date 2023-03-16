@@ -57,7 +57,7 @@ Those who supported Bufalo up to $50 are on the "Fans" allowlist, and get a 50% 
 
 ### Generated allowlists
 
-This ([Google Spreadsheet](https://docs.google.com/spreadsheets/d/1jFPqO3S3dCODnYy4J-3v0ztPCuOTN7Qsvka_N4w_-K8/edit?usp=sharing)) indicates which are the addresses on the allowlists.
+This [Google Spreadsheet](https://docs.google.com/spreadsheets/d/1jFPqO3S3dCODnYy4J-3v0ztPCuOTN7Qsvka_N4w_-K8/edit?usp=sharing) indicates which are the addresses on the allowlists.
 
 | File                                                                | Description                                                      |
 | ------------------------------------------------------------------- | ---------------------------------------------------------------- |
