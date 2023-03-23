@@ -2,6 +2,8 @@ const keccak256 = require("keccak256");
 const { MerkleTree } = require("merkletreejs");
 
 function getMerkleDataFromAllowlistArray(addresses) {
+  addresses = addresses.map((a) => a.toLocaleLowerCase());
+
   const leafNodes = addresses.map((addr) =>
     keccak256(Buffer.from(addr.replace("0x", ""), "hex"))
   );

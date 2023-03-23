@@ -13,7 +13,7 @@ const bufaMerkle = require("../data/results/metadata/bufaRewardsMerkleData.json"
 // Create a new router
 const router = Router();
 
-/*
+
 router.get("/deployment/:network", ({ params: { network } }) => {
   let data = {};
   try {
@@ -30,7 +30,7 @@ router.get("/deployment/:network", ({ params: { network } }) => {
     }
   });
 });
-*/
+
 
 router.get(
   "/merkleproofs/rewards/:metadataIds",
