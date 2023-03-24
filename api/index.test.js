@@ -24,15 +24,17 @@ describe("Worker", () => {
     expect(resp.status).toBe(404);
   });
 
-  /*
   it("should return deployment info for valid network", async () => {
-    const network = "polygon";
+    const network = "mumbai";
     const resp = await worker.fetch(`/deployment/${network}`);
+    console.log({ resp });
     const jsonData = await resp.json();
 
     expect(resp.status).toBe(200);
 
-    expect(jsonData).toStrictEqual(require("../data/results/deployment/polygon.json"));
+    expect(jsonData).toStrictEqual(
+      require("../data/results/deployment/mumbai.json")
+    );
   });
 
   it("should return empty deployment info for invalid network", async () => {
@@ -50,7 +52,6 @@ describe("Worker", () => {
       expect(jsonData).toStrictEqual({});
     }
   });
-*/
 
   it("should return merkle proofs for valid address", async () => {
     const addr =

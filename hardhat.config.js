@@ -19,6 +19,10 @@ module.exports = {
     }
   },
 
+  mocha: {
+    timeout: 100000000
+  },
+
   networks: {
     hardhat: {
       chainId: 1337

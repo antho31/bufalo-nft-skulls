@@ -10,17 +10,19 @@ const privateSaleMerkle = require("../data/results/merkleAllowlists/community.js
 const discountMerkle = require("../data/results/merkleAllowlists/fans.json");
 const bufaMerkle = require("../data/results/metadata/bufaRewardsMerkleData.json");
 
+const mumbaiDeployment = require(`../data/results/deployment/mumbai.json`);
+const polygonDeployment = require(`../data/results/deployment/polygon.json`);
+
 // Create a new router
 const router = Router();
 
-
 router.get("/deployment/:network", ({ params: { network } }) => {
-  let data = {};
-  try {
-    data = require(`../data/results/deployment/${network}.json`);
-  } catch (e) {
-    // send nothing
-  }
+  let data =
+    network === "mumbai"
+      ? mumbaiDeployment
+      : network === "polygon"
+      ? polygonDeployment
+      : {};
 
   const json = JSON.stringify(data, null, 2);
 
@@ -30,7 +32,6 @@ router.get("/deployment/:network", ({ params: { network } }) => {
     }
   });
 });
-
 
 router.get(
   "/merkleproofs/rewards/:metadataIds",
@@ -82,7 +83,8 @@ router.get("/merkleproofs/:addr", ({ params: { addr } }) => {
 
   return new Response(json, {
     headers: {
-      "content-type": "application/json;charset=UTF-8"
+      "content-type": "application/json;charset=UTF-8",
+      "Access-Control-Allow-Origin": "*"
     }
   });
 });

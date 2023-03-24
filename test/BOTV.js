@@ -139,7 +139,9 @@ describe("BOTV", function () {
     ]);
     const discountListMerkleRoot = discountListMerkle.root;
     const discountMerkleProof = (addr) =>
-      discountListMerkle[addr] ? discountListMerkle[addr] : [];
+      discountListMerkle[addr.toLocaleLowerCase()]
+        ? discountListMerkle[addr.toLocaleLowerCase()]
+        : [];
 
     const privateListMerkle = getMerkleDataFromAllowlistArray([
       privateUser1.address,
@@ -148,7 +150,9 @@ describe("BOTV", function () {
       discountPrivateUser.address
     ]);
     const privateListMerkleProof = (addr) =>
-      privateListMerkle[addr] ? privateListMerkle[addr] : [];
+      privateListMerkle[addr.toLocaleLowerCase()]
+        ? privateListMerkle[addr.toLocaleLowerCase()]
+        : [];
     const privateListMerkleRoot = privateListMerkle.root;
 
     const BOTVDeployer = await ethers.getContractFactory("BOTV");
