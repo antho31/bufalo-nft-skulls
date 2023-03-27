@@ -743,12 +743,15 @@ contract BOTV is
 
                 uint256 currentId = _wearablesTokenIds[airdropAddr];
 
-                airdropAddr.safeTransferFrom(
-                    _WEARABLES_OWNER,
-                    tokenOwner,
-                    currentId
-                );
-                _wearablesTokenIds[airdropAddr] = currentId + 1;
+                try
+                    airdropAddr.safeTransferFrom(
+                        _WEARABLES_OWNER,
+                        tokenOwner,
+                        currentId
+                    )
+                {
+                    _wearablesTokenIds[airdropAddr] = currentId + 1;
+                } catch {}
             }
         }
     }

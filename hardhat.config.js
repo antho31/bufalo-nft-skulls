@@ -25,7 +25,9 @@ module.exports = {
 
   networks: {
     hardhat: {
-      chainId: 1337
+      forking: {
+        url: `https://polygon-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`
+      }
     },
     mumbai: {
       url: process.env.POLYGON_MUMBAI_RPC_PROVIDER,

@@ -123,7 +123,15 @@ async function main() {
 
   fs.writeFileSync(
     `./data/results/deployment/${network.name}.json`,
-    JSON.stringify({ BOTVContractAddress, BUFAContractAddress }, null, 2)
+    JSON.stringify(
+      {
+        BOTVContractAddress,
+        BUFAContractAddress,
+        CurrencyAddress: deployBOTVArgs.mintCurrency
+      },
+      null,
+      2
+    )
   );
 
   const abiForApproval =
