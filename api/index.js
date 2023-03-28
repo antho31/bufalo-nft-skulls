@@ -12,7 +12,7 @@ const { BigNumber } = require("ethers");
 const privateSaleMerkle = require("../data/results/merkleAllowlists/community.json");
 const discountMerkle = require("../data/results/merkleAllowlists/fans.json");
 const bufaMerkle = require("../data/results/metadata/bufaRewardsMerkleData.json");
-const rarities = require("../data/results/metadata/BOTV/rarities.json");
+// const rarities = require("../data/results/metadata/BOTV/rarities.json");
 
 const mumbaiDeployment = require(`../data/results/deployment/mumbai.json`);
 const polygonDeployment = require(`../data/results/deployment/polygon.json`);
@@ -38,6 +38,7 @@ router.get("/deployment/:network", ({ params: { network } }) => {
   });
 });
 
+/*
 router.get(
   "/merkleproofs/rewards/:metadataIds",
   ({ params: { metadataIds } }) => {
@@ -73,6 +74,7 @@ router.get(
     });
   }
 );
+*/
 
 router.get("/merkleproofs/:addr", ({ params: { addr } }) => {
   addr = addr.toLocaleLowerCase();
@@ -138,7 +140,7 @@ router.get(
             metadataIds.push(metadataId);
             rewardsPerDay.push(bufaPerDay);
             rewardsProofs.push(merkleProofs);
-            rank = rarities.metadatas[metadataId].rank;
+            // rank = rarities.metadatas[metadataId].rank;
           }
           tokenData.push({
             tokenId,

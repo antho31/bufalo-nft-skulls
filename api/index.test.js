@@ -89,7 +89,7 @@ describe("Worker", () => {
       });
     }
   });
-
+  /*
   it("should return merkle proofs for valid metadataId", async () => {
     const metadataId = "15";
     const resp = await worker.fetch(`/merkleproofs/rewards/${metadataId}`);
@@ -153,6 +153,7 @@ describe("Worker", () => {
       rewardsProofs: [null, bufaMerkle["85"].merkleProofs, null, null]
     });
   });
+  */
 
   it("should return token infos", async () => {
     jest.setTimeout(30000);

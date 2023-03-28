@@ -100,11 +100,11 @@ All attributes are defined within the metadata JSON files for each token, availa
 | [Rank](./data/results/metadata/BOTV/rank.csv)                              | Rank, score and number of $BUFA per day for every token. ([see Google Spreadsheet version](https://docs.google.com/spreadsheets/d/1igOFN5aebsixi28IkVbI0plyBg_lg3uJtMb_bXB1DX4)) |
 | [$BUFA rewards merkle](./data/results/metadata/bufaRewardsMerkleData.json) | Merkle root & proofs to claim $BUFA                                                                                                                                              |
 
-### $BUFA rewards : get merkle proofs to claim`
+### $BUFA rewards : get merkle proofs to claim
 
 You can fetch `https://bufalo-api.anthonygourraud.workers.dev/tokensForOwner/polygon/:addr` to get all token infos for the wallet with address `addr`. Use `tokenIds`, `rewardsPerDay` and `rewardsProofs` values from the response to claim.
 
-```json
+```js
 // Result from https://bufalo-api.anthonygourraud.workers.dev/tokensForOwner/polygon/0x64E8f7C2B4fd33f5E8470F3C6Df04974F90fc2cA
 {
   "tokenIds": [
@@ -120,7 +120,7 @@ You can fetch `https://bufalo-api.anthonygourraud.workers.dev/tokensForOwner/pol
     [
       "0x815c37dada917998387f155315f9d0bade8d37c20297f484f017274efe5c4c47",
       "0x17b396aa747cdbfa0ae182fc7ca753415a4cf4891b5354baa4d224caa28db07a",
-       ...
+      // ...
     ]
   ],
   "tokenData": [
@@ -147,7 +147,7 @@ You can fetch `https://bufalo-api.anthonygourraud.workers.dev/tokensForOwner/pol
             "value": "Yellow",
             "trait_type": "Background"
           },
-          ...
+          // ...
         ],
         "animation_url": "ipfs://bafybeig2ov6c5wbmdpcmdc5barky2rgx2b2n33noihldiensblbzf2zute/Bufalo - Billy Bob (Song 2).wav"
       }

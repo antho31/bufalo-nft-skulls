@@ -32,7 +32,7 @@ import "./interfaces/IBUFA.sol";
  *
  * When a user pays and mints X tokens, he also receives X tokens from each Bufalo collection of wearables.
  * IMPORTANT :
- * - Deployer should be owner of 1000 wearable tokens, for each collection to airdrop.
+ * - Deployer should be owner of 1000 wearable tokens, with tokenIDs following each other, for each collection to airdrop.
  * - Once the contract deployed, the deployer should call for each collection
  *   the {ERC721-setApprovalForAll} function to allow the contract to airdrop the tokens
  *
