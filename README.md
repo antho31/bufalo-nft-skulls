@@ -100,31 +100,59 @@ All attributes are defined within the metadata JSON files for each token, availa
 | [Rank](./data/results/metadata/BOTV/rank.csv)                              | Rank, score and number of $BUFA per day for every token. ([see Google Spreadsheet version](https://docs.google.com/spreadsheets/d/1igOFN5aebsixi28IkVbI0plyBg_lg3uJtMb_bXB1DX4)) |
 | [$BUFA rewards merkle](./data/results/metadata/bufaRewardsMerkleData.json) | Merkle root & proofs to claim $BUFA                                                                                                                                              |
 
-### Claim $BUFA : get merkle proofs for a specific `metadataIds`
+### $BUFA rewards : get merkle proofs to claim`
 
-You can fetch `https://bufalo-api.anthonygourraud.workers.dev/merkleproofs/rewards/:metadataIds` to get the merkle proofs for `metadataIds`, assigned to tokens after the reveal.
+You can fetch `https://bufalo-api.anthonygourraud.workers.dev/tokensForOwner/polygon/:addr` to get all token infos for the wallet with address `addr`. Use `tokenIds`, `rewardsPerDay` and `rewardsProofs` values from the response to claim.
 
-```js
-// Result from https://bufalo-api.anthonygourraud.workers.dev/merkleproofs/rewards/1,45,999
+```json
+// Result from https://bufalo-api.anthonygourraud.workers.dev/tokensForOwner/polygon/0x64E8f7C2B4fd33f5E8470F3C6Df04974F90fc2cA
 {
-      error: false,
-      invalidIds: [],
-      metadataIds: ["1", "45", "999"],
-      rewardsPerDay: [400, 50, 75],
-      rewardsProofs: [
-        [
-          "0x....",
-          "0x....."
+  "tokenIds": [
+    "0"
+  ],
+  "metadataIds": [
+    "977"
+  ],
+  "rewardsPerDay": [
+    150
+  ],
+  "rewardsProofs": [
+    [
+      "0x815c37dada917998387f155315f9d0bade8d37c20297f484f017274efe5c4c47",
+      "0x17b396aa747cdbfa0ae182fc7ca753415a4cf4891b5354baa4d224caa28db07a",
+       ...
+    ]
+  ],
+  "tokenData": [
+    {
+      "tokenId": "0",
+      "metadataId": "977",
+      "rank": 170,
+      "title": "Bufalo BOTV Skull #977",
+      "media": [
+        {
+          "gateway": "https://nft-cdn.alchemy.com/matic-mainnet/d3965748aa4e688668e3d77b0978d9b3",
+          "thumbnail": "https://res.cloudinary.com/alchemyapi/image/upload/thumbnailv2/matic-mainnet/d3965748aa4e688668e3d77b0978d9b3",
+          "raw": "ipfs://bafybeicgk7uqmmfhcopoyh7rwvqgiva7ebr6u6osqbeviel7o4x3suaiee/977.png",
+          "format": "png",
+          "bytes": 1188597
+        }
+      ],
+      "metadata": {
+        "name": "Bufalo BOTV Skull #977",
+        "description": "",
+        "image": "ipfs://bafybeicgk7uqmmfhcopoyh7rwvqgiva7ebr6u6osqbeviel7o4x3suaiee/977.png",
+        "attributes": [
+          {
+            "value": "Yellow",
+            "trait_type": "Background"
+          },
+          ...
         ],
-        [
-          "0x....",
-          "0x....."
-        ],
-        [
-          "0x....",
-          "0x....."
-        ]
-      ]
+        "animation_url": "ipfs://bafybeig2ov6c5wbmdpcmdc5barky2rgx2b2n33noihldiensblbzf2zute/Bufalo - Billy Bob (Song 2).wav"
+      }
+    }
+  ]
 }
 ```
 

@@ -58,7 +58,7 @@ async function main() {
         "0xfded171d346107c1d4eb20f37484e8dd65beac9b", // Bufalo BFL Genesis Hats [510,1659] https://polygonscan.com/token/0xfded171d346107c1d4eb20f37484e8dd65beac9b?a=0x0b83e83f1ec0ee09191fab0ec10dd362ba0b29df
         "0x78D37B7D47b3915685FA6c5E85A01E166296F95C" // Bufalo BOTV Crystal Skull [11,1000]
       ],
-      wearablesTokenIdsOffset: [301, 510, 11],
+      wearablesTokenIdsOffset: [302, 511, 2],
       BUFAContractAddress,
       rewardsMerkleRoot: bufaMerkle.root,
       discountListMerkleRoot: discountListMerkle.root,

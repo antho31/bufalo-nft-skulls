@@ -3,12 +3,16 @@
  * - Open a browser tab at http://localhost:8787/ to see worker in action
  * - Run `npm run deploy-api` to publish worker
  */
-
+const envs = require("../env.json");
 const { Router } = require("itty-router");
+const { Network } = require("alchemy-sdk");
+
+const { BigNumber } = require("ethers");
 
 const privateSaleMerkle = require("../data/results/merkleAllowlists/community.json");
 const discountMerkle = require("../data/results/merkleAllowlists/fans.json");
 const bufaMerkle = require("../data/results/metadata/bufaRewardsMerkleData.json");
+const rarities = require("../data/results/metadata/BOTV/rarities.json");
 
 const mumbaiDeployment = require(`../data/results/deployment/mumbai.json`);
 const polygonDeployment = require(`../data/results/deployment/polygon.json`);
@@ -28,7 +32,8 @@ router.get("/deployment/:network", ({ params: { network } }) => {
 
   return new Response(json, {
     headers: {
-      "content-type": "application/json;charset=UTF-8"
+      "content-type": "application/json;charset=UTF-8",
+      "Access-Control-Allow-Origin": "*"
     }
   });
 });
@@ -62,7 +67,8 @@ router.get(
 
     return new Response(json, {
       headers: {
-        "content-type": "application/json;charset=UTF-8"
+        "content-type": "application/json;charset=UTF-8",
+        "Access-Control-Allow-Origin": "*"
       }
     });
   }
@@ -89,8 +95,109 @@ router.get("/merkleproofs/:addr", ({ params: { addr } }) => {
   });
 });
 
+router.get(
+  "/tokensForOwner/:chain/:addr",
+  async ({ params: { addr, chain } }) => {
+    const network =
+      chain === "polygon"
+        ? Network.MATIC_MAINNET
+        : chain === "mumbai"
+        ? Network.MATIC_MUMBAI
+        : undefined;
+    const apiKey = envs.ALCHEMY_API_KEY;
+
+    if (network && addr) {
+      try {
+        const contractAddress =
+          chain === "polygon"
+            ? polygonDeployment.BOTVContractAddress
+            : chain === "mumbai"
+            ? mumbaiDeployment.BOTVContractAddress
+            : undefined;
+
+        const response = await fetch(
+          `https://${network}.g.alchemy.com/nft/v2/${apiKey}/getNFTs?owner=${addr}&contractAddresses[]=${contractAddress}&withMetadata=true&pageSize=100`
+        );
+        const { ownedNfts } = JSON.parse(await gatherResponse(response));
+
+        const tokenIds = [];
+        const metadataIds = [];
+        const rewardsPerDay = [];
+        const rewardsProofs = [];
+        const tokenData = [];
+
+        for (let { id, title, media, metadata } of ownedNfts) {
+          let rank, metadataId;
+          let { tokenId } = id;
+          tokenId = BigNumber.from(tokenId).toString();
+          tokenIds.push(tokenId);
+          const titleSplit = title.split("#");
+          if (titleSplit.length === 2) {
+            metadataId = titleSplit[1];
+            const { bufaPerDay, merkleProofs } = bufaMerkle[metadataId];
+            metadataIds.push(metadataId);
+            rewardsPerDay.push(bufaPerDay);
+            rewardsProofs.push(merkleProofs);
+            rank = rarities.metadatas[metadataId].rank;
+          }
+          tokenData.push({
+            tokenId,
+            metadataId,
+            rank,
+            title,
+            media,
+            metadata
+          });
+        }
+        const json = JSON.stringify(
+          {
+            tokenIds,
+            metadataIds,
+            rewardsPerDay,
+            rewardsProofs,
+            tokenData
+          },
+          null,
+          2
+        );
+
+        return new Response(json, {
+          headers: {
+            "content-type": "application/json;charset=UTF-8",
+            "Access-Control-Allow-Origin": "*"
+          }
+        });
+      } catch (e) {
+        console.error(e);
+        new Response(e, { status: 500 });
+      }
+    } else {
+      new Response("404, not found!", { status: 404 });
+    }
+  }
+);
+
 router.all("*", () => new Response("404, not found!", { status: 404 }));
 
 addEventListener("fetch", (event) => {
   event.respondWith(router.handle(event.request));
 });
+
+/**
+ * gatherResponse awaits and returns a response body as a string.
+ * Use await gatherResponse(..) in an async function to get the response body
+ * @param {Response} response
+ */
+async function gatherResponse(response) {
+  const { headers } = response;
+  const contentType = headers.get("content-type") || "";
+  if (contentType.includes("application/json")) {
+    return JSON.stringify(await response.json());
+  } else if (contentType.includes("application/text")) {
+    return await response.text();
+  } else if (contentType.includes("text/html")) {
+    return await response.text();
+  } else {
+    return await response.text();
+  }
+}

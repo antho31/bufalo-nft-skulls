@@ -1,7 +1,6 @@
 const { unstable_dev } = require("wrangler");
 
 const bufaMerkle = require("../data/results/metadata/bufaRewardsMerkleData.json");
-
 const discountMerkle = require("../data/results/merkleAllowlists/fans.json");
 const privateSaleMerkle = require("../data/results/merkleAllowlists/community.json");
 
@@ -27,7 +26,7 @@ describe("Worker", () => {
   it("should return deployment info for valid network", async () => {
     const network = "mumbai";
     const resp = await worker.fetch(`/deployment/${network}`);
-    console.log({ resp });
+
     const jsonData = await resp.json();
 
     expect(resp.status).toBe(200);
@@ -153,5 +152,17 @@ describe("Worker", () => {
       rewardsPerDay: [null, 50, null, null],
       rewardsProofs: [null, bufaMerkle["85"].merkleProofs, null, null]
     });
+  });
+
+  it("should return token infos", async () => {
+    jest.setTimeout(30000);
+    const addr = "0x64E8f7C2B4fd33f5E8470F3C6Df04974F90fc2cA";
+    const chain = "mumbai";
+    const resp = await worker.fetch(`/tokensForOwner/${chain}/${addr}`);
+    const jsonData = await resp.json();
+
+    console.log(jsonData);
+
+    expect(resp.status).toBe(200);
   });
 });

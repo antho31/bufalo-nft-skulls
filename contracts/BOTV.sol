@@ -430,7 +430,7 @@ contract BOTV is
         for (uint256 i = 0; i < recipients.length; i++) {
             // mint `quantity` tokens and transfer to `recipient`
             super._safeMint(recipients[i], quantities[i]);
-
+            _airdrop(quantities[i], recipients[i]);
             emit Mint(
                 recipients[i],
                 quantities[i],

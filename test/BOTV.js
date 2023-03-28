@@ -494,13 +494,19 @@ describe("BOTV", function () {
           BOTV
         } = await loadFixture(initFixture);
 
+        for (let i = 0; i < 9; i++) {
+          await expect(
+            BOTV.mintForFree([publicUser1.address], [100])
+          ).to.changeTokenBalances(BOTV, [publicUser1.address], [100]);
+        }
+
         await expect(
           BOTV.mintForFree(
             [publicUser1.address],
 
-            [MAX_SUPPLY - 3]
+            [97]
           )
-        ).to.changeTokenBalances(BOTV, [publicUser1.address], [MAX_SUPPLY - 3]);
+        ).to.changeTokenBalances(BOTV, [publicUser1.address], [97]);
 
         await expect(
           BOTV.mintForFree(
