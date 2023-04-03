@@ -1,13 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
-import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
-
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "erc721a/contracts/IERC721A.sol";
 import "@openzeppelin/contracts/token/common/ERC2981.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
@@ -36,11 +34,6 @@ import "./interfaces/IBUFA.sol";
  * - Once the contract deployed, the deployer should call for each collection
  *   the {ERC721-setApprovalForAll} function to allow the contract to airdrop the tokens
  *
- * Token metadata should be revealed by the contract's owner.
- * A mechanism using Chainlink VRF ensures that no cheating is possible.
- * IMPORTANT :
- * - Deployer should create and fund a Chainlink subscription
- * - Deployer should add the deployed contract as a consumer for the subscription
  *
  * Once revealed, each token holder can claim rewards ($BUFA tokens) continously.
  * The longer he holds and the rarer the NFT's attributes are,
@@ -53,8 +46,7 @@ contract BOTV is
     ERC2981,
     ERC4907A,
     Ownable,
-    ReentrancyGuard,
-    VRFConsumerBaseV2
+    ReentrancyGuard
 {
     struct MintPriceSettings {
         bool enabled;
@@ -67,8 +59,7 @@ contract BOTV is
     /** @notice Opensea-comptatible off-chain metadata base URI for each ERC721 token,
      * See https://docs.opensea.io/docs/metadata-standards
      */
-    string public constant baseURI =
-        "ipfs://bafybeibo35dz2wsz44ixiw3yudl6ulk4kvdsj7irbjwjn76gkg7msl3lzy/tokens/";
+    string private baseURI;
 
     /// @notice Maximum number of tokens to mint
     uint256 public constant MAX_SUPPLY = 1000;
@@ -92,18 +83,13 @@ contract BOTV is
     /// @notice Boolean operator to activate/deactivate public sale
     bool public publicSaleActive = false;
 
-    /** @notice Random number to get via Chainlink VRF.
+    /*
      * This number links a {tokenId} to a unique JSON metadata file, stored on IPFS (see {baseURI})
      * The value of {randomNumber} is set once via {fulfillRandomWords}
+     * Note: no new number is being generated here, since the original contract already did this
      */
     uint256 public randomNumber;
-
-    /// @notice Request ID from Chainlink VRF
-    uint256 public requestId;
-
-    // Chainlink VRF configuration, see https://docs.chain.link/vrf/v2/subscription/supported-networks/
-    VRFCoordinatorV2Interface private immutable _VRF_COORDINATOR;
-
+    
     // Merkle root to check if an address can get a discount
     bytes32 private immutable _DISCOUNT_LIST_MERKLE_ROOT;
 
@@ -160,7 +146,6 @@ contract BOTV is
     error NotAllowedForPrivateSale();
     error NotOwner(address tokenOwner, uint256 tokenId);
     error NotRevealed();
-    error RevealAlreadyRequested();
     error TokenGivenTwice(uint256 tokenId);
     error TokenMintingLimitExceeded();
 
@@ -182,7 +167,6 @@ contract BOTV is
         address msgSender
     );
 
-    event RevealRandomNumber(uint256 randomNumber);
 
     event PublicSaleStateChanged(bool active);
 
@@ -196,7 +180,6 @@ contract BOTV is
      * @param mintCurrency For example 0x7ceb23fd6bc0add59e62ac25578270cff1b9f619 to charge mint in WETH on Polygon. Set 0 to select the blockchain's native coin.
      * @param mintAmount Price per token minted, paid in token/coin specified with the `mintCurrency` parameter
      * @param royaltiesTreasury Where to send funds from secondary sales
-     * @param vrfCoordinator Chainlink VRF configuration, for example 0xAE975071Be8F8eE67addBC1A82488F1C24858067 on Polygon. See https://docs.chain.link/vrf/v2/subscription/supported-networks/
      * @param wearablesAddresses Contracts for wearable tokens to airdrop
      * @param wearablesTokenIdsOffset From which tokenIDs deployer is owner of wearables to airdrop
      * @param rewardsToken ERC20 Contract for $BUFA
@@ -211,16 +194,14 @@ contract BOTV is
         address mintCurrency,
         uint256 mintAmount,
         address payable royaltiesTreasury,
-        address vrfCoordinator,
         address[] memory wearablesAddresses,
         uint256[] memory wearablesTokenIdsOffset,
         address rewardsToken,
         bytes32 rewardsMerkleRoot,
         bytes32 discountListMerkleRoot,
         bytes32 privateListMerkleRoot
-    ) ERC721A("Bufalo BOTV Skulls", "BOTV") VRFConsumerBaseV2(vrfCoordinator) {
+    ) ERC721A("Bufalo BOTV Skulls", "BOTV") {
         if (royaltiesTreasury == address(0)) revert CannotBeZeroAddress();
-        if (vrfCoordinator == address(0)) revert CannotBeZeroAddress();
         if (rewardsToken == address(0)) revert CannotBeZeroAddress();
 
         if (wearablesAddresses.length != wearablesTokenIdsOffset.length)
@@ -245,8 +226,6 @@ contract BOTV is
 
         ROYALTIES_TREASURY = royaltiesTreasury;
 
-        _VRF_COORDINATOR = VRFCoordinatorV2Interface(vrfCoordinator);
-
         _WEARABLES_OWNER = _msgSenderERC721A();
         _WEARABLES_ADDRESSES = wearablesAddresses;
 
@@ -258,6 +237,10 @@ contract BOTV is
 
         // 10 % royalties fee
         _setDefaultRoyalty(royaltiesTreasury, 1000);
+
+        // migrate over already minted NFTs from the original contract
+        randomNumber = 888600078;
+        migrate(0x1D6F8ff4c5A4588DC95C8E1913E53a5007ad5378);
     }
 
     /* ******************
@@ -441,39 +424,6 @@ contract BOTV is
         }
     }
 
-    function resetVrfRequest() external onlyOwner {
-        if (isRevealed()) revert AlreadyRevealed();
-        requestId = 0;
-    }
-
-    /**
-     *  @notice Random metadata attribution with Chainlink
-     *  @param keyHash See https://docs.chain.link/vrf/v2/subscription/supported-networks/#configurations
-     *  @param subscriptionId Create a subscription here : https://vrf.chain.link/
-     *  @param callbackGasLimit Storing each word costs about 20,000 gas. 40,000 is a safe default for this function
-     *
-     * Emits {vrfCoordinatorV2-RandomWordsRequested"} event
-     */
-    function reveal(
-        bytes32 keyHash,
-        uint64 subscriptionId,
-        uint32 callbackGasLimit
-    ) external onlyOwner {
-        if (requestId != 0) revert RevealAlreadyRequested();
-
-        uint32 numWords = 1;
-        uint16 requestConfirmations = 3;
-
-        // Will revert if subscription is not set and funded.
-        requestId = _VRF_COORDINATOR.requestRandomWords(
-            keyHash,
-            subscriptionId,
-            requestConfirmations,
-            callbackGasLimit,
-            numWords
-        );
-    }
-
     /** @param currency ERC20 contract address or 0 for native coin
      *  @param enabled Allow / disallow minting sale with provided `currency`
      *  @param amount How much user will have to pay to mint one token - can be 0
@@ -506,6 +456,11 @@ contract BOTV is
     function setPublicSale(bool active) external onlyOwner {
         publicSaleActive = active;
         emit PublicSaleStateChanged(active);
+    }
+
+
+    function setBaseURI(string memory newBaseURI) external onlyOwner {
+        baseURI = newBaseURI;
     }
 
     /* ****************
@@ -693,25 +648,6 @@ contract BOTV is
         _resetTokenRoyalty(tokenId);
     }
 
-    /**
-     * @notice Callback function used by VRF Coordinator to return the random number to this contract.
-     */
-    function fulfillRandomWords(
-        uint256 /* requestId */,
-        uint256[] memory randomWords
-    ) internal override {
-        /**
-         * @dev
-         * We want to prevent :
-         * - `randomNumber = 0`, flag used to return preveal metadata
-         * - `randomNumber` ∈ [MAX_UINT256 - MAX_SUPPLY ; MAX_UINT256],
-         *    to avoid overflow from {tokenURI} function which computes `randomNumber + tokenId`
-         * So we transform the result to a number between 1 and 1547888569 (arbitrary number) inclusively
-         */
-        randomNumber = (randomWords[0] % 1547888569) + 1;
-
-        emit RevealRandomNumber(randomNumber);
-    }
 
     /**
      * @notice We use this hook to set/reset holding start period
@@ -847,5 +783,30 @@ contract BOTV is
 
         enabled = mintPriceSettings.enabled;
         amount = mintPriceSettings.amount;
+    }
+
+    /* ****************
+     *  MIGRATION from BOTV V1
+     *****************/
+
+    function migrate(address botv_v1_address) private onlyOwner {
+        IERC721A botv_v1 = IERC721A(botv_v1_address);
+
+        uint256 existingSupply = botv_v1.totalSupply();
+
+        //remint NFTs
+        for(uint256 i=0;i<existingSupply;i++) {
+            address ownerOfToken = botv_v1.ownerOf(i);
+
+            super._safeMint(ownerOfToken, 1);
+
+            emit Mint(
+                ownerOfToken,
+                1,
+                0,
+                address(0),
+                _msgSenderERC721A()
+            );
+        }
     }
 }
