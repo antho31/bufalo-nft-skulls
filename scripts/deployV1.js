@@ -36,9 +36,9 @@ async function main() {
   const MINTER_ROLE = await BUFAContract.MINTER_ROLE();
   console.log("BUFA contract deployed : ", BUFAContractAddress);
 
-  const BOTVDeployer = await ethers.getContractFactory("BOTV");
+  const BOTV1Deployer = await ethers.getContractFactory("BOTV1");
 
-  let deployBOTVArgs;
+  let deployBOTV1Args;
   let subscriptionId;
   if (network.name === "polygon") {
     /**
@@ -48,7 +48,7 @@ async function main() {
     // callbackGasLimit = 100000
     subscriptionId = 651;
 
-    deployBOTVArgs = {
+    deployBOTV1Args = {
       mintCurrency: "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619", // WETH https://polygonscan.com/token/0x7ceb23fd6bc0add59e62ac25578270cff1b9f619
       mintAmount: BigNumber.from("50000000000000000"), // 0.05, decimals = 18 ; 10 ** 18 = 1000000000000000000
       treasury: "0x0231339790F09B5F3d50a37D0dd82D66e82cA37D", // https://app.0xsplits.xyz/accounts/0x0231339790F09B5F3d50a37D0dd82D66e82cA37D/?chainId=137
@@ -56,7 +56,7 @@ async function main() {
       wearablesAddresses: [
         "0xdf60e4f253003b01f8c6863a996b080d0a9f03de", // Bufalo Cowboy Trench Coat [301,1600] https://polygonscan.com/token/0xdf60e4f253003b01f8c6863a996b080d0a9f03de?a=0x0b83e83f1ec0ee09191fab0ec10dd362ba0b29df
         "0xfded171d346107c1d4eb20f37484e8dd65beac9b", // Bufalo BFL Genesis Hats [510,1659] https://polygonscan.com/token/0xfded171d346107c1d4eb20f37484e8dd65beac9b?a=0x0b83e83f1ec0ee09191fab0ec10dd362ba0b29df
-        "0x78D37B7D47b3915685FA6c5E85A01E166296F95C" // Bufalo BOTV Crystal Skull [11,1000]
+        "0x78D37B7D47b3915685FA6c5E85A01E166296F95C" // Bufalo BOTV1 Crystal Skull [11,1000]
       ],
       wearablesTokenIdsOffset: [302, 511, 1],
       BUFAContractAddress,
@@ -72,7 +72,7 @@ async function main() {
     // callbackGasLimit = 100000
     subscriptionId = 3447;
 
-    deployBOTVArgs = {
+    deployBOTV1Args = {
       mintCurrency: "0xfe4F5145f6e09952a5ba9e956ED0C25e3Fa4c7F1", // Dummy ERC20 https://mumbai.polygonscan.com/token/0xfe4f5145f6e09952a5ba9e956ed0c25e3fa4c7f1?a=0x64E8f7C2B4fd33f5E8470F3C6Df04974F90fc2cA
       mintAmount: BigNumber.from("50000000000000000"), // 0.05, decimals = 18 ; 10 ** 18 = 1000000000000000000
       treasury: "0x376A21fAEAd5603A0912A220D030A97358c7AC25", // https://app.0xsplits.xyz/accounts/0x376A21fAEAd5603A0912A220D030A97358c7AC25/?chainId=80001
@@ -94,40 +94,40 @@ async function main() {
 
   const vrfCoordinatorV2 = await ethers.getContractAt(
     VRFCoordinatorV2ABI,
-    deployBOTVArgs.vrfCoordinator
+    deployBOTV1Args.vrfCoordinator
   );
 
-  const deployBOTVArgsArray = Object.keys(deployBOTVArgs).map(
-    (i) => deployBOTVArgs[i]
+  const deployBOTV1ArgsArray = Object.keys(deployBOTV1Args).map(
+    (i) => deployBOTV1Args[i]
   );
 
-  const BOTVContract = await BOTVDeployer.deploy(...deployBOTVArgsArray);
-  await BOTVContract.deployed();
-  const BOTVContractAddress = BOTVContract.address;
-  console.log("BOTV Skulls collection deployed to:", BOTVContract.address);
+  const BOTV1Contract = await BOTV1Deployer.deploy(...deployBOTV1ArgsArray);
+  await BOTV1Contract.deployed();
+  const BOTV1ContractAddress = BOTV1Contract.address;
+  console.log("BOTV1 Skulls collection deployed to:", BOTV1Contract.address);
 
-  await vrfCoordinatorV2.addConsumer(subscriptionId, BOTVContractAddress);
+  await vrfCoordinatorV2.addConsumer(subscriptionId, BOTV1ContractAddress);
   console.log("Added as consumer on Chainlink");
 
-  await BUFAContract.grantRole(MINTER_ROLE, BOTVContractAddress);
+  await BUFAContract.grantRole(MINTER_ROLE, BOTV1ContractAddress);
   console.log("Minter role for BUFA OK");
 
   // @TODO
   // deploy Music NFT contract
   // verify music nft contracts
 
-  console.log("Ready to verify BUFA & BOTV");
+  console.log("Ready to verify BUFA & BOTV1");
 
   await verify("BUFA", BUFAContractAddress);
-  await verify("BOTV", BOTVContractAddress, deployBOTVArgsArray);
+  await verify("BOTV1", BOTV1ContractAddress, deployBOTV1ArgsArray);
 
   fs.writeFileSync(
     `./data/results/deployment/${network.name}.json`,
     JSON.stringify(
       {
-        BOTVContractAddress,
+        BOTV1ContractAddress,
         BUFAContractAddress,
-        CurrencyAddress: deployBOTVArgs.mintCurrency
+        CurrencyAddress: deployBOTV1Args.mintCurrency
       },
       null,
       2
@@ -136,9 +136,9 @@ async function main() {
 
   const abiForApproval =
     network.name === "polygon" ? DclERC721CollectionABI : ERC721MockABI;
-  for (let addr of deployBOTVArgs.wearablesAddresses) {
+  for (let addr of deployBOTV1Args.wearablesAddresses) {
     const ERC721CollectionV2 = await ethers.getContractAt(abiForApproval, addr);
-    await ERC721CollectionV2.setApprovalForAll(BOTVContractAddress, true);
+    await ERC721CollectionV2.setApprovalForAll(BOTV1ContractAddress, true);
   }
   console.log("Set approvals OK");
 

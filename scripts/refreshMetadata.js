@@ -1,7 +1,7 @@
 const puppeteer = require("puppeteer");
 (async () => {
   const browser = await puppeteer.launch({
-    //  headless: false,
+    headless: true
     // slowMo: 100 // Uncomment to visualize test
   });
   const page = await browser.newPage();
@@ -10,9 +10,9 @@ const puppeteer = require("puppeteer");
   );
 
   for (let i = 0; i < 1000; i++) {
-    // Load "https://testnets.opensea.io/fr/assets/mumbai/0x07a11e9a2d219831d5b0695ab45d86a3af35c023/134"
+    // testnet "https://testnets.opensea.io/fr/assets/mumbai/0x07a11e9a2d219831d5b0695ab45d86a3af35c023/134"
     await page.goto(
-      `https://testnets.opensea.io/fr/assets/mumbai/0x07a11e9a2d219831d5b0695ab45d86a3af35c023/${i}`
+      `https://opensea.io/fr/assets/matic/0x1d6f8ff4c5a4588dc95c8e1913e53a5007ad5378/${i}`
     );
 
     // Resize window to 1299 x 1282

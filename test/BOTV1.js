@@ -26,7 +26,7 @@ const BASE_URI =
 
 const MINT_TREASURY = "0x3C0dABC82bf51d1bf994a54E70e7a7d19865f950";
 
-describe("BOTV", function () {
+describe("BOTV1", function () {
   // We define a fixture to reuse the same setup in every test.
   // We use loadFixture to run this setup once, snapshot that state,
   // and reset Hardhat Network to that snapshopt in every test.
@@ -155,8 +155,8 @@ describe("BOTV", function () {
         : [];
     const privateListMerkleRoot = privateListMerkle.root;
 
-    const BOTVDeployer = await ethers.getContractFactory("BOTV");
-    const BOTV = await BOTVDeployer.deploy(
+    const BOTV1Deployer = await ethers.getContractFactory("BOTV1");
+    const BOTV1 = await BOTV1Deployer.deploy(
       ERC20Mock.address,
       ERC20Amount,
       treasury.address,
@@ -169,20 +169,20 @@ describe("BOTV", function () {
       privateListMerkleRoot
     );
 
-    tx = await BUFA.grantRole(MINTER_ROLE, BOTV.address);
+    tx = await BUFA.grantRole(MINTER_ROLE, BOTV1.address);
 
     for (let wearableContract of wearablesContracts) {
-      tx = await wearableContract.setApprovalForAll(BOTV.address, true);
+      tx = await wearableContract.setApprovalForAll(BOTV1.address, true);
       await tx.wait();
     }
 
     tx = await ERC20Mock.connect(publicUser1).approve(
-      BOTV.address,
+      BOTV1.address,
       BigNumber.from(ERC20Amount).mul(MAX_SUPPLY)
     );
     await tx.wait();
 
-    await vrfCoordinatorV2Mock.addConsumer(subscriptionId, BOTV.address);
+    await vrfCoordinatorV2Mock.addConsumer(subscriptionId, BOTV1.address);
 
     return {
       deployer,
@@ -219,8 +219,8 @@ describe("BOTV", function () {
       privateListMerkleProof,
 
       BUFA,
-      BOTV,
-      BOTVDeployer,
+      BOTV1,
+      BOTV1Deployer,
 
       BUFAUnits,
       MINTER_ROLE
@@ -228,20 +228,20 @@ describe("BOTV", function () {
   }
 
   async function activeSaleFixture() {
-    const { BOTV, ...others } = await initFixture();
+    const { BOTV1, ...others } = await initFixture();
 
-    let tx = await BOTV.setPublicSale(true);
+    let tx = await BOTV1.setPublicSale(true);
     await tx.wait();
 
-    return { BOTV, ...others };
+    return { BOTV1, ...others };
   }
 
   async function afterOneSaleFixture() {
-    const { BOTV, publicUser1, ERC20Mock, ...others } =
+    const { BOTV1, publicUser1, ERC20Mock, ...others } =
       await activeSaleFixture();
 
     const quantity = 5;
-    let tx = await BOTV.connect(publicUser1).mint(
+    let tx = await BOTV1.connect(publicUser1).mint(
       publicUser1.address,
       quantity,
       ERC20Mock.address,
@@ -250,22 +250,22 @@ describe("BOTV", function () {
     );
     await tx.wait();
 
-    return { quantity, BOTV, publicUser1, ERC20Mock, ...others };
+    return { quantity, BOTV1, publicUser1, ERC20Mock, ...others };
   }
 
   async function onceRevealed() {
-    const { BOTV, vrfCoordinatorV2Mock, subscriptionId, keyHash, ...others } =
+    const { BOTV1, vrfCoordinatorV2Mock, subscriptionId, keyHash, ...others } =
       await loadFixture(afterOneSaleFixture);
 
-    await expect(BOTV.reveal(keyHash, subscriptionId, 40000));
-    const requestId = await BOTV.requestId();
-    await vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV.address);
+    await expect(BOTV1.reveal(keyHash, subscriptionId, 40000));
+    const requestId = await BOTV1.requestId();
+    await vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV1.address);
 
     const tokenIds = [0, 1, 2, 3, 4]; // quantity = 5
     // metadataIds = [944,945,946,947,948]
     // bufaRewardsPerDay = [100,75,150,150,75] => 550 for increaseTime = 86400 (1 day)
 
-    const [, metadataIdsBN] = await BOTV.getMetadataIdsForTokens(tokenIds);
+    const [, metadataIdsBN] = await BOTV1.getMetadataIdsForTokens(tokenIds);
     const metadataIds = metadataIdsBN.map((m) => `${m}`);
     const bufaPerDay = metadataIds.map((m) => bufaRewardsMerkle[m].bufaPerDay);
     const merkleProofs = metadataIds.map(
@@ -282,7 +282,7 @@ describe("BOTV", function () {
       bufaPerDay,
       merkleProofs,
       increasedTime,
-      BOTV,
+      BOTV1,
       vrfCoordinatorV2Mock,
       subscriptionId,
       keyHash,
@@ -292,17 +292,19 @@ describe("BOTV", function () {
 
   describe("Deployment", async function () {
     it("Should support ERC4907, ERC2981 and ERC721 interfaces", async function () {
-      const { BOTV } = await loadFixture(initFixture);
+      const { BOTV1 } = await loadFixture(initFixture);
 
-      const supportsDummy = await BOTV.supportsInterface("0x80ac58cf");
-      const supportsERC1555 = await BOTV.supportsInterface("0x4e2312e0");
-      const supportsERC165 = await BOTV.supportsInterface("0x01ffc9a7");
-      const supportsERC20 = await BOTV.supportsInterface("0x36372b07");
-      const supportsERC2981 = await BOTV.supportsInterface("0x2a55205a");
-      const supportsERC4907 = await BOTV.supportsInterface("0xad092b5c");
-      const supportsERC721 = await BOTV.supportsInterface("0x80ac58cd");
+      const supportsDummy = await BOTV1.supportsInterface("0x80ac58cf");
+      const supportsERC1555 = await BOTV1.supportsInterface("0x4e2312e0");
+      const supportsERC165 = await BOTV1.supportsInterface("0x01ffc9a7");
+      const supportsERC20 = await BOTV1.supportsInterface("0x36372b07");
+      const supportsERC2981 = await BOTV1.supportsInterface("0x2a55205a");
+      const supportsERC4907 = await BOTV1.supportsInterface("0xad092b5c");
+      const supportsERC721 = await BOTV1.supportsInterface("0x80ac58cd");
 
-      const supportsERC721Metadata = await BOTV.supportsInterface("0x5b5e139f");
+      const supportsERC721Metadata = await BOTV1.supportsInterface(
+        "0x5b5e139f"
+      );
 
       expect(supportsDummy).to.equal(false);
       expect(supportsERC1555).to.equal(false);
@@ -329,12 +331,12 @@ describe("BOTV", function () {
         privateListMerkleRoot,
 
         BUFA,
-        BOTV,
-        BOTVDeployer
+        BOTV1,
+        BOTV1Deployer
       } = await loadFixture(initFixture);
 
       await expect(
-        BOTVDeployer.deploy(
+        BOTV1Deployer.deploy(
           ERC20Mock.address,
           ERC20Amount,
           ZERO_ADDRESS,
@@ -346,10 +348,10 @@ describe("BOTV", function () {
           discountListMerkleRoot,
           privateListMerkleRoot
         )
-      ).to.be.revertedWithCustomError(BOTV, "CannotBeZeroAddress");
+      ).to.be.revertedWithCustomError(BOTV1, "CannotBeZeroAddress");
 
       await expect(
-        BOTVDeployer.deploy(
+        BOTV1Deployer.deploy(
           ERC20Mock.address,
           ERC20Amount,
           treasury.address,
@@ -361,10 +363,10 @@ describe("BOTV", function () {
           discountListMerkleRoot,
           privateListMerkleRoot
         )
-      ).to.be.revertedWithCustomError(BOTV, "CannotBeZeroAddress");
+      ).to.be.revertedWithCustomError(BOTV1, "CannotBeZeroAddress");
 
       await expect(
-        BOTVDeployer.deploy(
+        BOTV1Deployer.deploy(
           ERC20Mock.address,
           ERC20Amount,
           treasury.address,
@@ -376,12 +378,12 @@ describe("BOTV", function () {
           discountListMerkleRoot,
           privateListMerkleRoot
         )
-      ).to.be.revertedWithCustomError(BOTV, "IncompleteAirdropParameter");
+      ).to.be.revertedWithCustomError(BOTV1, "IncompleteAirdropParameter");
 
       const wearablesAddresses2 = [...wearablesAddresses];
       wearablesAddresses2[0] = ZERO_ADDRESS;
       await expect(
-        BOTVDeployer.deploy(
+        BOTV1Deployer.deploy(
           ERC20Mock.address,
           ERC20Amount,
           treasury.address,
@@ -393,10 +395,10 @@ describe("BOTV", function () {
           discountListMerkleRoot,
           privateListMerkleRoot
         )
-      ).to.be.revertedWithCustomError(BOTV, "InvalidAirdropParameter");
+      ).to.be.revertedWithCustomError(BOTV1, "InvalidAirdropParameter");
 
       await expect(
-        BOTVDeployer.deploy(
+        BOTV1Deployer.deploy(
           ERC20Mock.address,
           ERC20Amount,
           treasury.address,
@@ -408,10 +410,10 @@ describe("BOTV", function () {
           discountListMerkleRoot,
           privateListMerkleRoot
         )
-      ).to.be.revertedWithCustomError(BOTV, "InvalidMerkleRoot");
+      ).to.be.revertedWithCustomError(BOTV1, "InvalidMerkleRoot");
 
       await expect(
-        BOTVDeployer.deploy(
+        BOTV1Deployer.deploy(
           ERC20Mock.address,
           ERC20Amount,
           treasury.address,
@@ -423,10 +425,10 @@ describe("BOTV", function () {
           formatBytes32String(""),
           privateListMerkleRoot
         )
-      ).to.be.revertedWithCustomError(BOTV, "InvalidMerkleRoot");
+      ).to.be.revertedWithCustomError(BOTV1, "InvalidMerkleRoot");
 
       await expect(
-        BOTVDeployer.deploy(
+        BOTV1Deployer.deploy(
           ERC20Mock.address,
           ERC20Amount,
           treasury.address,
@@ -438,7 +440,7 @@ describe("BOTV", function () {
           discountListMerkleRoot,
           formatBytes32String("")
         )
-      ).to.be.revertedWithCustomError(BOTV, "InvalidMerkleRoot");
+      ).to.be.revertedWithCustomError(BOTV1, "InvalidMerkleRoot");
     });
   });
 
@@ -451,37 +453,39 @@ describe("BOTV", function () {
           publicUser2,
           publicUser3,
 
-          BOTV
+          BOTV1
         } = await loadFixture(initFixture);
 
         const totalQty = 10;
 
-        const totalSupply = await BOTV.totalSupply();
+        const totalSupply = await BOTV1.totalSupply();
 
         await expect(
-          BOTV.mintForFree(
+          BOTV1.mintForFree(
             [publicUser1.address, publicUser2.address, publicUser3.address],
 
             [1, 8, 1]
           )
         ).to.changeTokenBalances(
-          BOTV,
+          BOTV1,
 
           [publicUser1.address, publicUser2.address, publicUser3.address],
 
           [1, 8, 1]
         );
 
-        expect(await BOTV.totalSupply()).to.be.equal(totalSupply.add(totalQty));
+        expect(await BOTV1.totalSupply()).to.be.equal(
+          totalSupply.add(totalQty)
+        );
 
         await expect(
-          BOTV.mintForFree(
+          BOTV1.mintForFree(
             [publicUser1.address, publicUser2.address, publicUser3.address],
 
             [1, 8, 1]
           )
         )
-          .to.emit(BOTV, "Mint")
+          .to.emit(BOTV1, "Mint")
           .withArgs(publicUser2.address, 8, 0, ZERO_ADDRESS, deployer.address);
       });
 
@@ -491,32 +495,32 @@ describe("BOTV", function () {
           publicUser2,
           publicUser3,
 
-          BOTV
+          BOTV1
         } = await loadFixture(initFixture);
 
         for (let i = 0; i < 9; i++) {
           await expect(
-            BOTV.mintForFree([publicUser1.address], [100])
-          ).to.changeTokenBalances(BOTV, [publicUser1.address], [100]);
+            BOTV1.mintForFree([publicUser1.address], [100])
+          ).to.changeTokenBalances(BOTV1, [publicUser1.address], [100]);
         }
 
         await expect(
-          BOTV.mintForFree(
+          BOTV1.mintForFree(
             [publicUser1.address],
 
             [97]
           )
-        ).to.changeTokenBalances(BOTV, [publicUser1.address], [97]);
+        ).to.changeTokenBalances(BOTV1, [publicUser1.address], [97]);
 
         await expect(
-          BOTV.mintForFree(
+          BOTV1.mintForFree(
             [publicUser1.address, publicUser2.address, publicUser3.address],
 
             [1, 2, 1]
           )
-        ).to.revertedWithCustomError(BOTV, "MaxSupplyExceeded");
+        ).to.revertedWithCustomError(BOTV1, "MaxSupplyExceeded");
 
-        expect(await BOTV.balanceOf(publicUser1.address)).to.be.equal(
+        expect(await BOTV1.balanceOf(publicUser1.address)).to.be.equal(
           MAX_SUPPLY - 3
         );
       });
@@ -527,16 +531,16 @@ describe("BOTV", function () {
           publicUser2,
           publicUser3,
 
-          BOTV
+          BOTV1
         } = await loadFixture(initFixture);
 
         await expect(
-          BOTV.mintForFree(
+          BOTV1.mintForFree(
             [publicUser1.address, publicUser2.address, publicUser3.address],
 
             [1, 2, 1, 2]
           )
-        ).to.revertedWithCustomError(BOTV, "InvalidMintParameters");
+        ).to.revertedWithCustomError(BOTV1, "InvalidMintParameters");
       });
 
       it("Should reject if 0 as quantity provided", async function () {
@@ -545,39 +549,39 @@ describe("BOTV", function () {
           publicUser2,
           publicUser3,
 
-          BOTV
+          BOTV1
         } = await loadFixture(initFixture);
 
         await expect(
-          BOTV.mintForFree(
+          BOTV1.mintForFree(
             [publicUser1.address, publicUser2.address, publicUser3.address],
 
             [1, 2, 0]
           )
-        ).to.revertedWithCustomError(BOTV, "InvalidMintParameters");
+        ).to.revertedWithCustomError(BOTV1, "InvalidMintParameters");
       });
 
       it("Should reject if no address provided", async function () {
-        const { BOTV } = await loadFixture(initFixture);
+        const { BOTV1 } = await loadFixture(initFixture);
 
-        await expect(BOTV.mintForFree([], [])).to.revertedWithCustomError(
-          BOTV,
+        await expect(BOTV1.mintForFree([], [])).to.revertedWithCustomError(
+          BOTV1,
           "InvalidMintParameters"
         );
       });
 
       it("Should reject if zero address provided", async function () {
-        const { publicUser1, BOTV } = await loadFixture(initFixture);
+        const { publicUser1, BOTV1 } = await loadFixture(initFixture);
 
         await expect(
-          BOTV.mintForFree(
+          BOTV1.mintForFree(
             [publicUser1.address, ZERO_ADDRESS],
 
             [1, 2]
           )
-        ).to.revertedWithCustomError(BOTV, "CannotBeZeroAddress");
+        ).to.revertedWithCustomError(BOTV1, "CannotBeZeroAddress");
 
-        expect(await BOTV.balanceOf(publicUser1.address)).to.be.equal(0);
+        expect(await BOTV1.balanceOf(publicUser1.address)).to.be.equal(0);
       });
     });
 
@@ -590,7 +594,7 @@ describe("BOTV", function () {
           ERC20Amount,
           ERC20Mock,
           wearablesContracts,
-          BOTV
+          BOTV1
         } = await loadFixture(activeSaleFixture);
 
         const quantity = 3;
@@ -605,10 +609,10 @@ describe("BOTV", function () {
         );
         await tx.wait();
 
-        const totalSupply = await BOTV.totalSupply();
+        const totalSupply = await BOTV1.totalSupply();
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             quantity,
             ERC20Mock.address,
@@ -621,10 +625,12 @@ describe("BOTV", function () {
           [-price, price, 0]
         );
 
-        expect(await BOTV.totalSupply()).to.be.equal(totalSupply.add(quantity));
+        expect(await BOTV1.totalSupply()).to.be.equal(
+          totalSupply.add(quantity)
+        );
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             quantity,
             ERC20Mock.address,
@@ -632,14 +638,14 @@ describe("BOTV", function () {
             []
           )
         ).to.changeTokenBalances(
-          BOTV,
+          BOTV1,
           [publicUser1.address, MINT_TREASURY, publicUser2.address],
           [0, 0, quantity]
         );
 
         for (let wearableContract of wearablesContracts) {
           await expect(
-            BOTV.connect(publicUser1).mint(
+            BOTV1.connect(publicUser1).mint(
               publicUser3.address,
               quantity,
               ERC20Mock.address,
@@ -654,7 +660,7 @@ describe("BOTV", function () {
         }
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             quantity,
             ERC20Mock.address,
@@ -662,7 +668,7 @@ describe("BOTV", function () {
             []
           )
         )
-          .to.emit(BOTV, "Mint")
+          .to.emit(BOTV1, "Mint")
           .withArgs(
             publicUser2.address,
             quantity,
@@ -671,7 +677,7 @@ describe("BOTV", function () {
             publicUser1.address
           );
 
-        expect(await BOTV.totalSupply()).to.be.equal(
+        expect(await BOTV1.totalSupply()).to.be.equal(
           totalSupply.add(nbOfMints)
         );
       });
@@ -682,7 +688,7 @@ describe("BOTV", function () {
           publicUser2,
           publicUser3,
           wearablesContracts,
-          BOTV
+          BOTV1
         } = await loadFixture(activeSaleFixture);
 
         const etherAmount = "0.05";
@@ -691,15 +697,15 @@ describe("BOTV", function () {
         const value = BigNumber.from(amount).mul(BigNumber.from(quantity));
         const etherValue = "0.15";
 
-        let tx = await BOTV.setPrice(ZERO_ADDRESS, true, amount);
+        let tx = await BOTV1.setPrice(ZERO_ADDRESS, true, amount);
         await tx.wait();
 
         const nbOfMints = quantity * (3 + wearablesContracts.length);
 
-        const totalSupply = await BOTV.totalSupply();
+        const totalSupply = await BOTV1.totalSupply();
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             quantity,
             ZERO_ADDRESS,
@@ -713,7 +719,7 @@ describe("BOTV", function () {
         );
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             quantity,
             ZERO_ADDRESS,
@@ -722,14 +728,14 @@ describe("BOTV", function () {
             { value }
           )
         ).to.changeTokenBalances(
-          BOTV,
+          BOTV1,
           [publicUser1.address, MINT_TREASURY, publicUser2.address],
           [0, 0, quantity]
         );
 
         for (let wearableContract of wearablesContracts) {
           await expect(
-            BOTV.connect(publicUser1).mint(
+            BOTV1.connect(publicUser1).mint(
               publicUser3.address,
               quantity,
               ZERO_ADDRESS,
@@ -745,7 +751,7 @@ describe("BOTV", function () {
         }
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             quantity,
             ZERO_ADDRESS,
@@ -754,7 +760,7 @@ describe("BOTV", function () {
             { value }
           )
         )
-          .to.emit(BOTV, "Mint")
+          .to.emit(BOTV1, "Mint")
           .withArgs(
             publicUser2.address,
             quantity,
@@ -763,29 +769,28 @@ describe("BOTV", function () {
             publicUser1.address
           );
 
-        expect(await BOTV.totalSupply()).to.be.equal(
+        expect(await BOTV1.totalSupply()).to.be.equal(
           totalSupply.add(nbOfMints)
         );
       });
 
       it("Should mint even if pricing is set as free", async function () {
-        const { publicUser1, publicUser2, ERC20Mock, BOTV } = await loadFixture(
-          activeSaleFixture
-        );
+        const { publicUser1, publicUser2, ERC20Mock, BOTV1 } =
+          await loadFixture(activeSaleFixture);
 
         const value = 0;
 
         const quantity = 2;
-        const totalSupply = await BOTV.totalSupply();
+        const totalSupply = await BOTV1.totalSupply();
         const nbOfMints = quantity * 4;
 
-        let tx = await BOTV.setPrice(ZERO_ADDRESS, true, value);
+        let tx = await BOTV1.setPrice(ZERO_ADDRESS, true, value);
         await tx.wait();
-        tx = await BOTV.setPrice(ERC20Mock.address, true, 0);
+        tx = await BOTV1.setPrice(ERC20Mock.address, true, 0);
         await tx.wait();
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             quantity,
             ERC20Mock.address,
@@ -799,7 +804,7 @@ describe("BOTV", function () {
         );
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             quantity,
             ERC20Mock.address,
@@ -807,7 +812,7 @@ describe("BOTV", function () {
             []
           )
         )
-          .to.emit(BOTV, "Mint")
+          .to.emit(BOTV1, "Mint")
           .withArgs(
             publicUser2.address,
             quantity,
@@ -817,7 +822,7 @@ describe("BOTV", function () {
           );
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             quantity,
             ZERO_ADDRESS,
@@ -828,7 +833,7 @@ describe("BOTV", function () {
         ).to.changeEtherBalances([publicUser1.address, MINT_TREASURY], [0, 0]);
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             quantity,
             ZERO_ADDRESS,
@@ -837,7 +842,7 @@ describe("BOTV", function () {
             { value }
           )
         )
-          .to.emit(BOTV, "Mint")
+          .to.emit(BOTV1, "Mint")
           .withArgs(
             publicUser2.address,
             quantity,
@@ -846,7 +851,7 @@ describe("BOTV", function () {
             publicUser1.address
           );
 
-        expect(await BOTV.totalSupply()).to.be.equal(
+        expect(await BOTV1.totalSupply()).to.be.equal(
           totalSupply.add(nbOfMints)
         );
       });
@@ -858,16 +863,16 @@ describe("BOTV", function () {
 
           ERC20Amount,
           ERC20Mock,
-          BOTV
+          BOTV1
         } = await loadFixture(activeSaleFixture);
 
-        const totalSupply = await BOTV.totalSupply();
+        const totalSupply = await BOTV1.totalSupply();
 
-        let tx = await ERC20Mock.connect(publicUser1).approve(BOTV.address, 0);
+        let tx = await ERC20Mock.connect(publicUser1).approve(BOTV1.address, 0);
         await tx.wait();
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             1,
             ERC20Mock.address,
@@ -877,13 +882,13 @@ describe("BOTV", function () {
         ).to.be.revertedWith("ERC20: insufficient allowance");
 
         tx = await ERC20Mock.connect(publicUser1).approve(
-          BOTV.address,
+          BOTV1.address,
           BigNumber.from(ERC20Amount).mul(2).mul(MAX_SUPPLY)
         );
         await tx.wait();
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             1,
             ERC20Mock.address,
@@ -891,7 +896,7 @@ describe("BOTV", function () {
             []
           )
         )
-          .to.emit(BOTV, "Mint")
+          .to.emit(BOTV1, "Mint")
           .withArgs(
             publicUser2.address,
             1,
@@ -900,7 +905,7 @@ describe("BOTV", function () {
             publicUser1.address
           );
 
-        tx = await BOTV.setPrice(
+        tx = await BOTV1.setPrice(
           ERC20Mock.address,
           true,
           BigNumber.from(ERC20Amount).mul(MINT_LIMIT_PER_WALLET).add(1)
@@ -908,7 +913,7 @@ describe("BOTV", function () {
         await tx.wait();
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             1,
             ERC20Mock.address,
@@ -916,11 +921,11 @@ describe("BOTV", function () {
             []
           )
         ).to.be.revertedWith("ERC20: transfer amount exceeds balance");
-        expect(await BOTV.totalSupply()).to.be.equal(totalSupply.add(1));
+        expect(await BOTV1.totalSupply()).to.be.equal(totalSupply.add(1));
       });
 
       it("Should revert if msg.value is too low", async function () {
-        const { publicUser1, publicUser2, BOTV } = await loadFixture(
+        const { publicUser1, publicUser2, BOTV1 } = await loadFixture(
           activeSaleFixture
         );
 
@@ -929,13 +934,13 @@ describe("BOTV", function () {
         const quantity = 3;
         const value = BigNumber.from(amount).mul(quantity);
 
-        let tx = await BOTV.setPrice(ZERO_ADDRESS, true, amount);
+        let tx = await BOTV1.setPrice(ZERO_ADDRESS, true, amount);
         await tx.wait();
 
-        const totalSupply = await BOTV.totalSupply();
+        const totalSupply = await BOTV1.totalSupply();
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             quantity,
             ZERO_ADDRESS,
@@ -943,12 +948,12 @@ describe("BOTV", function () {
             [],
             { value: amount }
           )
-        ).to.be.revertedWithCustomError(BOTV, "AmountValueTooLow");
+        ).to.be.revertedWithCustomError(BOTV1, "AmountValueTooLow");
 
         const provider = ethers.provider;
         const balance = await provider.getBalance(publicUser1.address);
 
-        tx = await BOTV.setPrice(
+        tx = await BOTV1.setPrice(
           ZERO_ADDRESS,
           true,
           BigNumber.from(balance).add(1)
@@ -956,7 +961,7 @@ describe("BOTV", function () {
         await tx.wait();
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             quantity,
             ZERO_ADDRESS,
@@ -964,13 +969,13 @@ describe("BOTV", function () {
             [],
             { value }
           )
-        ).to.be.revertedWithCustomError(BOTV, "AmountValueTooLow");
+        ).to.be.revertedWithCustomError(BOTV1, "AmountValueTooLow");
 
-        tx = await BOTV.setPrice(ZERO_ADDRESS, true, amount);
+        tx = await BOTV1.setPrice(ZERO_ADDRESS, true, amount);
         await tx.wait();
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             quantity,
             ZERO_ADDRESS,
@@ -979,7 +984,7 @@ describe("BOTV", function () {
             { value }
           )
         )
-          .to.emit(BOTV, "Mint")
+          .to.emit(BOTV1, "Mint")
           .withArgs(
             publicUser2.address,
             quantity,
@@ -987,18 +992,20 @@ describe("BOTV", function () {
             ZERO_ADDRESS,
             publicUser1.address
           );
-        expect(await BOTV.totalSupply()).to.be.equal(totalSupply.add(quantity));
+        expect(await BOTV1.totalSupply()).to.be.equal(
+          totalSupply.add(quantity)
+        );
       });
 
       it("Should revert if provided currency is not enabled", async function () {
-        const { publicUser1, publicUser2, ERC20Amount, ERC20Mock, BOTV } =
+        const { publicUser1, publicUser2, ERC20Amount, ERC20Mock, BOTV1 } =
           await loadFixture(activeSaleFixture);
 
-        let tx = await BOTV.setPrice(ERC20Mock.address, false, ERC20Amount);
+        let tx = await BOTV1.setPrice(ERC20Mock.address, false, ERC20Amount);
         await tx.wait();
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             1,
             ERC20Mock.address,
@@ -1006,17 +1013,17 @@ describe("BOTV", function () {
             []
           )
         )
-          .to.be.revertedWithCustomError(BOTV, "ForbiddenCurrency")
+          .to.be.revertedWithCustomError(BOTV1, "ForbiddenCurrency")
           .withArgs(ERC20Mock.address);
 
         ERC20Amount.add(1);
 
         await tx.wait();
-        tx = await BOTV.setPrice(ERC20Mock.address, true, ERC20Amount);
+        tx = await BOTV1.setPrice(ERC20Mock.address, true, ERC20Amount);
         await tx.wait();
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             1,
             ERC20Mock.address,
@@ -1024,7 +1031,7 @@ describe("BOTV", function () {
             []
           )
         )
-          .to.emit(BOTV, "Mint")
+          .to.emit(BOTV1, "Mint")
           .withArgs(
             publicUser2.address,
             1,
@@ -1034,7 +1041,7 @@ describe("BOTV", function () {
           );
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             1,
             ZERO_ADDRESS,
@@ -1042,7 +1049,7 @@ describe("BOTV", function () {
             []
           )
         )
-          .to.be.revertedWithCustomError(BOTV, "ForbiddenCurrency")
+          .to.be.revertedWithCustomError(BOTV1, "ForbiddenCurrency")
           .withArgs(ZERO_ADDRESS);
       });
 
@@ -1053,7 +1060,7 @@ describe("BOTV", function () {
           publicUser3,
           ERC20Amount,
           ERC20Mock,
-          BOTV
+          BOTV1
         } = await loadFixture(activeSaleFixture);
 
         let tx = await ERC20Mock.mint(
@@ -1063,17 +1070,17 @@ describe("BOTV", function () {
         await tx.wait();
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             ZERO_ADDRESS,
             1,
             ERC20Mock.address,
             [],
             []
           )
-        ).to.be.revertedWithCustomError(BOTV, "CannotBeZeroAddress");
+        ).to.be.revertedWithCustomError(BOTV1, "CannotBeZeroAddress");
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             1,
             ZERO_ADDRESS,
@@ -1081,14 +1088,14 @@ describe("BOTV", function () {
             []
           )
         )
-          .to.be.revertedWithCustomError(BOTV, "ForbiddenCurrency")
+          .to.be.revertedWithCustomError(BOTV1, "ForbiddenCurrency")
           .withArgs(ZERO_ADDRESS);
 
         const ERC20MockDeployer = await ethers.getContractFactory("ERC20Mock");
         const ERC20Mock2 = await ERC20MockDeployer.deploy();
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             1,
             ERC20Mock2.address,
@@ -1096,21 +1103,21 @@ describe("BOTV", function () {
             []
           )
         )
-          .to.be.revertedWithCustomError(BOTV, "ForbiddenCurrency")
+          .to.be.revertedWithCustomError(BOTV1, "ForbiddenCurrency")
           .withArgs(ERC20Mock2.address);
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             MINT_LIMIT_PER_WALLET + 1,
             ERC20Mock.address,
             [],
             []
           )
-        ).to.be.revertedWithCustomError(BOTV, "TokenMintingLimitExceeded");
+        ).to.be.revertedWithCustomError(BOTV1, "TokenMintingLimitExceeded");
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             0,
             ERC20Mock.address,
@@ -1122,7 +1129,7 @@ describe("BOTV", function () {
         const quantity = MINT_LIMIT_PER_WALLET;
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             quantity,
             ERC20Mock.address,
@@ -1130,7 +1137,7 @@ describe("BOTV", function () {
             []
           )
         )
-          .to.emit(BOTV, "Mint")
+          .to.emit(BOTV1, "Mint")
           .withArgs(
             publicUser2.address,
             quantity,
@@ -1140,17 +1147,17 @@ describe("BOTV", function () {
           );
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             1,
             ERC20Mock.address,
             [],
             []
           )
-        ).to.be.revertedWithCustomError(BOTV, "TokenMintingLimitExceeded");
+        ).to.be.revertedWithCustomError(BOTV1, "TokenMintingLimitExceeded");
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser3.address,
             quantity,
             ERC20Mock.address,
@@ -1158,7 +1165,7 @@ describe("BOTV", function () {
             []
           )
         )
-          .to.emit(BOTV, "Mint")
+          .to.emit(BOTV1, "Mint")
           .withArgs(
             publicUser3.address,
             quantity,
@@ -1169,9 +1176,8 @@ describe("BOTV", function () {
       });
 
       it("Should revert if number of tokens exceed MAX_SUPPLY value", async function () {
-        const { publicUser1, ERC20Amount, ERC20Mock, BOTV } = await loadFixture(
-          activeSaleFixture
-        );
+        const { publicUser1, ERC20Amount, ERC20Mock, BOTV1 } =
+          await loadFixture(activeSaleFixture);
         let tx;
 
         tx = await ERC20Mock.mint(
@@ -1187,7 +1193,7 @@ describe("BOTV", function () {
           const signer = wallet.connect(ethers.provider);
 
           await expect(
-            BOTV.connect(publicUser1).mint(
+            BOTV1.connect(publicUser1).mint(
               signer.address,
               MINT_LIMIT_PER_WALLET,
               ERC20Mock.address,
@@ -1195,7 +1201,7 @@ describe("BOTV", function () {
               []
             )
           )
-            .to.emit(BOTV, "Mint")
+            .to.emit(BOTV1, "Mint")
             .withArgs(
               signer.address,
               MINT_LIMIT_PER_WALLET,
@@ -1205,19 +1211,19 @@ describe("BOTV", function () {
             );
         }
 
-        expect(await BOTV.totalSupply()).to.be.equal(
+        expect(await BOTV1.totalSupply()).to.be.equal(
           BigNumber.from(MAX_SUPPLY)
         );
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser1.address,
             1,
             ERC20Mock.address,
             [],
             []
           )
-        ).to.be.revertedWithCustomError(BOTV, "MaxSupplyExceeded");
+        ).to.be.revertedWithCustomError(BOTV1, "MaxSupplyExceeded");
       });
     });
 
@@ -1233,24 +1239,24 @@ describe("BOTV", function () {
           ERC20Mock,
           privateListMerkleProof,
 
-          BOTV
+          BOTV1
         } = await loadFixture(initFixture);
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             privateUser3.address,
             1,
             ERC20Mock.address,
             privateListMerkleProof(privateUser3.address),
             []
           )
-        ).to.be.revertedWithCustomError(BOTV, "NoActiveSale");
+        ).to.be.revertedWithCustomError(BOTV1, "NoActiveSale");
 
-        let tx = await BOTV.setPrivateSale(true);
+        let tx = await BOTV1.setPrivateSale(true);
         await tx.wait();
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             privateUser3.address,
             1,
             ERC20Mock.address,
@@ -1258,7 +1264,7 @@ describe("BOTV", function () {
             []
           )
         )
-          .to.emit(BOTV, "Mint")
+          .to.emit(BOTV1, "Mint")
           .withArgs(
             privateUser3.address,
             1,
@@ -1268,7 +1274,7 @@ describe("BOTV", function () {
           );
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             discountPrivateUser.address,
             1,
             ERC20Mock.address,
@@ -1276,7 +1282,7 @@ describe("BOTV", function () {
             []
           )
         )
-          .to.emit(BOTV, "Mint")
+          .to.emit(BOTV1, "Mint")
           .withArgs(
             discountPrivateUser.address,
             1,
@@ -1298,44 +1304,44 @@ describe("BOTV", function () {
           ERC20Mock,
           privateListMerkleProof,
 
-          BOTV
+          BOTV1
         } = await loadFixture(initFixture);
 
-        let tx = await BOTV.setPrivateSale(true);
+        let tx = await BOTV1.setPrivateSale(true);
         await tx.wait();
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             1,
             ERC20Mock.address,
             privateListMerkleProof(privateUser3.address),
             []
           )
-        ).to.be.revertedWithCustomError(BOTV, "NotAllowedForPrivateSale");
+        ).to.be.revertedWithCustomError(BOTV1, "NotAllowedForPrivateSale");
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             discountUser1.address,
             1,
             ERC20Mock.address,
             privateListMerkleProof(discountUser1.address),
             []
           )
-        ).to.be.revertedWithCustomError(BOTV, "NotAllowedForPrivateSale");
+        ).to.be.revertedWithCustomError(BOTV1, "NotAllowedForPrivateSale");
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             privateUser3.address,
             1,
             ERC20Mock.address,
             privateListMerkleProof(publicUser1.address),
             []
           )
-        ).to.be.revertedWithCustomError(BOTV, "NotAllowedForPrivateSale");
+        ).to.be.revertedWithCustomError(BOTV1, "NotAllowedForPrivateSale");
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             privateUser3.address,
             1,
             ERC20Mock.address,
@@ -1343,7 +1349,7 @@ describe("BOTV", function () {
             []
           )
         )
-          .to.emit(BOTV, "Mint")
+          .to.emit(BOTV1, "Mint")
           .withArgs(
             privateUser3.address,
             1,
@@ -1352,11 +1358,11 @@ describe("BOTV", function () {
             publicUser1.address
           );
 
-        tx = await BOTV.setPublicSale(true);
+        tx = await BOTV1.setPublicSale(true);
         await tx.wait();
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             discountUser1.address,
             1,
             ERC20Mock.address,
@@ -1364,7 +1370,7 @@ describe("BOTV", function () {
             []
           )
         )
-          .to.emit(BOTV, "Mint")
+          .to.emit(BOTV1, "Mint")
           .withArgs(
             discountUser1.address,
             1,
@@ -1388,13 +1394,13 @@ describe("BOTV", function () {
           ERC20Mock,
           discountMerkleProof,
 
-          BOTV
+          BOTV1
         } = await loadFixture(activeSaleFixture);
 
         let discount = BigNumber.from(ERC20Amount).div(2);
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             discountUser1.address,
             2,
             ERC20Mock.address,
@@ -1402,7 +1408,7 @@ describe("BOTV", function () {
             discountMerkleProof(discountUser1.address)
           )
         )
-          .to.emit(BOTV, "Mint")
+          .to.emit(BOTV1, "Mint")
           .withArgs(
             discountUser1.address,
             2,
@@ -1412,7 +1418,7 @@ describe("BOTV", function () {
           );
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             discountUser2.address,
             1,
             ERC20Mock.address,
@@ -1428,11 +1434,11 @@ describe("BOTV", function () {
         const etherValue = "0.15";
         const value = parseEther(etherValue);
 
-        let tx = await BOTV.setPrice(ZERO_ADDRESS, true, value);
+        let tx = await BOTV1.setPrice(ZERO_ADDRESS, true, value);
         await tx.wait();
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             discountUser2.address,
             1,
             ZERO_ADDRESS,
@@ -1446,7 +1452,7 @@ describe("BOTV", function () {
         );
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             discountPrivateUser.address,
             1,
             ZERO_ADDRESS,
@@ -1459,7 +1465,7 @@ describe("BOTV", function () {
           [parseEther(`-${etherValue}`), value]
         );
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             discountPrivateUser.address,
             5,
             ERC20Mock.address,
@@ -1488,13 +1494,13 @@ describe("BOTV", function () {
           ERC20Mock,
           discountMerkleProof,
 
-          BOTV
+          BOTV1
         } = await loadFixture(activeSaleFixture);
 
         let discount = BigNumber.from(ERC20Amount).div(2);
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             discountUser1.address,
             2,
             ERC20Mock.address,
@@ -1502,7 +1508,7 @@ describe("BOTV", function () {
             discountMerkleProof(discountUser1.address)
           )
         )
-          .to.emit(BOTV, "Mint")
+          .to.emit(BOTV1, "Mint")
           .withArgs(
             discountUser1.address,
             2,
@@ -1512,7 +1518,7 @@ describe("BOTV", function () {
           );
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             discountUser1.address,
             1,
             ERC20Mock.address,
@@ -1528,11 +1534,11 @@ describe("BOTV", function () {
         const etherValue = "0.15";
         const value = parseEther(etherValue);
 
-        let tx = await BOTV.setPrice(ZERO_ADDRESS, true, value);
+        let tx = await BOTV1.setPrice(ZERO_ADDRESS, true, value);
         await tx.wait();
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             discountUser2.address,
             1,
             ZERO_ADDRESS,
@@ -1546,7 +1552,7 @@ describe("BOTV", function () {
         );
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             discountUser2.address,
             1,
             ZERO_ADDRESS,
@@ -1560,7 +1566,7 @@ describe("BOTV", function () {
         );
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             discountUser2.address,
             1,
             ZERO_ADDRESS,
@@ -1568,10 +1574,10 @@ describe("BOTV", function () {
             discountMerkleProof(discountUser2.address),
             { value: BigNumber.from(value).div(2) }
           )
-        ).to.be.revertedWithCustomError(BOTV, "AmountValueTooLow");
+        ).to.be.revertedWithCustomError(BOTV1, "AmountValueTooLow");
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             discountUser2.address,
             5,
             ERC20Mock.address,
@@ -1603,11 +1609,11 @@ describe("BOTV", function () {
           ERC20Mock,
           discountMerkleProof,
 
-          BOTV
+          BOTV1
         } = await loadFixture(activeSaleFixture);
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             publicUser2.address,
             2,
             ERC20Mock.address,
@@ -1615,7 +1621,7 @@ describe("BOTV", function () {
             discountMerkleProof(publicUser2.address)
           )
         )
-          .to.emit(BOTV, "Mint")
+          .to.emit(BOTV1, "Mint")
           .withArgs(
             publicUser2.address,
             2,
@@ -1625,7 +1631,7 @@ describe("BOTV", function () {
           );
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             privateUser1.address,
             1,
             ERC20Mock.address,
@@ -1641,11 +1647,11 @@ describe("BOTV", function () {
         const etherValue = "0.15";
         const value = parseEther(etherValue);
 
-        let tx = await BOTV.setPrice(ZERO_ADDRESS, true, value);
+        let tx = await BOTV1.setPrice(ZERO_ADDRESS, true, value);
         await tx.wait();
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             privateUser1.address,
             1,
             ZERO_ADDRESS,
@@ -1653,10 +1659,10 @@ describe("BOTV", function () {
             discountMerkleProof(privateUser1.address),
             { value: BigNumber.from(value).div(2) }
           )
-        ).to.be.revertedWithCustomError(BOTV, "AmountValueTooLow");
+        ).to.be.revertedWithCustomError(BOTV1, "AmountValueTooLow");
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             privateUser1.address,
             1,
             ZERO_ADDRESS,
@@ -1664,10 +1670,10 @@ describe("BOTV", function () {
             discountMerkleProof(discountUser1.address),
             { value: BigNumber.from(value).div(2) }
           )
-        ).to.be.revertedWithCustomError(BOTV, "AmountValueTooLow");
+        ).to.be.revertedWithCustomError(BOTV1, "AmountValueTooLow");
 
         await expect(
-          BOTV.connect(publicUser1).mint(
+          BOTV1.connect(publicUser1).mint(
             privateUser1.address,
             1,
             ZERO_ADDRESS,
@@ -1685,79 +1691,79 @@ describe("BOTV", function () {
 
   describe("Metadata reveal", async function () {
     it("Should give prereveal metadata for minted token as randomNumber is 0", async function () {
-      const { BOTV, quantity } = await loadFixture(afterOneSaleFixture);
+      const { BOTV1, quantity } = await loadFixture(afterOneSaleFixture);
 
-      expect(await BOTV.tokenURI(0)).to.be.equal(`${BASE_URI}prereveal`);
-      expect(await BOTV.tokenURI(1)).to.be.equal(`${BASE_URI}prereveal`);
-      await expect(BOTV.tokenURI(quantity)).to.be.revertedWithCustomError(
-        BOTV,
+      expect(await BOTV1.tokenURI(0)).to.be.equal(`${BASE_URI}prereveal`);
+      expect(await BOTV1.tokenURI(1)).to.be.equal(`${BASE_URI}prereveal`);
+      await expect(BOTV1.tokenURI(quantity)).to.be.revertedWithCustomError(
+        BOTV1,
         "URIQueryForNonexistentToken"
       );
     });
 
     it("Should give random metadata once reveal function is executed", async function () {
-      const { BOTV, quantity, vrfCoordinatorV2Mock, subscriptionId, keyHash } =
+      const { BOTV1, quantity, vrfCoordinatorV2Mock, subscriptionId, keyHash } =
         await loadFixture(afterOneSaleFixture);
 
-      await expect(BOTV.reveal(keyHash, subscriptionId, 40000)).to.emit(
+      await expect(BOTV1.reveal(keyHash, subscriptionId, 40000)).to.emit(
         vrfCoordinatorV2Mock,
         "RandomWordsRequested"
       );
-      const requestId = await BOTV.requestId();
+      const requestId = await BOTV1.requestId();
 
       await expect(
-        vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV.address)
-      ).to.emit(BOTV, "RevealRandomNumber");
+        vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV1.address)
+      ).to.emit(BOTV1, "RevealRandomNumber");
 
-      const randomNumber = await BOTV.randomNumber();
+      const randomNumber = await BOTV1.randomNumber();
 
       const tokenUri0 = `${BASE_URI}${BigNumber.from(randomNumber).mod(
         MAX_SUPPLY
       )}`;
-      expect(await BOTV.tokenURI(0)).to.be.equal(tokenUri0);
+      expect(await BOTV1.tokenURI(0)).to.be.equal(tokenUri0);
       const tokenUri1 = `${BASE_URI}${BigNumber.from(randomNumber)
         .add(1)
         .mod(MAX_SUPPLY)}`;
-      expect(await BOTV.tokenURI(1)).to.be.equal(tokenUri1);
+      expect(await BOTV1.tokenURI(1)).to.be.equal(tokenUri1);
       const tokenUriLast = `${BASE_URI}${BigNumber.from(randomNumber)
         .add(quantity - 1)
         .mod(MAX_SUPPLY)}`;
-      expect(await BOTV.tokenURI(quantity - 1)).to.be.equal(tokenUriLast);
+      expect(await BOTV1.tokenURI(quantity - 1)).to.be.equal(tokenUriLast);
 
-      await expect(BOTV.tokenURI(quantity)).to.be.revertedWithCustomError(
-        BOTV,
+      await expect(BOTV1.tokenURI(quantity)).to.be.revertedWithCustomError(
+        BOTV1,
         "URIQueryForNonexistentToken"
       );
     });
 
     it("Should revert if `reveal` function is executed more than once", async function () {
-      const { BOTV, vrfCoordinatorV2Mock, subscriptionId, keyHash } =
+      const { BOTV1, vrfCoordinatorV2Mock, subscriptionId, keyHash } =
         await loadFixture(afterOneSaleFixture);
 
-      await expect(BOTV.reveal(keyHash, subscriptionId, 40000)).to.emit(
+      await expect(BOTV1.reveal(keyHash, subscriptionId, 40000)).to.emit(
         vrfCoordinatorV2Mock,
         "RandomWordsRequested"
       );
 
       await expect(
-        BOTV.reveal(keyHash, subscriptionId, 40000)
-      ).to.be.revertedWithCustomError(BOTV, "RevealAlreadyRequested");
+        BOTV1.reveal(keyHash, subscriptionId, 40000)
+      ).to.be.revertedWithCustomError(BOTV1, "RevealAlreadyRequested");
 
-      const requestId = await BOTV.requestId();
+      const requestId = await BOTV1.requestId();
 
       await expect(
-        vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV.address)
-      ).to.emit(BOTV, "RevealRandomNumber");
+        vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV1.address)
+      ).to.emit(BOTV1, "RevealRandomNumber");
 
-      await expect(BOTV.resetVrfRequest()).to.be.revertedWithCustomError(
-        BOTV,
+      await expect(BOTV1.resetVrfRequest()).to.be.revertedWithCustomError(
+        BOTV1,
         "AlreadyRevealed"
       );
     });
 
     describe("Chainlink errors", async function () {
       it("Should be able to retry if is not funded", async function () {
-        const { BOTV, vrfCoordinatorV2Mock, keyHash } = await loadFixture(
+        const { BOTV1, vrfCoordinatorV2Mock, keyHash } = await loadFixture(
           initFixture
         );
 
@@ -1766,15 +1772,15 @@ describe("BOTV", function () {
         const subscriptionId2 = BigNumber.from(
           transactionReceipt.events[0].topics[1]
         );
-        await vrfCoordinatorV2Mock.addConsumer(subscriptionId2, BOTV.address);
+        await vrfCoordinatorV2Mock.addConsumer(subscriptionId2, BOTV1.address);
 
-        await expect(BOTV.reveal(keyHash, subscriptionId2, 40000)).to.not.be
+        await expect(BOTV1.reveal(keyHash, subscriptionId2, 40000)).to.not.be
           .reverted;
 
-        let requestId = await BOTV.requestId();
+        let requestId = await BOTV1.requestId();
 
         await expect(
-          vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV.address)
+          vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV1.address)
         ).to.be.reverted;
 
         tx = await vrfCoordinatorV2Mock.fundSubscription(
@@ -1783,22 +1789,22 @@ describe("BOTV", function () {
         );
         await tx.wait();
 
-        tx = await BOTV.resetVrfRequest();
+        tx = await BOTV1.resetVrfRequest();
         await tx.wait();
 
-        await expect(BOTV.reveal(keyHash, subscriptionId2, 40000)).to.emit(
+        await expect(BOTV1.reveal(keyHash, subscriptionId2, 40000)).to.emit(
           vrfCoordinatorV2Mock,
           "RandomWordsRequested"
         );
-        requestId = await BOTV.requestId();
+        requestId = await BOTV1.requestId();
 
         await expect(
-          vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV.address)
-        ).to.emit(BOTV, "RevealRandomNumber");
+          vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV1.address)
+        ).to.emit(BOTV1, "RevealRandomNumber");
       });
 
       it("Should be able to retry if not added as consumer", async function () {
-        const { BOTV, vrfCoordinatorV2Mock, keyHash } = await loadFixture(
+        const { BOTV1, vrfCoordinatorV2Mock, keyHash } = await loadFixture(
           initFixture
         );
 
@@ -1813,66 +1819,66 @@ describe("BOTV", function () {
         );
         await tx.wait();
 
-        await expect(BOTV.reveal(keyHash, subscriptionId2, 40000)).to.be
+        await expect(BOTV1.reveal(keyHash, subscriptionId2, 40000)).to.be
           .reverted;
 
-        await vrfCoordinatorV2Mock.addConsumer(subscriptionId2, BOTV.address);
+        await vrfCoordinatorV2Mock.addConsumer(subscriptionId2, BOTV1.address);
 
-        await expect(BOTV.reveal(keyHash, subscriptionId2, 40000)).to.emit(
+        await expect(BOTV1.reveal(keyHash, subscriptionId2, 40000)).to.emit(
           vrfCoordinatorV2Mock,
           "RandomWordsRequested"
         );
-        let requestId = await BOTV.requestId();
+        let requestId = await BOTV1.requestId();
 
         await expect(
-          vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV.address)
-        ).to.emit(BOTV, "RevealRandomNumber");
+          vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV1.address)
+        ).to.emit(BOTV1, "RevealRandomNumber");
       });
 
       it("Should be able to retry if bad subscription", async function () {
-        const { BOTV, vrfCoordinatorV2Mock, subscriptionId, keyHash } =
+        const { BOTV1, vrfCoordinatorV2Mock, subscriptionId, keyHash } =
           await loadFixture(initFixture);
 
-        await expect(BOTV.reveal(keyHash, 40000, 40000)).to.be.reverted;
+        await expect(BOTV1.reveal(keyHash, 40000, 40000)).to.be.reverted;
 
-        await expect(BOTV.reveal(keyHash, subscriptionId, 40000)).to.emit(
+        await expect(BOTV1.reveal(keyHash, subscriptionId, 40000)).to.emit(
           vrfCoordinatorV2Mock,
           "RandomWordsRequested"
         );
-        const requestId = await BOTV.requestId();
+        const requestId = await BOTV1.requestId();
 
         await expect(
-          vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV.address)
-        ).to.emit(BOTV, "RevealRandomNumber");
+          vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV1.address)
+        ).to.emit(BOTV1, "RevealRandomNumber");
       });
 
       it("Should be able to retry if callbackGasLimit is too low", async function () {
-        const { BOTV, vrfCoordinatorV2Mock, subscriptionId, keyHash } =
+        const { BOTV1, vrfCoordinatorV2Mock, subscriptionId, keyHash } =
           await loadFixture(initFixture);
 
-        await expect(BOTV.reveal(keyHash, subscriptionId, 10000)).to.emit(
+        await expect(BOTV1.reveal(keyHash, subscriptionId, 10000)).to.emit(
           vrfCoordinatorV2Mock,
           "RandomWordsRequested"
         );
 
-        let requestId = await BOTV.requestId();
+        let requestId = await BOTV1.requestId();
 
         await expect(
-          vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV.address)
-        ).to.not.emit(BOTV, "RevealRandomNumber");
+          vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV1.address)
+        ).to.not.emit(BOTV1, "RevealRandomNumber");
 
-        let tx = await BOTV.resetVrfRequest();
+        let tx = await BOTV1.resetVrfRequest();
         await tx.wait();
 
-        await expect(BOTV.reveal(keyHash, subscriptionId, 40000)).to.emit(
+        await expect(BOTV1.reveal(keyHash, subscriptionId, 40000)).to.emit(
           vrfCoordinatorV2Mock,
           "RandomWordsRequested"
         );
-        requestId = await BOTV.requestId();
+        requestId = await BOTV1.requestId();
 
         await expect(
-          vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV.address)
-        ).to.emit(BOTV, "RevealRandomNumber");
+          vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV1.address)
+        ).to.emit(BOTV1, "RevealRandomNumber");
       });
     });
   });
@@ -1883,7 +1889,7 @@ describe("BOTV", function () {
         publicUser1,
         BUFAUnits,
         BUFA,
-        BOTV,
+        BOTV1,
         vrfCoordinatorV2Mock,
         subscriptionId,
         keyHash
@@ -1907,32 +1913,32 @@ describe("BOTV", function () {
       await time.increase(increasedTime);
 
       await expect(
-        BOTV.availableRewards(
+        BOTV1.availableRewards(
           publicUser1.address,
           tokenIds,
           bufaPerDay,
           merkleProofs
         )
-      ).to.revertedWithCustomError(BOTV, "NotRevealed");
+      ).to.revertedWithCustomError(BOTV1, "NotRevealed");
 
       await expect(
-        BOTV.claimRewards(
+        BOTV1.claimRewards(
           publicUser1.address,
           tokenIds,
           bufaPerDay,
           merkleProofs
         )
-      ).to.revertedWithCustomError(BOTV, "NotRevealed");
+      ).to.revertedWithCustomError(BOTV1, "NotRevealed");
 
       expect(await BUFA.balanceOf(publicUser1.address)).to.equal(0);
 
-      await expect(BOTV.reveal(keyHash, subscriptionId, 40000));
-      const requestId = await BOTV.requestId();
-      await vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV.address);
+      await expect(BOTV1.reveal(keyHash, subscriptionId, 40000));
+      const requestId = await BOTV1.requestId();
+      await vrfCoordinatorV2Mock.fulfillRandomWords(requestId, BOTV1.address);
 
       await time.increase(increasedTime);
 
-      const rewardsAmount = await BOTV.availableRewards(
+      const rewardsAmount = await BOTV1.availableRewards(
         publicUser1.address,
         tokenIds,
         bufaPerDay,
@@ -1942,7 +1948,7 @@ describe("BOTV", function () {
       expect(BigNumber.from(rewardsAmount).div(BUFAUnits)).to.equal(550 * 2);
 
       await expect(
-        BOTV.claimRewards(
+        BOTV1.claimRewards(
           publicUser1.address,
           tokenIds,
           bufaPerDay,
@@ -1956,7 +1962,7 @@ describe("BOTV", function () {
 
     it("Should get rewards according holding period and rarity rank", async function () {
       const {
-        BOTV,
+        BOTV1,
         BUFA,
         publicUser1,
         BUFAUnits,
@@ -1966,7 +1972,7 @@ describe("BOTV", function () {
         increasedTime
       } = await loadFixture(onceRevealed);
 
-      const rewardsAmount = await BOTV.availableRewards(
+      const rewardsAmount = await BOTV1.availableRewards(
         publicUser1.address,
         tokenIds,
         bufaPerDay,
@@ -1976,7 +1982,7 @@ describe("BOTV", function () {
       expect(BigNumber.from(rewardsAmount).div(BUFAUnits)).to.equal(550);
 
       await expect(
-        BOTV.claimRewards(
+        BOTV1.claimRewards(
           publicUser1.address,
           [0],
           [100],
@@ -1985,7 +1991,7 @@ describe("BOTV", function () {
       ).to.emit(BUFA, "Transfer");
 
       await expect(
-        BOTV.claimRewards(
+        BOTV1.claimRewards(
           publicUser1.address,
           tokenIds,
           bufaPerDay,
@@ -1999,7 +2005,7 @@ describe("BOTV", function () {
       await time.increase(increasedTime / 2);
 
       await expect(
-        BOTV.claimRewards(
+        BOTV1.claimRewards(
           publicUser1.address,
           tokenIds,
           bufaPerDay,
@@ -2013,7 +2019,7 @@ describe("BOTV", function () {
       await time.increase(increasedTime * 7);
 
       await expect(
-        BOTV.claimRewards(
+        BOTV1.claimRewards(
           publicUser1.address,
           [0],
           [100],
@@ -2028,68 +2034,68 @@ describe("BOTV", function () {
     });
 
     it("Should revert if bufaRewards value is not correct", async function () {
-      const { BOTV, BUFA, publicUser1, tokenIds, bufaPerDay, merkleProofs } =
+      const { BOTV1, BUFA, publicUser1, tokenIds, bufaPerDay, merkleProofs } =
         await loadFixture(onceRevealed);
 
       const newBufaPerDays = [...bufaPerDay];
       newBufaPerDays[2] = 1000;
 
       await expect(
-        BOTV.availableRewards(
+        BOTV1.availableRewards(
           publicUser1.address,
           tokenIds,
           newBufaPerDays,
           merkleProofs
         )
       )
-        .to.revertedWithCustomError(BOTV, "InvalidRewardsForToken")
+        .to.revertedWithCustomError(BOTV1, "InvalidRewardsForToken")
         .withArgs(tokenIds[2], 946, 1000);
 
       await expect(
-        BOTV.claimRewards(
+        BOTV1.claimRewards(
           publicUser1.address,
           tokenIds,
           newBufaPerDays,
           merkleProofs
         )
       )
-        .to.revertedWithCustomError(BOTV, "InvalidRewardsForToken")
+        .to.revertedWithCustomError(BOTV1, "InvalidRewardsForToken")
         .withArgs(tokenIds[2], 946, 1000);
 
       expect(await BUFA.balanceOf(publicUser1.address)).to.equal(0);
     });
 
     it("Should revert if tokenId does not exist", async function () {
-      const { BOTV, BUFA, publicUser1, tokenIds, bufaPerDay, merkleProofs } =
+      const { BOTV1, BUFA, publicUser1, tokenIds, bufaPerDay, merkleProofs } =
         await loadFixture(onceRevealed);
 
       const newTokenIds = [...tokenIds];
       newTokenIds[2] = 900;
 
       await expect(
-        BOTV.availableRewards(
+        BOTV1.availableRewards(
           publicUser1.address,
           newTokenIds,
           bufaPerDay,
           merkleProofs
         )
-      ).to.revertedWithCustomError(BOTV, "OwnerQueryForNonexistentToken");
+      ).to.revertedWithCustomError(BOTV1, "OwnerQueryForNonexistentToken");
 
       await expect(
-        BOTV.claimRewards(
+        BOTV1.claimRewards(
           publicUser1.address,
           newTokenIds,
           bufaPerDay,
           merkleProofs
         )
-      ).to.revertedWithCustomError(BOTV, "OwnerQueryForNonexistentToken");
+      ).to.revertedWithCustomError(BOTV1, "OwnerQueryForNonexistentToken");
 
       expect(await BUFA.balanceOf(publicUser1.address)).to.equal(0);
     });
 
     it("Should revert if not owner", async function () {
       const {
-        BOTV,
+        BOTV1,
         BUFA,
         deployer,
         publicUser1,
@@ -2100,30 +2106,30 @@ describe("BOTV", function () {
       } = await loadFixture(onceRevealed);
 
       await expect(
-        BOTV.connect(publicUser1).availableRewards(
+        BOTV1.connect(publicUser1).availableRewards(
           deployer.address,
           tokenIds,
           bufaPerDay,
           merkleProofs
         )
       )
-        .to.revertedWithCustomError(BOTV, "NotOwner")
+        .to.revertedWithCustomError(BOTV1, "NotOwner")
         .withArgs(deployer.address, tokenIds[0]);
 
       await expect(
-        BOTV.connect(publicUser1).claimRewards(
+        BOTV1.connect(publicUser1).claimRewards(
           deployer.address,
           tokenIds,
           bufaPerDay,
           merkleProofs
         )
       )
-        .to.revertedWithCustomError(BOTV, "NotOwner")
+        .to.revertedWithCustomError(BOTV1, "NotOwner")
         .withArgs(deployer.address, tokenIds[0]);
       expect(await BUFA.balanceOf(deployer.address)).to.equal(0);
       expect(await BUFA.balanceOf(publicUser1.address)).to.equal(0);
 
-      await BOTV.connect(publicUser1).claimRewards(
+      await BOTV1.connect(publicUser1).claimRewards(
         publicUser1.address,
         tokenIds,
         bufaPerDay,
@@ -2138,7 +2144,7 @@ describe("BOTV", function () {
 
     it("Should reset on transfer", async function () {
       const {
-        BOTV,
+        BOTV1,
         BUFA,
         publicUser1,
         publicUser2,
@@ -2149,7 +2155,7 @@ describe("BOTV", function () {
         increasedTime
       } = await loadFixture(onceRevealed);
 
-      const rewardsAmount = await BOTV.availableRewards(
+      const rewardsAmount = await BOTV1.availableRewards(
         publicUser1.address,
         tokenIds,
         bufaPerDay,
@@ -2158,47 +2164,47 @@ describe("BOTV", function () {
 
       expect(BigNumber.from(rewardsAmount).div(BUFAUnits)).to.equal(550);
 
-      expect(await BOTV.ownerOf(0)).to.equal(publicUser1.address);
-      expect(await BOTV.ownerOf(1)).to.equal(publicUser1.address);
-      expect(await BOTV.ownerOf(2)).to.equal(publicUser1.address);
+      expect(await BOTV1.ownerOf(0)).to.equal(publicUser1.address);
+      expect(await BOTV1.ownerOf(1)).to.equal(publicUser1.address);
+      expect(await BOTV1.ownerOf(2)).to.equal(publicUser1.address);
 
-      await BOTV.connect(publicUser1)[
+      await BOTV1.connect(publicUser1)[
         "safeTransferFrom(address,address,uint256)"
       ](publicUser1.address, publicUser2.address, 0);
 
-      await BOTV.connect(publicUser1).transferFrom(
+      await BOTV1.connect(publicUser1).transferFrom(
         publicUser1.address,
         publicUser2.address,
         1
       );
 
-      expect(await BOTV.ownerOf(0)).to.equal(publicUser2.address);
-      expect(await BOTV.ownerOf(1)).to.equal(publicUser2.address);
-      expect(await BOTV.ownerOf(2)).to.equal(publicUser1.address);
+      expect(await BOTV1.ownerOf(0)).to.equal(publicUser2.address);
+      expect(await BOTV1.ownerOf(1)).to.equal(publicUser2.address);
+      expect(await BOTV1.ownerOf(2)).to.equal(publicUser1.address);
 
       await expect(
-        BOTV.connect(publicUser1).availableRewards(
+        BOTV1.connect(publicUser1).availableRewards(
           publicUser1.address,
           tokenIds,
           bufaPerDay,
           merkleProofs
         )
       )
-        .to.revertedWithCustomError(BOTV, "NotOwner")
+        .to.revertedWithCustomError(BOTV1, "NotOwner")
         .withArgs(publicUser1.address, tokenIds[0]);
 
       const [tokenId0, tokenId1, ...otherTokenIds] = tokenIds;
       const [bufaPerDay0, bufaPerDay1, ...otherBufaPerDays] = bufaPerDay;
       const [merkleProofs0, merkleProofs1, ...othermerkleProofs] = merkleProofs;
 
-      await BOTV.connect(publicUser1).claimRewards(
+      await BOTV1.connect(publicUser1).claimRewards(
         publicUser1.address,
         otherTokenIds,
         otherBufaPerDays,
         othermerkleProofs
       );
 
-      await BOTV.connect(publicUser1).claimRewards(
+      await BOTV1.connect(publicUser1).claimRewards(
         publicUser2.address,
         [tokenId0, tokenId1],
         [bufaPerDay0, bufaPerDay1],
@@ -2216,14 +2222,14 @@ describe("BOTV", function () {
 
       time.increase(increasedTime);
 
-      await BOTV.connect(publicUser1).claimRewards(
+      await BOTV1.connect(publicUser1).claimRewards(
         publicUser1.address,
         otherTokenIds,
         otherBufaPerDays,
         othermerkleProofs
       );
 
-      await BOTV.connect(publicUser2).claimRewards(
+      await BOTV1.connect(publicUser2).claimRewards(
         publicUser2.address,
         [tokenId0],
         [bufaPerDay0],
@@ -2238,7 +2244,7 @@ describe("BOTV", function () {
         BigNumber.from(await BUFA.balanceOf(publicUser2.address)).div(BUFAUnits)
       ).to.equal(100);
 
-      await BOTV.connect(publicUser2).claimRewards(
+      await BOTV1.connect(publicUser2).claimRewards(
         publicUser2.address,
         [tokenId1],
         [bufaPerDay1],
@@ -2251,7 +2257,7 @@ describe("BOTV", function () {
 
       time.increase(increasedTime * 1.5);
 
-      await BOTV.connect(publicUser2).claimRewards(
+      await BOTV1.connect(publicUser2).claimRewards(
         publicUser2.address,
         [tokenId1, tokenId0],
         [bufaPerDay1, bufaPerDay0],
@@ -2265,7 +2271,7 @@ describe("BOTV", function () {
 
     it("Should ignore token provided multiples times", async function () {
       const {
-        BOTV,
+        BOTV1,
         BUFA,
         publicUser1,
         BUFAUnits,
@@ -2275,18 +2281,18 @@ describe("BOTV", function () {
       } = await loadFixture(onceRevealed);
 
       await expect(
-        BOTV.availableRewards(
+        BOTV1.availableRewards(
           publicUser1.address,
           [tokenIds[2], ...tokenIds],
           [bufaPerDay[2], ...bufaPerDay],
           [merkleProofs[2], ...merkleProofs]
         )
       )
-        .to.revertedWithCustomError(BOTV, "TokenGivenTwice")
+        .to.revertedWithCustomError(BOTV1, "TokenGivenTwice")
         .withArgs(tokenIds[2]);
 
       await expect(
-        BOTV.claimRewards(
+        BOTV1.claimRewards(
           publicUser1.address,
           [tokenIds[2], ...tokenIds],
           [bufaPerDay[2], ...bufaPerDay],
@@ -2295,7 +2301,7 @@ describe("BOTV", function () {
       ).to.emit(BUFA, "Transfer");
 
       await expect(
-        BOTV.claimRewards(
+        BOTV1.claimRewards(
           publicUser1.address,
           [...tokenIds, tokenIds[2]],
           [...bufaPerDay, bufaPerDay[2]],
@@ -2311,10 +2317,10 @@ describe("BOTV", function () {
 
   describe("Protected operations", async function () {
     async function testProtectedFunction(functionName, functionArgs) {
-      const { BOTV, publicUser1 } = await loadFixture(initFixture);
-      await expect(BOTV[functionName](...functionArgs)).to.not.be.reverted;
+      const { BOTV1, publicUser1 } = await loadFixture(initFixture);
+      await expect(BOTV1[functionName](...functionArgs)).to.not.be.reverted;
       await expect(
-        BOTV.connect(publicUser1)[functionName](...functionArgs)
+        BOTV1.connect(publicUser1)[functionName](...functionArgs)
       ).to.be.revertedWith("Ownable: caller is not the owner");
     }
 

@@ -17,13 +17,14 @@ import "./interfaces/IBUFA.sol";
 // import "hardhat/console.sol";
 
 /**
- * @title Bufalo's NFT Collection - BOTV Skulls (BOTV)
+ * @title Bufalo's NFT Collection - BOTV Skulls (BOTV) - version 2
  * @author Anthony Gourraud
  * @notice ERC721A contract with ERC4907 rentable NFT token standard and ERC2981 royalties implementations.
  *
  * The contract's owner (initially the deployer) can :
  * - specify the price to mint a token, with the currency he wants (any ERC20 or the blockchain's native coin)
  * - activate or deactivate private and public minting phases
+ * - migrate from BOTV1
  *
  * Allowed addresses for the private sale and eligible addresses for a 50% discount on the second token minted
  * are verified with a merkle proof (see https://soliditydeveloper.com/merkle-tree)
@@ -32,22 +33,16 @@ import "./interfaces/IBUFA.sol";
  * IMPORTANT :
  * - Deployer should be owner of 1000 wearable tokens, with tokenIDs following each other, for each collection to airdrop.
  * - Once the contract deployed, the deployer should call for each collection
- *   the {ERC721-setApprovalForAll} function to allow the contract to airdrop the tokens
+ *   the {ERC721-setApprovalForAll} function to allow the contract to airdrop the tokens *
  *
- *
- * Once revealed, each token holder can claim rewards ($BUFA tokens) continously.
+ * Each token holder can claim rewards ($BUFA tokens) continously.
  * The longer he holds and the rarer the NFT's attributes are,
  * the higher reward amount he gets
  * IMPORTANT :
- * - Deployer should grant the contract the `MINTER_ROLE`
+ * - Deployer should grant the contract the {BUFA-MINTER_ROLE}
  * - User should claim its rewards before transfering a token, or he will lose it
  */
-contract BOTV is
-    ERC2981,
-    ERC4907A,
-    Ownable,
-    ReentrancyGuard
-{
+contract BOTV2 is ERC2981, ERC4907A, Ownable, ReentrancyGuard {
     struct MintPriceSettings {
         bool enabled;
         uint256 amount;
@@ -55,11 +50,6 @@ contract BOTV is
 
     using SafeERC20 for IERC20;
     using Strings for uint256;
-
-    /** @notice Opensea-comptatible off-chain metadata base URI for each ERC721 token,
-     * See https://docs.opensea.io/docs/metadata-standards
-     */
-    string private baseURI;
 
     /// @notice Maximum number of tokens to mint
     uint256 public constant MAX_SUPPLY = 1000;
@@ -74,39 +64,48 @@ contract BOTV is
     /// @notice Where goes funds from second sales royalties
     address payable public immutable ROYALTIES_TREASURY;
 
-    /// @notice $BUFA contract address, rewards tokens holding NFT
-    IBUFA public immutable BUFA_CONTRACT_ADDRESS;
-
     /// @notice Boolean operator to activate/deactivate private sale
     bool public privateSaleActive = false;
 
     /// @notice Boolean operator to activate/deactivate public sale
     bool public publicSaleActive = false;
 
-    /*
-     * This number links a {tokenId} to a unique JSON metadata file, stored on IPFS (see {baseURI})
-     * The value of {randomNumber} is set once via {fulfillRandomWords}
-     * Note: no new number is being generated here, since the original contract already did this
+    /** @notice Opensea-comptatible off-chain metadata base URI for each ERC721 token,
+     * See https://docs.opensea.io/docs/metadata-standards
      */
-    uint256 public randomNumber;
-    
+    string public baseURI =
+        "ipfs://bafybeigqeiwfl2bh66dflt4v46745u3tnua2xpph5lqve4q2kjsbmninkq/tokens/";
+
+    /// @notice $BUFA contract address, rewards tokens holding NFT
+    IBUFA public bufaContractAddr;
+
+    /**
+     * This number links a {tokenId} to a unique JSON metadata file, stored on IPFS (see {baseURI})
+     * The value of {_randomNumber} has previously been set via chainlink
+     * https://polygonscan.com/tx/0x00a1e467ee7162ac62b0ba294cbbfa50308a5fed19219ab6873df0ce1642b03a
+     */
+    uint256 private constant _randomNumber = 888600078;
+
     // Merkle root to check if an address can get a discount
-    bytes32 private immutable _DISCOUNT_LIST_MERKLE_ROOT;
+    bytes32 private _discountListMerkleRoot;
 
     // Merkle root to check if an address is on the private sale allowlist
-    bytes32 private immutable _PRIVATE_LIST_MERKLE_ROOT;
+    bytes32 private _privateListMerkleRoot;
 
     // Merkle root to check if an address is on the private sale allowlist
-    bytes32 private immutable _BUFA_REWARDS_MERKLE_ROOT;
+    bytes32 private _rewardsMerkleRoot;
+
+    // First version of BOTV contract address
+    IERC721A private _BOTV1_addr;
 
     // Address from which to airdrop wearable tokens on mint
-    address private immutable _WEARABLES_OWNER;
+    address private _wearablesOwner;
 
     // Specific for which contracts the airdrop applies
-    address[] private _WEARABLES_ADDRESSES;
+    address[] private _wearablesAddresses;
 
-    /** For every single _WEARABLES_ADDRESSES i,
-     * _WEARABLES_OWNER should be owner of
+    /** For every single _wearablesAddresses i,
+     * _wearablesOwner should be owner of
      * tokenIDs = [_WEARABLES_TOKENIDS_OFFSET[i] ; _WEARABLES_TOKENIDS_OFFSET[i] + MAX_SUPPLY -1]
      *
      * Keep track of tokenId index for every wearable airdrop
@@ -127,7 +126,6 @@ contract BOTV is
      *  ERRORS
      *****************/
 
-    error AlreadyRevealed();
     error AmountValueTooLow(uint256 value);
     error CannotBeZeroAddress();
     error ForbiddenCurrency(address currency);
@@ -145,7 +143,7 @@ contract BOTV is
     error NoActiveSale();
     error NotAllowedForPrivateSale();
     error NotOwner(address tokenOwner, uint256 tokenId);
-    error NotRevealed();
+
     error TokenGivenTwice(uint256 tokenId);
     error TokenMintingLimitExceeded();
 
@@ -167,7 +165,6 @@ contract BOTV is
         address msgSender
     );
 
-
     event PublicSaleStateChanged(bool active);
 
     event PrivateSaleStateChanged(bool active);
@@ -186,6 +183,7 @@ contract BOTV is
      * @param rewardsMerkleRoot Merkle root computed from the rank/rarity scores to verify how much per day a token is eligible in $BUFA
      * @param discountListMerkleRoot Merkle root computed from array of eligible addresses for the 50% discount on second token minted
      * @param privateListMerkleRoot Merkle root computed from array of allowed addresses to mint during the private sale
+     * @param botv1Contract BOTV contract address from previous deployment, used for migration
      *
      * Merkle proofs can
      *
@@ -199,48 +197,25 @@ contract BOTV is
         address rewardsToken,
         bytes32 rewardsMerkleRoot,
         bytes32 discountListMerkleRoot,
-        bytes32 privateListMerkleRoot
+        bytes32 privateListMerkleRoot,
+        address botv1Contract
     ) ERC721A("Bufalo BOTV Skulls", "BOTV") {
-        if (royaltiesTreasury == address(0)) revert CannotBeZeroAddress();
-        if (rewardsToken == address(0)) revert CannotBeZeroAddress();
-
-        if (wearablesAddresses.length != wearablesTokenIdsOffset.length)
-            revert IncompleteAirdropParameter();
-
-        for (uint256 i = 0; i < wearablesAddresses.length; i++) {
-            address wearableContractAddr = wearablesAddresses[i];
-            if (wearableContractAddr == address(0))
-                revert InvalidAirdropParameter();
-            _wearablesTokenIds[
-                IERC721(wearableContractAddr)
-            ] = wearablesTokenIdsOffset[i];
-        }
-
-        if (
-            rewardsMerkleRoot == bytes32(0) ||
-            discountListMerkleRoot == bytes32(0) ||
-            privateListMerkleRoot == bytes32(0)
-        ) revert InvalidMerkleRoot();
-
         _setPrice(mintCurrency, true, mintAmount);
 
+        if (royaltiesTreasury == address(0)) revert CannotBeZeroAddress();
         ROYALTIES_TREASURY = royaltiesTreasury;
+        _setDefaultRoyalty(royaltiesTreasury, 1000); // 10 % royalties fee
 
-        _WEARABLES_OWNER = _msgSenderERC721A();
-        _WEARABLES_ADDRESSES = wearablesAddresses;
+        _setWearableOwner(_msgSenderERC721A());
+        _setWearableAirdropValues(wearablesAddresses, wearablesTokenIdsOffset);
 
-        BUFA_CONTRACT_ADDRESS = IBUFA(rewardsToken);
-        _BUFA_REWARDS_MERKLE_ROOT = rewardsMerkleRoot;
+        _setRewardsBufaContractAddress(rewardsToken);
 
-        _DISCOUNT_LIST_MERKLE_ROOT = discountListMerkleRoot;
-        _PRIVATE_LIST_MERKLE_ROOT = privateListMerkleRoot;
+        _setRewardsMerkleRoot(rewardsMerkleRoot);
+        _setDiscountMerkleRoot(discountListMerkleRoot);
+        _setPrivateListMerkleRoot(privateListMerkleRoot);
 
-        // 10 % royalties fee
-        _setDefaultRoyalty(royaltiesTreasury, 1000);
-
-        // migrate over already minted NFTs from the original contract
-        randomNumber = 888600078;
-        migrate(0x1D6F8ff4c5A4588DC95C8E1913E53a5007ad5378);
+        _setBOTV1(botv1Contract);
     }
 
     /* ******************
@@ -350,19 +325,14 @@ contract BOTV is
         bytes32[][] calldata rewardsProofs
     ) public {
         uint256 amount;
-        if (isRevealed() == false) revert NotRevealed();
         if (
             tokenIds.length == 0 ||
             tokenIds.length != rewardsProofs.length ||
             tokenIds.length != rewardsProofs.length
         ) revert InvalidRewardsParameters();
 
-        //   bool[] memory tokensChecked = new bool[](MAX_SUPPLY);
-
         for (uint256 i = 0; i < tokenIds.length; i++) {
             uint256 tokenId = tokenIds[i];
-            //  if (tokensChecked[tokenId]) revert TokenGivenTwice(tokenId);
-            //   tokensChecked[tokenId] = true;
             uint256 rewardsPerDayForToken = rewardsPerDay[i];
             bytes32[] memory rewardsProof = rewardsProofs[i];
 
@@ -376,12 +346,40 @@ contract BOTV is
                 );
             _resetClaimTimestamp(tokenId);
         }
-        BUFA_CONTRACT_ADDRESS.mint(tokenOwner, amount);
+        bufaContractAddr.mint(tokenOwner, amount);
     }
 
     /* ****************************************
      *  EXTERNAL FUNCTIONS, RESTRICTED TO OWNER
      ******************************************/
+
+    /**
+     * @notice Anticipate potential V3, allow admin to burn tokens
+     * @param tokenId Token to burn
+     */
+    function burn(uint256 tokenId) external onlyOwner nonReentrant {
+        _burn(tokenId);
+    }
+
+    /**
+     * @notice Mint/airdrop tokens
+     * @param batchNb Number of tokens to mint per address for migration
+     *
+     * Emits {Mint} and {ERC721-Transfer} events.
+     */
+    function migrate(uint256 batchNb) external onlyOwner nonReentrant {
+        uint256 existingSupply = _BOTV1_addr.totalSupply();
+        uint256 offset = totalSupply();
+
+        if (offset + batchNb > existingSupply) revert InvalidMintParameters();
+
+        //remint NFTs
+        for (uint256 i = offset; i < offset + batchNb; i++) {
+            address ownerOfToken = _BOTV1_addr.ownerOf(i);
+            super._safeMint(ownerOfToken, 1);
+            emit Mint(ownerOfToken, 1, 0, address(0), _msgSenderERC721A());
+        }
+    }
 
     /**
      * @notice Mint/airdrop tokens
@@ -458,9 +456,41 @@ contract BOTV is
         emit PublicSaleStateChanged(active);
     }
 
-
     function setBaseURI(string memory newBaseURI) external onlyOwner {
         baseURI = newBaseURI;
+    }
+
+    function setRewardsBufaContractAddress(
+        address contractAddr
+    ) external onlyOwner {
+        _setRewardsBufaContractAddress(contractAddr);
+    }
+
+    function setDiscountMerkleRoot(bytes32 merkleRoot) external onlyOwner {
+        _setDiscountMerkleRoot(merkleRoot);
+    }
+
+    function setPrivateListMerkleRoot(bytes32 merkleRoot) external onlyOwner {
+        _setPrivateListMerkleRoot(merkleRoot);
+    }
+
+    function setRewardsMerkleRoot(bytes32 merkleRoot) external onlyOwner {
+        _setRewardsMerkleRoot(merkleRoot);
+    }
+
+    function setBOTV1(address contractAddr) external onlyOwner {
+        _setBOTV1(contractAddr);
+    }
+
+    function setWearableOwner(address addr) external onlyOwner {
+        _setWearableOwner(addr);
+    }
+
+    function setWearableAirdropValues(
+        address[] memory wearablesAddresses,
+        uint256[] memory wearablesTokenIdsOffset
+    ) external onlyOwner {
+        _setWearableAirdropValues(wearablesAddresses, wearablesTokenIdsOffset);
     }
 
     /* ****************
@@ -487,7 +517,6 @@ contract BOTV is
         uint256[] memory rewardsPerDay,
         bytes32[][] calldata rewardsProofs
     ) external view returns (uint256 amount) {
-        if (isRevealed() == false) revert NotRevealed();
         if (
             tokenIds.length == 0 ||
             tokenIds.length != rewardsProofs.length ||
@@ -524,18 +553,14 @@ contract BOTV is
      */
     function getMetadataIdsForTokens(
         uint256[] memory tokenIds
-    ) public view returns (bool, uint256[] memory) {
+    ) public view returns (uint256[] memory) {
         uint256[] memory metadataIds = new uint256[](tokenIds.length);
 
-        if (isRevealed() == false) {
-            return (false, metadataIds);
-        } else {
-            for (uint256 i = 0; i < tokenIds.length; i++) {
-                metadataIds[i] = _getMetadataForToken(tokenIds[i]);
-            }
-
-            return (true, metadataIds);
+        for (uint256 i = 0; i < tokenIds.length; i++) {
+            metadataIds[i] = _getMetadataForToken(tokenIds[i]);
         }
+
+        return (metadataIds);
     }
 
     /**
@@ -577,16 +602,9 @@ contract BOTV is
         return
             MerkleProof.verifyCalldata(
                 privateSaleMerkleProof,
-                _PRIVATE_LIST_MERKLE_ROOT,
+                _privateListMerkleRoot,
                 keccak256(abi.encodePacked(tokenOwner))
             );
-    }
-
-    /**
-     * @notice Check if metadata assignation is revealed
-     */
-    function isRevealed() public view returns (bool) {
-        return randomNumber != 0;
     }
 
     /* ****************
@@ -594,7 +612,7 @@ contract BOTV is
      *****************/
 
     function isApprovedForAll(
-        address owner,
+        address tokenOwner,
         address operator
     ) public view override(ERC721A, IERC721A) returns (bool isOperator) {
         /* @dev On Polygon (Main Network), if OpenSea's ERC721 Proxy Address is detected,
@@ -607,7 +625,7 @@ contract BOTV is
         ) {
             return true;
         }
-        return ERC721A.isApprovedForAll(owner, operator);
+        return ERC721A.isApprovedForAll(tokenOwner, operator);
     }
 
     function supportsInterface(
@@ -623,17 +641,11 @@ contract BOTV is
     ) public view virtual override(ERC721A, IERC721A) returns (string memory) {
         uint256[] memory tokenIds = new uint256[](1);
         tokenIds[0] = tokenId;
-        (bool revealed, uint256[] memory metadataIds) = getMetadataIdsForTokens(
-            tokenIds
-        );
+        uint256[] memory metadataIds = getMetadataIdsForTokens(tokenIds);
 
         if (_exists(tokenId) == false) revert URIQueryForNonexistentToken();
 
-        if (revealed == false) {
-            return string(abi.encodePacked(baseURI, "prereveal"));
-        } else {
-            return string(abi.encodePacked(baseURI, metadataIds[0].toString()));
-        }
+        return string(abi.encodePacked(baseURI, metadataIds[0].toString()));
     }
 
     /* ****************
@@ -647,7 +659,6 @@ contract BOTV is
         super._burn(tokenId);
         _resetTokenRoyalty(tokenId);
     }
-
 
     /**
      * @notice We use this hook to set/reset holding start period
@@ -670,7 +681,7 @@ contract BOTV is
 
     function _airdrop(uint256 quantity, address tokenOwner) private {
         // @dev gas optimization : copy from storage to memory
-        address[] memory airdrops = _WEARABLES_ADDRESSES;
+        address[] memory airdrops = _wearablesAddresses;
         uint256 airdropNbs = airdrops.length;
 
         for (uint256 i = 0; i < quantity; i++) {
@@ -678,10 +689,9 @@ contract BOTV is
                 IERC721 airdropAddr = IERC721(airdrops[j]);
 
                 uint256 currentId = _wearablesTokenIds[airdropAddr];
-
                 try
                     airdropAddr.safeTransferFrom(
-                        _WEARABLES_OWNER,
+                        _wearablesOwner,
                         tokenOwner,
                         currentId
                     )
@@ -694,6 +704,55 @@ contract BOTV is
 
     function _resetClaimTimestamp(uint256 tokenId) private {
         _lastClaimTimestamps[tokenId] = block.timestamp;
+    }
+
+    function _setRewardsBufaContractAddress(address contractAddr) private {
+        if (contractAddr == address(0)) revert CannotBeZeroAddress();
+        bufaContractAddr = IBUFA(contractAddr);
+    }
+
+    function _setDiscountMerkleRoot(bytes32 merkleRoot) private {
+        if (merkleRoot == bytes32(0)) revert InvalidMerkleRoot();
+        _discountListMerkleRoot = merkleRoot;
+    }
+
+    function _setPrivateListMerkleRoot(bytes32 merkleRoot) private {
+        if (merkleRoot == bytes32(0)) revert InvalidMerkleRoot();
+        _privateListMerkleRoot = merkleRoot;
+    }
+
+    function _setRewardsMerkleRoot(bytes32 merkleRoot) private {
+        if (merkleRoot == bytes32(0)) revert InvalidMerkleRoot();
+        _rewardsMerkleRoot = merkleRoot;
+    }
+
+    function _setBOTV1(address contractAddr) private {
+        if (contractAddr == address(0)) revert CannotBeZeroAddress();
+        _BOTV1_addr = IERC721A(contractAddr);
+    }
+
+    function _setWearableOwner(address addr) private {
+        if (addr == address(0)) revert CannotBeZeroAddress();
+        _wearablesOwner = addr;
+    }
+
+    function _setWearableAirdropValues(
+        address[] memory wearablesAddresses,
+        uint256[] memory wearablesTokenIdsOffset
+    ) private {
+        if (wearablesAddresses.length != wearablesTokenIdsOffset.length)
+            revert IncompleteAirdropParameter();
+
+        for (uint256 i = 0; i < wearablesAddresses.length; i++) {
+            address wearableContractAddr = wearablesAddresses[i];
+            if (wearableContractAddr == address(0))
+                revert InvalidAirdropParameter();
+            _wearablesTokenIds[
+                IERC721(wearableContractAddr)
+            ] = wearablesTokenIdsOffset[i];
+        }
+
+        _wearablesAddresses = wearablesAddresses;
     }
 
     function _setPrice(address currency, bool enabled, uint256 amount) private {
@@ -726,7 +785,7 @@ contract BOTV is
         if (
             MerkleProof.verify(
                 rewardsProof,
-                _BUFA_REWARDS_MERKLE_ROOT,
+                _rewardsMerkleRoot,
                 keccak256(abi.encodePacked(metadataId, rewardsPerDay))
             ) == false
         ) revert InvalidRewardsForToken(tokenId, metadataId, rewardsPerDay);
@@ -737,7 +796,7 @@ contract BOTV is
             _lastClaimTimestamps[tokenId];
 
         return
-            ((10 ** BUFA_CONTRACT_ADDRESS.decimals()) *
+            ((10 ** bufaContractAddr.decimals()) *
                 rewardsPerDay *
                 nbSecondsToClaim) / 86400;
     }
@@ -755,10 +814,17 @@ contract BOTV is
             discountMerkleProof.length > 0 &&
             ((ownerBalance == 0 && quantity > 1) || ownerBalance == 1)
         ) {
+            /**
+             * possible hack :
+             * 1- wallet in the discount list buys a second token
+             * 2- the wallet transfers to another address
+             * 3- the wallet can benefits from another discount
+             * => it's OK to let clever users get discounts multiple times
+             */
             if (
                 MerkleProof.verifyCalldata(
                     discountMerkleProof,
-                    _DISCOUNT_LIST_MERKLE_ROOT,
+                    _discountListMerkleRoot,
                     keccak256(abi.encodePacked(tokenOwner))
                 )
             ) {
@@ -771,7 +837,7 @@ contract BOTV is
         uint256 tokenId
     ) private view returns (uint256) {
         if (!_exists(tokenId)) revert URIQueryForNonexistentToken();
-        return (tokenId + randomNumber) % MAX_SUPPLY;
+        return (tokenId + _randomNumber) % MAX_SUPPLY;
     }
 
     function _getMintPriceForCurrency(
@@ -783,30 +849,5 @@ contract BOTV is
 
         enabled = mintPriceSettings.enabled;
         amount = mintPriceSettings.amount;
-    }
-
-    /* ****************
-     *  MIGRATION from BOTV V1
-     *****************/
-
-    function migrate(address botv_v1_address) private onlyOwner {
-        IERC721A botv_v1 = IERC721A(botv_v1_address);
-
-        uint256 existingSupply = botv_v1.totalSupply();
-
-        //remint NFTs
-        for(uint256 i=0;i<existingSupply;i++) {
-            address ownerOfToken = botv_v1.ownerOf(i);
-
-            super._safeMint(ownerOfToken, 1);
-
-            emit Mint(
-                ownerOfToken,
-                1,
-                0,
-                address(0),
-                _msgSenderERC721A()
-            );
-        }
     }
 }

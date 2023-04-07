@@ -58,7 +58,7 @@ for (let i = 0; i < 1000; i++) {
       itemTraits[trait_type] = value;
       raritiesDistribution[trait_type][value].ids.push(i);
       if (trait_type == "Music") {
-        animation_url = `ipfs://bafybeig2ov6c5wbmdpcmdc5barky2rgx2b2n33noihldiensblbzf2zute/${value}.wav`;
+        animation_url = `ipfs://bafybeibv34mmilskls4nuubcwow4pjeswzsfv5pdkna4b2nu5g7fipay6i/${value}.wav`;
       }
     } else if (itemTraits[trait_type] != value) {
       throw new Error(`not same values for ${trait_type} - metadata ${i}`);

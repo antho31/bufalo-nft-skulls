@@ -149,7 +149,7 @@ You can fetch `https://bufalo-api.anthonygourraud.workers.dev/tokensForOwner/pol
           },
           // ...
         ],
-        "animation_url": "ipfs://bafybeig2ov6c5wbmdpcmdc5barky2rgx2b2n33noihldiensblbzf2zute/Bufalo - Billy Bob (Song 2).wav"
+        "animation_url": "ipfs://bafybeibv34mmilskls4nuubcwow4pjeswzsfv5pdkna4b2nu5g7fipay6i/Bufalo - Billy Bob (Song 2).wav"
       }
     }
   ]

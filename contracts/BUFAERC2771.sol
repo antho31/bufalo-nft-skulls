@@ -19,7 +19,7 @@ contract BUFAERC2771 is ERC20, ERC2771Context, AccessControl {
     ) ERC2771Context(_trustedForwarder) ERC20("Bufalo Token", "BUFA") {
         // Grant the contract deployer the default admin role: it will be able
         // to grant and revoke any roles
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
     }
 
     function mint(address to, uint256 amount) external onlyRole(MINTER_ROLE) {
