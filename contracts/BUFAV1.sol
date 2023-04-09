@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
  * @author Anthony Gourraud
  * @notice ERC20 contract with AccessControl to allow token minting
  */
-contract BUFA is ERC20, AccessControl {
+contract BUFAV1 is ERC20, AccessControl {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE");
 

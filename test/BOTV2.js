@@ -66,7 +66,9 @@ describe("BOTV2", function () {
     const botv1ContractAddress = "0x1D6F8ff4c5A4588DC95C8E1913E53a5007ad5378";
 
     const BUFADeployer = await ethers.getContractFactory("BUFA");
-    const BUFA = await BUFADeployer.deploy();
+    const BUFA = await BUFADeployer.deploy(
+      "0xf0511f123164602042ab2bCF02111fA5D3Fe97CD"
+    );
     const BUFAdecimals = await BUFA.decimals();
     const BUFAUnits = parseUnits("1", BUFAdecimals);
     const MINTER_ROLE = await BUFA.MINTER_ROLE();
@@ -1715,6 +1717,9 @@ describe("BOTV2", function () {
       expect(await BOTV2.tokenURI(5)).to.equal(
         "ipfs://bafybeigqeiwfl2bh66dflt4v46745u3tnua2xpph5lqve4q2kjsbmninkq/tokens/83"
       );
+      expect(await BOTV2.tokenURI(6)).to.equal(
+        "ipfs://bafybeigqeiwfl2bh66dflt4v46745u3tnua2xpph5lqve4q2kjsbmninkq/tokens/84"
+      );
       expect(await BOTV2.tokenURI(81)).to.equal(
         "ipfs://bafybeigqeiwfl2bh66dflt4v46745u3tnua2xpph5lqve4q2kjsbmninkq/tokens/159"
       );
@@ -1722,7 +1727,7 @@ describe("BOTV2", function () {
         "ipfs://bafybeigqeiwfl2bh66dflt4v46745u3tnua2xpph5lqve4q2kjsbmninkq/tokens/160"
       );
 
-      for (let i = 0; i < 8; i++) {
+      for (let i = 0; i < 15; i++) {
         const tokenURI = await BOTV2.tokenURI(i);
         const metadataId = tokenURI.split("/").pop();
         const metadataRes = await superagent(

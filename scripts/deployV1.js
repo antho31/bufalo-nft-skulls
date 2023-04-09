@@ -29,7 +29,7 @@ async function main() {
 
   const [{ address: deployerAddress }] = await ethers.getSigners();
 
-  const BUFADeployer = await ethers.getContractFactory("BUFA");
+  const BUFADeployer = await ethers.getContractFactory("BUFAV1");
   const BUFAContract = await BUFADeployer.deploy();
   await BUFAContract.deployed();
   const BUFAContractAddress = BUFAContract.address;

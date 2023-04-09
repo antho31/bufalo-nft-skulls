@@ -323,7 +323,7 @@ contract BOTV2 is ERC2981, ERC4907A, Ownable, ReentrancyGuard {
         uint256[] memory tokenIds,
         uint256[] memory rewardsPerDay,
         bytes32[][] calldata rewardsProofs
-    ) public {
+    ) external {
         uint256 amount;
         if (
             tokenIds.length == 0 ||
@@ -357,7 +357,7 @@ contract BOTV2 is ERC2981, ERC4907A, Ownable, ReentrancyGuard {
      * @notice Anticipate potential V3, allow admin to burn tokens
      * @param tokenId Token to burn
      */
-    function burn(uint256 tokenId) external onlyOwner nonReentrant {
+    function burn(uint256 tokenId) external onlyOwner {
         _burn(tokenId);
     }
 

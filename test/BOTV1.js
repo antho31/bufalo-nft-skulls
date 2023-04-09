@@ -60,7 +60,7 @@ describe("BOTV1", function () {
       await tx.wait();
     }
 
-    const BUFADeployer = await ethers.getContractFactory("BUFA");
+    const BUFADeployer = await ethers.getContractFactory("BUFAV1");
     const BUFA = await BUFADeployer.deploy();
     const BUFAdecimals = await BUFA.decimals();
 
