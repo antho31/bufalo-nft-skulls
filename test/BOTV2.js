@@ -66,9 +66,7 @@ describe("BOTV2", function () {
     const botv1ContractAddress = "0x1D6F8ff4c5A4588DC95C8E1913E53a5007ad5378";
 
     const BUFADeployer = await ethers.getContractFactory("BUFA");
-    const BUFA = await BUFADeployer.deploy(
-      "0xf0511f123164602042ab2bCF02111fA5D3Fe97CD"
-    );
+    const BUFA = await BUFADeployer.deploy();
     const BUFAdecimals = await BUFA.decimals();
     const BUFAUnits = parseUnits("1", BUFAdecimals);
     const MINTER_ROLE = await BUFA.MINTER_ROLE();

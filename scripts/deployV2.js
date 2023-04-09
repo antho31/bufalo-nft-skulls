@@ -29,7 +29,7 @@ async function main() {
   const BUFADeployer = await ethers.getContractFactory("BUFA");
   const trustedFwder = "0xc82BbE41f2cF04e3a8efA18F7032BDD7f6d98a81";
 
-  const BUFAContract = await BUFADeployer.deploy(trustedFwder);
+  const BUFAContract = await BUFADeployer.deploy();
   await BUFAContract.deployed();
   const BUFAContractAddress = BUFAContract.address;
   const MINTER_ROLE = await BUFAContract.MINTER_ROLE();
