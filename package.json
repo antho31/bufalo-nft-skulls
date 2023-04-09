@@ -1,6 +1,6 @@
 {
   "name": "bufalo-nft-skulls",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Codebase for Bufalo's NFT collection \"BOTV Skulls\"",
   "directories": {
     "test": "test"
@@ -11,7 +11,7 @@
   "scripts": {
     "analyze": "slither contracts --solc-remaps \"@=node_modules/@ erc721a=node_modules/erc721a\"",
     "coverage": "npx hardhat coverage",
-    "deploy-api": "wrangler publish",
+    "deploy-api": "node scripts/envConfig.js && wrangler publish",
     "deploy-mumbai": "npx hardhat run scripts/deployV2.js --network mumbai && npm run deploy-api",
     "deploy-polygon": "npx hardhat run scripts/deployV2.js --network polygon && npm run deploy-api",
     "dev-api": "wrangler dev",
