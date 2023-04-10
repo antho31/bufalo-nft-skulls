@@ -27,8 +27,6 @@ async function main() {
   console.log(`Deploying contracts to ${network.name}...`);
 
   const BUFADeployer = await ethers.getContractFactory("BUFA");
-  const trustedFwder = "0xc82BbE41f2cF04e3a8efA18F7032BDD7f6d98a81";
-
   const BUFAContract = await BUFADeployer.deploy();
   await BUFAContract.deployed();
   const BUFAContractAddress = BUFAContract.address;
@@ -48,7 +46,7 @@ async function main() {
         "0xfded171d346107c1d4eb20f37484e8dd65beac9b", // Bufalo BFL Genesis Hats [510,1659] https://polygonscan.com/token/0xfded171d346107c1d4eb20f37484e8dd65beac9b?a=0x0b83e83f1ec0ee09191fab0ec10dd362ba0b29df
         "0x78D37B7D47b3915685FA6c5E85A01E166296F95C" // Bufalo BOTV Crystal Skull [11,1000]
       ],
-      wearablesTokenIdsOffset: [384, 593, 83],
+      wearablesTokenIdsOffset: [385, 594, 84],
       BUFAContractAddress,
       rewardsMerkleRoot: bufaMerkle.root,
       discountListMerkleRoot: discountListMerkle.root,
@@ -90,7 +88,7 @@ async function main() {
 
   console.log("Ready to verify BUFA & BOTV");
 
-  await verify("BUFA", BUFAContractAddress, [trustedFwder]);
+  await verify("BUFA", BUFAContractAddress, []);
   await verify("BOTV", BOTVContractAddress, deployBOTVArgsArray);
 
   fs.writeFileSync(

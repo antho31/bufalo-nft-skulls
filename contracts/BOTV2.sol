@@ -23,7 +23,7 @@ import "./interfaces/IBUFA.sol";
  *
  * The contract's owner (initially the deployer) can :
  * - specify the price to mint a token, with the currency he wants (any ERC20 or the blockchain's native coin)
- * - activate or deactivate private and public minting phases
+ * - change contract parameters (activate or deactivate private and public minting phases, update baseURI, ...)
  * - migrate from BOTV1
  *
  * Allowed addresses for the private sale and eligible addresses for a 50% discount on the second token minted
@@ -33,7 +33,7 @@ import "./interfaces/IBUFA.sol";
  * IMPORTANT :
  * - Deployer should be owner of 1000 wearable tokens, with tokenIDs following each other, for each collection to airdrop.
  * - Once the contract deployed, the deployer should call for each collection
- *   the {ERC721-setApprovalForAll} function to allow the contract to airdrop the tokens *
+ *   the {ERC721-setApprovalForAll} function to allow the contract to airdrop the tokens
  *
  * Each token holder can claim rewards ($BUFA tokens) continously.
  * The longer he holds and the rarer the NFT's attributes are,
@@ -199,7 +199,7 @@ contract BOTV2 is ERC2981, ERC4907A, Ownable, ReentrancyGuard {
         bytes32 discountListMerkleRoot,
         bytes32 privateListMerkleRoot,
         address botv1Contract
-    ) ERC721A("Bufalo BOTV Skulls", "BOTV") {
+    ) ERC721A("Bufalo BOTV Skulls Official", "BOTV") {
         _setPrice(mintCurrency, true, mintAmount);
 
         if (royaltiesTreasury == address(0)) revert CannotBeZeroAddress();

@@ -86,7 +86,7 @@ describe("BOTV2", function () {
       )
     ]);
     const wearablesAddresses = wearablesContracts.map((c) => c.address);
-    const wearablesTokenIdsOffset = [384, 593, 83];
+    const wearablesTokenIdsOffset = [385, 594, 84];
 
     const discountListMerkle = getMerkleDataFromAllowlistArray([
       discountUser1.address,
@@ -1665,19 +1665,19 @@ describe("BOTV2", function () {
     it("Should mint tokens from botv1", async function () {
       const { BOTV2 } = await loadFixture(initFixture);
 
-      await expect(BOTV2.migrate(83)).to.revertedWithCustomError(
+      await expect(BOTV2.migrate(84)).to.revertedWithCustomError(
         BOTV2,
         "InvalidMintParameters"
       );
 
       await BOTV2.migrate(80);
 
-      await expect(BOTV2.migrate(3)).to.revertedWithCustomError(
+      await expect(BOTV2.migrate(4)).to.revertedWithCustomError(
         BOTV2,
         "InvalidMintParameters"
       );
 
-      await BOTV2.migrate(2);
+      await BOTV2.migrate(3);
 
       await expect(BOTV2.migrate(3)).to.revertedWithCustomError(
         BOTV2,
@@ -1694,6 +1694,10 @@ describe("BOTV2", function () {
 
       expect(await BOTV2.ownerOf(81)).equal(
         "0x894f0D51FB7cAa5adb5363ad42aff64ae7afdC77"
+      );
+
+      expect(await BOTV2.ownerOf(82)).equal(
+        "0x0019220dDAbe5b8438A6Be6EBcA31Ef01CA69965"
       );
     });
 
