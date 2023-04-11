@@ -34,19 +34,36 @@ describe("BUFAMUSIC", function () {
 
     const trustedFwder = "0xc82BbE41f2cF04e3a8efA18F7032BDD7f6d98a81";
 
-    const botv1ContractAddress = "0x1D6F8ff4c5A4588DC95C8E1913E53a5007ad5378";
+    const BOTVContractAddress = "0x1B9d577486D7AF13570F0d521cDDEc083D9F7e14";
+    const BUFAContractAddress = "0x6a9D0b634AB078E8F26Fb70baE77CBAD9840FfC2";
 
-    const bufav1ContractAddress = "0x9Cca62CF7360e143bD2E25c64742C5d8B7AB2a14";
-    const BUFADeployer = await ethers.getContractFactory("BUFAV1");
-    const BUFA = await BUFADeployer.attach(bufav1ContractAddress);
-
-    const BURNER_ROLE = await BUFA.BURNER_ROLE();
+    const BUFADeployer = await ethers.getContractFactory("BUFA");
+    const BUFA = await BUFADeployer.attach(BUFAContractAddress);
+    const BURNER_ROLE = await BUFA.SPENDER_ROLE();
 
     const BUFAMUSICDeployer = await ethers.getContractFactory("BUFAMUSIC");
     const BUFAMUSIC = await BUFAMUSICDeployer.deploy(
-      botv1ContractAddress,
-      bufav1ContractAddress,
+      BOTVContractAddress,
+      BUFAContractAddress,
       trustedFwder
+    );
+
+    const tokenId = "103141286";
+    const title = "Bufalo - Saddle Up - BOTV Skull Staking 1";
+    const iswc = "T-316.218.353.7";
+    const supply = 50;
+    const bufaPrice = 100;
+    const mintActive = true;
+    const tokenActive = true;
+
+    await BUFAMUSIC.updateTokenParameter(
+      tokenId,
+      title,
+      iswc,
+      supply,
+      bufaPrice,
+      mintActive,
+      tokenActive
     );
 
     await network.provider.request({
@@ -54,8 +71,6 @@ describe("BUFAMUSIC", function () {
       params: [DEPLOYER_ADDRESS]
     });
     const deployerSigner = await ethers.getSigner(DEPLOYER_ADDRESS);
-
-    await deployer.send;
 
     let tx = await BUFA.connect(deployerSigner).grantRole(
       BURNER_ROLE,
@@ -81,7 +96,16 @@ describe("BUFAMUSIC", function () {
 
       BUFA,
       BUFAMUSIC,
-      metadataOffset
+
+      metadataOffset,
+
+      tokenId,
+      title,
+      iswc,
+      supply,
+      bufaPrice,
+      mintActive,
+      tokenActive
     };
   }
 
@@ -95,14 +119,16 @@ describe("BUFAMUSIC", function () {
 
         BUFA,
         BUFAMUSIC,
-        metadataOffset
+        metadataOffset,
+
+        tokenId
       } = await loadFixture(initFixture);
       const botvTokenIds = [0];
 
       const { bufaPerDay, merkleProofs } = bufaMerkle[metadataOffset];
 
       await BUFAMUSIC.connect(userSigner).claimAndMintWithBufaTokens(
-        0,
+        tokenId,
         1,
         botvTokenIds,
         [bufaPerDay],

@@ -52,6 +52,15 @@ describe("Worker", () => {
     }
   });
 
+  it("should return correct metadata for token id", async () => {
+    const tokenId = "103141286";
+    const resp = await worker.fetch(`/musicnftmetadata/${tokenId}`);
+
+    // const jsonData = await resp.json();
+
+    expect(resp.status).toBe(200);
+  });
+
   it("should return merkle proofs for valid address", async () => {
     const addr =
       "0x64E8f7C2B4fd33f5E8470F3C6Df04974F90fc2cA".toLocaleLowerCase();
@@ -89,7 +98,7 @@ describe("Worker", () => {
       });
     }
   });
-  /*
+
   it("should return merkle proofs for valid metadataId", async () => {
     const metadataId = "15";
     const resp = await worker.fetch(`/merkleproofs/rewards/${metadataId}`);
@@ -153,7 +162,6 @@ describe("Worker", () => {
       rewardsProofs: [null, bufaMerkle["85"].merkleProofs, null, null]
     });
   });
-  */
 
   it("should return token infos", async () => {
     jest.setTimeout(30000);
@@ -161,8 +169,6 @@ describe("Worker", () => {
     const chain = "mumbai";
     const resp = await worker.fetch(`/tokensForOwner/${chain}/${addr}`);
     const jsonData = await resp.json();
-
-    console.log(jsonData);
 
     expect(resp.status).toBe(200);
   });

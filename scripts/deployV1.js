@@ -112,10 +112,6 @@ async function main() {
   await BUFAContract.grantRole(MINTER_ROLE, BOTV1ContractAddress);
   console.log("Minter role for BUFA OK");
 
-  // @TODO
-  // deploy Music NFT contract
-  // verify music nft contracts
-
   console.log("Ready to verify BUFA & BOTV1");
 
   await verify("BUFA", BUFAContractAddress);

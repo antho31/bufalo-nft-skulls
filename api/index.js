@@ -9,7 +9,7 @@ const { Network } = require("alchemy-sdk");
 
 const { BigNumber } = require("ethers");
 
-const privateSaleMerkle = require("../data/results/merkleAllowlists/community.json");
+// const privateSaleMerkle = require("../data/results/merkleAllowlists/community.json");
 const discountMerkle = require("../data/results/merkleAllowlists/fans.json");
 const bufaMerkle = require("../data/results/metadata/bufaRewardsMerkleData.json");
 // const rarities = require("../data/results/metadata/BOTV/rarities.json");
@@ -38,7 +38,6 @@ router.get("/deployment/:network", ({ params: { network } }) => {
   });
 });
 
-/*
 router.get(
   "/merkleproofs/rewards/:metadataIds",
   ({ params: { metadataIds } }) => {
@@ -74,10 +73,14 @@ router.get(
     });
   }
 );
-*/
 
-router.get("/merkleproofs/:addr", ({ params: { addr } }) => {
+router.get("/merkleproofs/:addr", async ({ params: { addr } }) => {
   addr = addr.toLocaleLowerCase();
+
+  let privateSaleMerkle = await fetch(
+    `https://raw.githubusercontent.com/antho31/bufalo-nft-skulls/main/data/results/merkleAllowlists/community.json`
+  );
+  privateSaleMerkle = await privateSaleMerkle.json();
 
   const data = {
     addr,
@@ -95,6 +98,119 @@ router.get("/merkleproofs/:addr", ({ params: { addr } }) => {
       "Access-Control-Allow-Origin": "*"
     }
   });
+});
+
+router.get("/musicnftmetadata/:tokenId", async ({ params: { tokenId } }) => {
+  try {
+    const { DATOCMS_API_KEY } = envs;
+
+    let res = await fetch("https://graphql.datocms.com/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${DATOCMS_API_KEY}`
+      },
+      body: JSON.stringify({
+        query: `{
+          allMusicNfts(filter: {  id: { eq: "${tokenId}" }}) {
+            id
+            songTitle
+            supply
+            bufaPrice
+            cover {
+              url
+            }
+            audioFile {
+              url
+            }
+            pdfContract {
+              url
+            }
+            mintActive
+            tokenActive
+            iswc
+            description
+            cocv
+            depositDate
+            tax
+            genre
+            origin
+          }
+        }`
+      })
+    });
+    res = await res.json();
+    const {
+      data: {
+        allMusicNfts: [dataForToken]
+      }
+    } = res;
+
+    if (dataForToken) {
+      const {
+        // id,
+        songTitle,
+        //  supply,
+        //  bufaPrice,
+        cover: { url: coverUrl },
+        audioFile: { url: audioUrl },
+        // pdfContract: { url: pdfUrl },
+        //  mintActive,
+        //  tokenActive,
+        iswc,
+        description,
+        cocv,
+        depositDate,
+        tax,
+        genre,
+        origin
+      } = dataForToken;
+
+      const metadata = {
+        attributes: [
+          {
+            trait_type: "ISWC",
+            value: iswc
+          },
+          {
+            trait_type: "COCV",
+            value: cocv
+          },
+          {
+            trait_type: "Tax",
+            value: tax
+          },
+          {
+            trait_type: "Genre",
+            value: genre
+          },
+          {
+            trait_type: "Origin",
+            value: origin
+          }
+        ],
+        animation_url: audioUrl,
+        description: `Holders get commercial rights for [this song](${audioUrl})`,
+        image: coverUrl,
+        name: songTitle
+      };
+
+      const json = JSON.stringify(metadata, null, 2);
+
+      return new Response(json, {
+        headers: {
+          "content-type": "application/json;charset=UTF-8",
+          "Access-Control-Allow-Origin": "*"
+        }
+      });
+    } else {
+      new Response("404, not found!", { status: 404 });
+    }
+  } catch (e) {
+    console.error(e);
+    new Response(e, { status: 500 });
+  }
 });
 
 router.get(
@@ -117,10 +233,15 @@ router.get(
             ? mumbaiDeployment.BOTVContractAddress
             : undefined;
 
-        const response = await fetch(
+        const alchemyResponse = await fetch(
           `https://${network}.g.alchemy.com/nft/v2/${apiKey}/getNFTs?owner=${addr}&contractAddresses[]=${contractAddress}&withMetadata=true&pageSize=100`
         );
-        const { ownedNfts } = JSON.parse(await gatherResponse(response));
+        const { ownedNfts } = JSON.parse(await gatherResponse(alchemyResponse));
+
+        const raritiesResponse = await fetch(
+          `https://raw.githubusercontent.com/antho31/bufalo-nft-skulls/main/data/results/metadata/BOTV/rarities.json`
+        );
+        const rarities = JSON.parse(await gatherResponse(raritiesResponse));
 
         const tokenIds = [];
         const metadataIds = [];
@@ -140,7 +261,7 @@ router.get(
             metadataIds.push(metadataId);
             rewardsPerDay.push(bufaPerDay);
             rewardsProofs.push(merkleProofs);
-            // rank = rarities.metadatas[metadataId].rank;
+            rank = rarities.metadatas[metadataId].rank;
           }
           tokenData.push({
             tokenId,

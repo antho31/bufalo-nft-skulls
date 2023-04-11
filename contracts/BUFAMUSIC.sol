@@ -14,7 +14,7 @@ import "./interfaces/IBOTV.sol";
 /**
  * @title Bufalo's Music NFTs
  * @author Anthony Gourraud
- * @notice ERC20 contract with AccessControl to allow token minting
+ * @notice ERC1155 contract giving commercial rights on a music for holders
  */
 contract BUFAMUSIC is
     Ownable,
@@ -23,30 +23,79 @@ contract BUFAMUSIC is
     ERC2771Recipient,
     ReentrancyGuard
 {
-    struct SacemRecord {
-        uint256 recordId;
+    struct TokenParameter {
+        string title;
+        string iswc;
+        uint256 supply;
+        uint256 bufaPrice;
+        bool mintActive;
+        bool tokenActive;
     }
-    mapping(uint256 => SacemRecord) public SacemData;
-    mapping(uint256 => uint256) public maxSupplies;
-    mapping(uint256 => uint256) public bufaPrices; // ether prices
 
-    IBOTV public botvContractAddress;
+    string public name = "Bufalo Music NFTs";
+    string public symbol = "BUFAMUSIC";
+
+    IBOTV public botvContractAddr;
     IBUFA public bufaContractAddr;
+
+    mapping(uint256 => TokenParameter) public tokenParameters;
+    mapping(string => uint256) public iswcs;
+
+    /* ****************
+     *  ERRORS
+     *****************/
+
+    error InactiveToken(uint256 tokenId);
+    error IswcAlreadyUsed(string iswc, uint256 tokenId, uint256 actualTokenId);
+    error MintDisabled(uint256 tokenId);
+    error OneTokenPerIdOnly(address tokenOwner, uint256 tokenId);
+    error SupplyExceeded(
+        uint256 tokenId,
+        uint256 actualSupply,
+        uint256 quantity,
+        uint256 maxSupply
+    );
+    error SupplySetAs0(uint256 tokenId);
+
+    /* ****************
+     *  EVENTS
+     *****************/
+
+    event CommercialRightsChange(
+        string indexed iswc,
+        address indexed previousOwner,
+        address indexed newOwner,
+        uint256 tokenId
+    );
+
+    event UpdatedTokenParameter(
+        uint256 indexed tokenId,
+        string indexed title,
+        string indexed iswc,
+        uint256 supply,
+        uint256 bufaPrice,
+        bool mintActive,
+        bool tokenActive
+    );
+
+    /* ****************
+     *  CONTRACT CONSTRUCTOR
+     *****************/
 
     constructor(
         address _botvAddress,
         address _bufaAddress,
         address _trustedForwarder
-    ) ERC1155("Bufalo Music NFTs") {
+    ) ERC1155("") {
         _setTrustedForwarder(_trustedForwarder);
         _setBotvAddress(_botvAddress);
         _setBufaAddress(_bufaAddress);
-        _setupMusicNFT(0, 1458888, 50, 1);
-        _setURI(
-            0,
-            "https://bafkreih342ey3v2ezuhc2pqcijw6kod7dcnlnwfxd7v6gmhwtjajzdwjse.ipfs.nftstorage.link"
-        );
+        _setBaseURI("@todo");
     }
+
+    /* ******************
+     *  EXTERNAL FUNCTIONS
+     ********************/
 
     function claimAndMintWithBufaTokens(
         uint256 tokenId,
@@ -57,7 +106,7 @@ contract BUFAMUSIC is
     ) external {
         address account = _msgSender();
 
-        botvContractAddress.claimRewards(
+        botvContractAddr.claimRewards(
             account,
             botvTokenIds,
             rewardsPerDay,
@@ -66,27 +115,16 @@ contract BUFAMUSIC is
         mintWithBufaTokens(tokenId, quantity);
     }
 
+    /* ****************************************
+     *  EXTERNAL FUNCTIONS, RESTRICTED TO OWNER
+     ******************************************/
+
     function mint(
         address to,
         uint256 tokenId,
-        uint256 amount
-    ) external onlyOwner {
-        _mint(to, tokenId, amount);
-    }
-
-    function mintWithBufaTokens(
-        uint256 tokenId,
         uint256 quantity
-    ) public nonReentrant {
-        // @todo require quantity > 0
-        // @todo require tokenId is enabled
-
-        uint256 price = bufaPrices[tokenId];
-        uint256 amount = quantity * price * (10 ** bufaContractAddr.decimals());
-        address account = _msgSender();
-
-        bufaContractAddr.burn(account, amount);
-        _mint(account, tokenId, quantity);
+    ) external onlyOwner {
+        _mint(to, tokenId, quantity);
     }
 
     function setBaseURI(string memory baseURI) external onlyOwner {
@@ -105,13 +143,24 @@ contract BUFAMUSIC is
         _setTrustedForwarder(_trustedForwarder);
     }
 
-    function setupMusicNFT(
+    function updateTokenParameter(
         uint256 tokenId,
-        uint256 recordId,
-        uint256 maxSupply,
-        uint256 bufaPrice
+        string memory title,
+        string memory iswc,
+        uint256 supply,
+        uint256 bufaPrice,
+        bool mintActive,
+        bool tokenActive
     ) external onlyOwner {
-        _setupMusicNFT(tokenId, recordId, maxSupply, bufaPrice);
+        _updateTokenParameter(
+            tokenId,
+            title,
+            iswc,
+            supply,
+            bufaPrice,
+            mintActive,
+            tokenActive
+        );
     }
 
     function setURI(
@@ -121,9 +170,45 @@ contract BUFAMUSIC is
         _setURI(tokenId, tokenURI);
     }
 
+    /* ******************
+     *  PUBLIC FUNCTIONS
+     ********************/
+
+    function mintWithBufaTokens(
+        uint256 tokenId,
+        uint256 quantity
+    ) public nonReentrant {
+        address account = _msgSender();
+
+        if (balanceOf(account, tokenId) > 0)
+            revert OneTokenPerIdOnly(account, tokenId);
+
+        TokenParameter memory tokenParameter = tokenParameters[tokenId];
+
+        if (tokenParameter.tokenActive == false) revert InactiveToken(tokenId);
+        if (tokenParameter.mintActive == false) revert MintDisabled(tokenId);
+
+        uint256 price = tokenParameter.bufaPrice;
+
+        if (price > 0) {
+            uint256 amount = quantity * price;
+            bufaContractAddr.burn(account, amount);
+        }
+
+        _mint(account, tokenId, quantity);
+    }
+
+    /* ****************
+     *  EXTERNAL GETTERS
+     *****************/
+
     function versionRecipient() external pure returns (string memory) {
         return "1";
     }
+
+    /* ****************
+     *  PUBLIC GETTERS
+     *****************/
 
     function uri(
         uint256 tokenId
@@ -134,8 +219,15 @@ contract BUFAMUSIC is
         override(ERC1155, ERC1155URIStorage)
         returns (string memory)
     {
+        if (tokenParameters[tokenId].tokenActive == false)
+            revert InactiveToken(tokenId);
+
         return ERC1155URIStorage.uri(tokenId);
     }
+
+    /* ****************
+     *  INTERNAL OVERRIDE
+     *****************/
 
     function _beforeTokenTransfer(
         address operator,
@@ -153,6 +245,17 @@ contract BUFAMUSIC is
             amounts,
             data
         );
+
+        for (uint256 i = 0; i < ids.length; i++) {
+            uint256 tokenId = ids[i];
+
+            emit CommercialRightsChange(
+                tokenParameters[tokenId].iswc,
+                from,
+                to,
+                tokenId
+            );
+        }
     }
 
     function _msgData()
@@ -175,46 +278,66 @@ contract BUFAMUSIC is
         return ERC2771Recipient._msgSender();
     }
 
-    function _mint(address to, uint256 tokenId, uint256 amount) private {
-        // @todo check quantity
-        _mint(to, tokenId, amount, "");
-        // @todo event mint with sacem data
+    /* ****************
+     *  PRIVATE FUNCTIONS
+     *****************/
+
+    function _mint(address to, uint256 tokenId, uint256 quantity) private {
+        TokenParameter memory tokenParameter = tokenParameters[tokenId];
+
+        if (tokenParameter.supply == 0) revert SupplySetAs0(tokenId);
+
+        uint256 actualSupply = totalSupply(tokenId);
+        uint256 maxSupply = tokenParameter.supply;
+        if (actualSupply + quantity > maxSupply)
+            revert SupplyExceeded(tokenId, actualSupply, quantity, maxSupply);
+
+        _mint(to, tokenId, quantity, "");
     }
 
     function _setBotvAddress(address contractAddr) private {
-        botvContractAddress = IBOTV(contractAddr);
+        botvContractAddr = IBOTV(contractAddr);
     }
 
     function _setBufaAddress(address contractAddr) private {
         bufaContractAddr = IBUFA(contractAddr);
     }
 
-    function _setBufaPrice(uint256 tokenId, uint256 bufaPrice) private {
-        bufaPrices[tokenId] = bufaPrice;
-        // @todo event
-    }
-
-    function _setMaxSupply(uint256 tokenId, uint256 maxSupply) private {
-        require(maxSupply > totalSupply(tokenId), "Cannot reduce the supply");
-        maxSupplies[tokenId] = maxSupply;
-        // @todo event
-    }
-
-    function _setupMusicNFT(
+    function _updateTokenParameter(
         uint256 tokenId,
-        uint256 recordId,
-        uint256 maxSupply,
-        uint256 bufaPrice
+        string memory title,
+        string memory iswc,
+        uint256 supply,
+        uint256 bufaPrice,
+        bool mintActive,
+        bool tokenActive
     ) private {
-        // uint256 existingRecordId = SacemData[tokenId].recordId;
-        // @todo Error if exists
+        uint256 tokenIdFromISWC = iswcs[iswc];
 
-        SacemRecord memory sacemRecord = SacemRecord(recordId);
-        SacemData[tokenId] = sacemRecord;
+        if (tokenIdFromISWC == 0 || tokenIdFromISWC == tokenIdFromISWC) {
+            TokenParameter memory tokenParameter = TokenParameter(
+                title,
+                iswc,
+                supply,
+                bufaPrice,
+                mintActive,
+                tokenActive
+            );
 
-        _setBufaPrice(tokenId, bufaPrice);
-        _setMaxSupply(tokenId, maxSupply);
+            tokenParameters[tokenId] = tokenParameter;
+            iswcs[iswc] = tokenId;
 
-        // @todo event music nft
+            emit UpdatedTokenParameter(
+                tokenId,
+                title,
+                iswc,
+                supply,
+                bufaPrice,
+                mintActive,
+                tokenActive
+            );
+        } else {
+            revert IswcAlreadyUsed(iswc, tokenId, tokenIdFromISWC);
+        }
     }
 }

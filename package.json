@@ -12,8 +12,8 @@
     "analyze": "slither contracts --solc-remaps \"@=node_modules/@ erc721a=node_modules/erc721a\"",
     "coverage": "npx hardhat coverage",
     "deploy-api": "node scripts/envConfig.js && wrangler publish",
-    "deploy-mumbai": "npx hardhat run scripts/deployV2.js --network mumbai && npm run deploy-api",
-    "deploy-polygon": "npx hardhat run scripts/deployV2.js --network polygon && npm run deploy-api",
+    "deploy-mumbai": "npx hardhat run scripts/deployBUFAMUSIC.js --network mumbai && npm run deploy-api",
+    "deploy-polygon": "npx hardhat run scripts/deployBUFAMUSIC.js --network polygon && npm run deploy-api",
     "dev-api": "wrangler dev",
     "metadata": "rm -f data/results/metadata/BOTV/*.car && node scripts/tokenMetadata.js && npx ipfs-car --pack data/results/metadata/BOTV/tokens --output data/results/metadata/BOTV/botvmetadata.car && npm run deploy-api",
     "snapshot": "node scripts/privateSaleLists.js && node scripts/merkleLists.js && npm run deploy-api",
@@ -30,6 +30,7 @@
   "license": "MIT",
   "homepage": "https://github.com/antho31/bufalo-nft-skulls",
   "dependencies": {
+    "@datocms/cma-client-node": "^1.3.1",
     "@json2csv/plainjs": "^6.1.2",
     "@thirdweb-dev/sdk": "^3.9.5",
     "alchemy-sdk": "^2.4.3",
