@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-const { DEPLOYER_ADDRESS } = process.env;
+const { DEPLOYER_ADDRESS, DATOCMS_API_KEY } = process.env;
 
 const {
   loadFixture,
@@ -52,7 +52,8 @@ describe("BUFAMUSIC", function () {
     const title = "Bufalo - Saddle Up - BOTV Skull Staking 1";
     const iswc = "T-316.218.353.7";
     const supply = 50;
-    const bufaPrice = 100;
+    const bufaPriceInt = 9;
+    const bufaPrice = parseUnits(bufaPriceInt.toString(), "ether");
     const mintActive = true;
     const tokenActive = true;
 
@@ -133,6 +134,27 @@ describe("BUFAMUSIC", function () {
         botvTokenIds,
         [bufaPerDay],
         [merkleProofs]
+      );
+    });
+
+    it("Should be the correct uri", async function () {
+      const {
+        BUFAMUSIC,
+
+        tokenId
+      } = await loadFixture(initFixture);
+      console.log("uri : ", await BUFAMUSIC.uri(tokenId));
+    });
+
+    it("Should be the correct price", async function () {
+      const {
+        BUFAMUSIC,
+
+        tokenId
+      } = await loadFixture(initFixture);
+      console.log(
+        "token parameters : ",
+        await BUFAMUSIC.tokenParameters(tokenId)
       );
     });
   });

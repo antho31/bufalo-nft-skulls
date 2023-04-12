@@ -23,6 +23,8 @@ contract BUFAMUSIC is
     ERC2771Recipient,
     ReentrancyGuard
 {
+    using Strings for uint256;
+
     struct TokenParameter {
         string title;
         string iswc;
@@ -45,6 +47,7 @@ contract BUFAMUSIC is
      *  ERRORS
      *****************/
 
+    error CannotSubmitALowerSupply();
     error InactiveToken(uint256 tokenId);
     error IswcAlreadyUsed(string iswc, uint256 tokenId, uint256 actualTokenId);
     error MintDisabled(uint256 tokenId);
@@ -90,7 +93,9 @@ contract BUFAMUSIC is
         _setTrustedForwarder(_trustedForwarder);
         _setBotvAddress(_botvAddress);
         _setBufaAddress(_bufaAddress);
-        _setBaseURI("@todo");
+        _setBaseURI(
+            "https://bufalo-api.anthonygourraud.workers.dev/musicnftmetadata/"
+        );
     }
 
     /* ******************
@@ -314,6 +319,9 @@ contract BUFAMUSIC is
     ) private {
         uint256 tokenIdFromISWC = iswcs[iswc];
 
+        if (tokenParameters[tokenId].supply > supply)
+            revert CannotSubmitALowerSupply();
+
         if (tokenIdFromISWC == 0 || tokenIdFromISWC == tokenIdFromISWC) {
             TokenParameter memory tokenParameter = TokenParameter(
                 title,
@@ -326,6 +334,7 @@ contract BUFAMUSIC is
 
             tokenParameters[tokenId] = tokenParameter;
             iswcs[iswc] = tokenId;
+            _setURI(tokenId, tokenId.toString());
 
             emit UpdatedTokenParameter(
                 tokenId,

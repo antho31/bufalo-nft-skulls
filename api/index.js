@@ -136,6 +136,8 @@ router.get("/musicnftmetadata/:tokenId", async ({ params: { tokenId } }) => {
             tax
             genre
             origin
+            visualArt
+            commercialRights
           }
         }`
       })
@@ -164,7 +166,9 @@ router.get("/musicnftmetadata/:tokenId", async ({ params: { tokenId } }) => {
         depositDate,
         tax,
         genre,
-        origin
+        origin,
+        visualArt,
+        commercialRights
       } = dataForToken;
 
       const metadata = {
@@ -178,25 +182,100 @@ router.get("/musicnftmetadata/:tokenId", async ({ params: { tokenId } }) => {
             value: cocv
           },
           {
-            trait_type: "Tax",
-            value: tax
-          },
-          {
             trait_type: "Genre",
             value: genre
           },
+          {
+            trait_type: "Visual Art",
+            value: visualArt
+          },
+          {
+            trait_type: "Commercial Rights",
+            value: commercialRights
+          },
+
+          {
+            trait_type: "Tax",
+            value: tax
+          },
+
           {
             trait_type: "Origin",
             value: origin
           }
         ],
         animation_url: audioUrl,
-        description: `Holders get commercial rights for [this song](${audioUrl})`,
+        description: `${description}. Download the song [here](${audioUrl}).`,
         image: coverUrl,
         name: songTitle
       };
 
       const json = JSON.stringify(metadata, null, 2);
+
+      return new Response(json, {
+        headers: {
+          "content-type": "application/json;charset=UTF-8",
+          "Access-Control-Allow-Origin": "*"
+        }
+      });
+    } else {
+      new Response("404, not found!", { status: 404 });
+    }
+  } catch (e) {
+    console.error(e);
+    new Response(e, { status: 500 });
+  }
+});
+
+router.get("/musicnfts", async () => {
+  try {
+    const { DATOCMS_API_KEY } = envs;
+
+    let res = await fetch("https://graphql.datocms.com/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${DATOCMS_API_KEY}`
+      },
+      body: JSON.stringify({
+        query: `{
+          allMusicNfts {
+            id
+            songTitle
+            supply
+            bufaPrice
+            cover {
+              url
+            }
+            audioFile {
+              url
+            }
+            pdfContract {
+              url
+            }
+            mintActive
+            tokenActive
+            iswc
+            description
+            cocv
+            depositDate
+            tax
+            genre
+            origin
+            visualArt
+            commercialRights
+          }
+        }`
+      })
+    });
+    res = await res.json();
+    const {
+      data: { allMusicNfts }
+    } = res;
+
+    if (allMusicNfts) {
+      const json = JSON.stringify(allMusicNfts, null, 2);
 
       return new Response(json, {
         headers: {

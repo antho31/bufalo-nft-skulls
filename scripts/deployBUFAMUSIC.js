@@ -1,15 +1,18 @@
 require("dotenv").config();
+const { TRUSTED_FORWARDER, DATOCMS_API_KEY } = process.env;
 
 const { ethers, network, run } = require("hardhat");
+const { parseUnits } = require("ethers/lib/utils");
+
 const { BigNumber } = ethers;
 const fs = require("fs");
 
-const bufaMerkle = require("../data/results/metadata/bufaRewardsMerkleData.json");
-const privateListMerkle = require("../data/results/merkleAllowlists/community.json");
-const discountListMerkle = require("../data/results/merkleAllowlists/fans.json");
-
-const DclERC721CollectionABI = require("../abis/DCL-ERC721CollectionV2.json");
-const ERC721MockABI = require("../abis/ERC721Mock.json");
+const polygonDeployment = JSON.parse(
+  fs.readFileSync(`./data/results/deployment/polygon.json`)
+);
+const mumbaiDeployment = JSON.parse(
+  fs.readFileSync(`./data/results/deployment/mumbai.json`)
+);
 
 async function verify(name, address, constructorArguments = []) {
   try {
@@ -26,45 +29,105 @@ async function verify(name, address, constructorArguments = []) {
 async function main() {
   console.log(`Deploying BUFA MUSIC contracts to ${network.name}...`);
 
-  if (network.name === "mumbai") {
-    const trustedFwder = "0xc82BbE41f2cF04e3a8efA18F7032BDD7f6d98a81";
-    const botvContractAddress = "0xEC6a14E246E5c3e59Bd9D4574cb98759A962172D";
-    const bufaContractAddress = "0x7E440A8bA78F7D78c7aF52A88DF5383675Fb5dA7";
+  const { BOTVContractAddress, BUFAContractAddress, CurrencyAddress } =
+    network.name === "polygon" ? polygonDeployment : mumbaiDeployment;
 
-    const BUFADeployer = await ethers.getContractFactory("BUFA");
-    const BUFA = await BUFADeployer.attach(bufaContractAddress);
+  const BUFADeployer = await ethers.getContractFactory("BUFA");
+  const BUFA = await BUFADeployer.attach(BUFAContractAddress);
 
-    const BURNER_ROLE = await BUFA.SPENDER_ROLE();
+  const BURNER_ROLE = await BUFA.SPENDER_ROLE();
 
-    const BUFAMUSICDeployer = await ethers.getContractFactory("BUFAMUSIC");
-    const BUFAMUSIC = await BUFAMUSICDeployer.deploy(
-      botvContractAddress,
-      bufaContractAddress,
-      trustedFwder
+  const BUFAMUSICDeployer = await ethers.getContractFactory("BUFAMUSIC");
+  const BUFAMUSIC = await BUFAMUSICDeployer.deploy(
+    BOTVContractAddress,
+    BUFAContractAddress,
+    TRUSTED_FORWARDER
+  );
+  await BUFAMUSIC.deployed();
+
+  console.log("BUFA MUSIC contract deployed : ", BUFAMUSIC.address);
+
+  fs.writeFileSync(
+    `./data/results/deployment/${network.name}.json`,
+    JSON.stringify(
+      {
+        BOTVContractAddress,
+        BUFAContractAddress,
+        CurrencyAddress,
+        MusicContractAddress: BUFAMUSIC.address
+      },
+      null,
+      2
+    )
+  );
+
+  await BUFA.grantRole(BURNER_ROLE, BUFAMUSIC.address);
+
+  console.log("Role granted");
+
+  let res = await fetch("https://graphql.datocms.com/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${DATOCMS_API_KEY}`
+    },
+    body: JSON.stringify({
+      query: `{
+        allMusicNfts {
+          id
+          songTitle
+          iswc
+          supply
+          bufaPrice          
+          mintActive
+          tokenActive
+        }
+      }`
+    })
+  });
+  res = await res.json();
+  const {
+    data: { allMusicNfts }
+  } = res;
+
+  for (let {
+    id,
+    songTitle,
+    iswc,
+    supply,
+    bufaPrice,
+    mintActive,
+    tokenActive
+  } of allMusicNfts) {
+    bufaPrice =
+      network.name === "polygon"
+        ? parseUnits(bufaPrice.toString(), "ether")
+        : parseUnits((bufaPrice / 1000).toString(), "ether");
+    await BUFAMUSIC.updateTokenParameter(
+      id,
+      songTitle,
+      iswc,
+      supply,
+      bufaPrice,
+      mintActive,
+      tokenActive
     );
-    await BUFAMUSIC.deployed();
-
-    console.log("BUFA MUSIC contract deployed : ", BUFAMUSIC.address);
-
-    await BUFA.grantRole(BURNER_ROLE, BUFAMUSIC.address);
-
-    console.log("Role granted");
-
-    console.log("Ready to verify BUFAMUSIC");
-
-    await verify("BUFAMUSIC", BUFAMUSIC.address, [
-      botvContractAddress,
-      bufaContractAddress,
-      trustedFwder
-    ]);
-
-    console.log("Deploy OK");
+    console.log(`Added music nft ${id}`);
   }
+
+  console.log("Ready to verify BUFAMUSIC");
+
+  await verify("BUFAMUSIC", BUFAMUSIC.address, [
+    BOTVContractAddress,
+    BUFAContractAddress,
+    TRUSTED_FORWARDER
+  ]);
+
+  console.log("Deploy OK");
 }
 
 main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
 });
-
-// 0x26488781e916bc31e916a99FD94A9ccE42E8618E
