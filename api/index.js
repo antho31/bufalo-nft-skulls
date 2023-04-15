@@ -131,9 +131,7 @@ router.get("/musicnftmetadata/:tokenId", async ({ params: { tokenId } }) => {
             tokenActive
             iswc
             description
-            cocv
             depositDate
-            tax
             genre
             origin
             visualArt
@@ -162,9 +160,7 @@ router.get("/musicnftmetadata/:tokenId", async ({ params: { tokenId } }) => {
         //  tokenActive,
         iswc,
         description,
-        cocv,
         depositDate,
-        tax,
         genre,
         origin,
         visualArt,
@@ -178,10 +174,6 @@ router.get("/musicnftmetadata/:tokenId", async ({ params: { tokenId } }) => {
             value: iswc
           },
           {
-            trait_type: "COCV",
-            value: cocv
-          },
-          {
             trait_type: "Genre",
             value: genre
           },
@@ -192,11 +184,6 @@ router.get("/musicnftmetadata/:tokenId", async ({ params: { tokenId } }) => {
           {
             trait_type: "Commercial Rights",
             value: commercialRights
-          },
-
-          {
-            trait_type: "Tax",
-            value: tax
           },
 
           {
@@ -258,9 +245,7 @@ router.get("/musicnfts", async () => {
             tokenActive
             iswc
             description
-            cocv
             depositDate
-            tax
             genre
             origin
             visualArt

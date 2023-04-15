@@ -1,5 +1,6 @@
 {
   "BOTVContractAddress": "0x1B9d577486D7AF13570F0d521cDDEc083D9F7e14",
   "BUFAContractAddress": "0x6a9D0b634AB078E8F26Fb70baE77CBAD9840FfC2",
-  "CurrencyAddress": "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619"
+  "CurrencyAddress": "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
+  "MusicContractAddress": "0x9be332DAbcC32C78c8DB0bb5E2c519592f2342c1"
 }

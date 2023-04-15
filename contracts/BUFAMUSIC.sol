@@ -124,6 +124,14 @@ contract BUFAMUSIC is
      *  EXTERNAL FUNCTIONS, RESTRICTED TO OWNER
      ******************************************/
 
+    function burn(
+        address from,
+        uint256 id,
+        uint256 quantity
+    ) external onlyOwner {
+        _burn(from, id, quantity);
+    }
+
     function mint(
         address to,
         uint256 tokenId,
