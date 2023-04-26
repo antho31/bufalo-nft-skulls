@@ -15,10 +15,21 @@ The DJ / Producer / Visual Artist is launching an NFT collection for its communi
 
 Holding a Skull NFT gives the opportunity to continually claim rewards to get :
 
-- commercial rights for music releases produced by Bufalo
+- Music NFTs granting commercial rights for music releases produced by Bufalo
 - exclusive perks like video tutorials
 
-## Core information
+All rewards can be claimed with gasless transactions.
+
+## Deployed contracts
+
+| Contract name | Contract info                                                                                                                                    | Deployed address                                                                                                         |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| BOTV1         | ERC721A PFP collection, reveal with Chainlink included. Necessary upgrade to BOTV2 to allow contract owner more possibilities                    | [0x1D6F8ff4c5A4588DC95C8E1913E53a5007ad5378](https://polygonscan.com/address/0x1D6F8ff4c5A4588DC95C8E1913E53a5007ad5378) |
+| BOTV2         | ERC721A PFP collection, migration from BOTV1                                                                                                     | [0x1B9d577486D7AF13570F0d521cDDEc083D9F7e14](https://polygonscan.com/address/0x1B9d577486D7AF13570F0d521cDDEc083D9F7e14) |
+| BUFA          | ERC20 tokens as rewards for BOTV NFT collection holders.ERC2612 (gasless approval) implemented                                                   | [0x6a9D0b634AB078E8F26Fb70baE77CBAD9840FfC2](https://polygonscan.com/address/0x6a9D0b634AB078E8F26Fb70baE77CBAD9840FfC2) |
+| BUFAMUSIC     | ERC1155 contract, Music NFTs to mint with $BUFA tokens. Give commercial rights on Bufalo's songs. ERC2771 (gasless / native meta tx) implemented | [0x9be332DAbcC32C78c8DB0bb5E2c519592f2342c1](https://polygonscan.com/address/0x9be332DAbcC32C78c8DB0bb5E2c519592f2342c1) |
+
+## BOTV contract - Core information
 
 ⛓️ Chain : Polygon PoS
 
@@ -40,7 +51,7 @@ Holding a Skull NFT gives the opportunity to continually claim rewards to get :
 
 💰 Hold-to-earn : receive a certain amount of $BUFA tokens (depending on the rarity of the NFT's attributes) every day. Spend these against benefits.
 
-🌐 More info on the website coming soon [bufalomusic.com](https://bufalomusic.com)
+🌐 More info on the website [bufalomusic.com](https://bufalomusic.com)
 
 ## Allowlists
 
@@ -102,7 +113,7 @@ All attributes are defined within the metadata JSON files for each token, availa
 
 ### $BUFA rewards : get merkle proofs to claim
 
-You can fetch `https://bufalo-api.anthonygourraud.workers.dev/tokensForOwner/polygon/:addr` to get all token infos for the wallet with address `addr`. Use `tokenIds`, `rewardsPerDay` and `rewardsProofs` values from the response to claim.
+You can fetch `https://bufalo-api.anthonygourraud.workers.dev/tokensForOwner/polygon/:addr` to get all token infos for the wallet with address `addr`. Use `tokenIds`, `rewardsPerDay` and `rewardsProofs` values from the response to claim $BUFA tokens.
 
 ```js
 // Result from https://bufalo-api.anthonygourraud.workers.dev/tokensForOwner/polygon/0x64E8f7C2B4fd33f5E8470F3C6Df04974F90fc2cA
@@ -156,13 +167,47 @@ You can fetch `https://bufalo-api.anthonygourraud.workers.dev/tokensForOwner/pol
 }
 ```
 
+### Music NFTs : commercial rights on a song as a reward
+
+You can fetch `https://bufalo-api.anthonygourraud.workers.dev/musicnfts` to get all available Music NFTs. Any wallet can buy with $BUFA tokens only one NFT for each `id`.
+
+```js
+[
+  {
+    id: "103141286",
+    songTitle: "Bufalo - Saddle Up - BOTV Skull Staking 1",
+    supply: 50,
+    bufaPrice: 2000,
+    cover: {
+      url: "https://www.datocms-assets.com/98314/1681205215-cover-saddle-up.jpeg"
+    },
+    audioFile: {
+      url: "https://www.datocms-assets.com/98314/1681205221-bufalo-saddle-up-botv-skull-staking-1.wav"
+    },
+    pdfContract: {
+      url: "https://www.datocms-assets.com/98314/1681576307-saddle-up-music-nft-license-agreement.pdf"
+    },
+    mintActive: true,
+    tokenActive: true,
+    iswc: "T-316.218.353.7",
+    description:
+      '"Saddle Up" is the first Music NFT redeemable with the $BUFA tokens that are distributed daily from holding [a BOTV Skull](https://opensea.io/fr/collection/bufalo-botv-skulls-official). \n\nThis Music NFT comes with one of the very first Music License Agreement that provide commercial rights to the song. \n\nFull details: [bufalomusic.com](https://bufalomusic.com)',
+    depositDate: "2023-03-27",
+    genre: "Futuristic Western Music",
+    origin: "FRANCE",
+    visualArt: "Pierre Porcherot",
+    commercialRights: "YES"
+  }
+];
+```
+
 ## Security
 
 - Contracts are not audited yet.
 
 - Note that the contract deployer has privileged access, including:
 
-  - the ability to mint Skulls NFT for free
+  - the ability to mint Skulls NFT, $BUFA & Music NFTs for free
   - minting price modification at any time
   - the ability to set any address as unlimited minter for $BUFA tokens, including himself
 
@@ -206,7 +251,7 @@ You can fetch `https://bufalo-api.anthonygourraud.workers.dev/tokensForOwner/pol
 - Earn $BUFA tokens as long as you hold your Skull NFT
 - $BUFA minting with Merkle proof verification
 
-🔲 ERC721A for music NFTs
+✅ ERC1155 for Music NFTs
 
 - Can be purchased with $BUFA
 - NFT holder get commercial rights to the related music
@@ -214,3 +259,7 @@ You can fetch `https://bufalo-api.anthonygourraud.workers.dev/tokensForOwner/pol
 ## Authors
 
 - [Anthony Gourraud - @antho31](https://www.github.com/antho31)
+
+```
+
+```
