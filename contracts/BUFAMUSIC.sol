@@ -232,9 +232,6 @@ contract BUFAMUSIC is
         override(ERC1155, ERC1155URIStorage)
         returns (string memory)
     {
-        if (tokenParameters[tokenId].tokenActive == false)
-            revert InactiveToken(tokenId);
-
         return ERC1155URIStorage.uri(tokenId);
     }
 

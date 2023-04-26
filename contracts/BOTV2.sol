@@ -185,7 +185,6 @@ contract BOTV2 is ERC2981, ERC4907A, Ownable, ReentrancyGuard {
      * @param privateListMerkleRoot Merkle root computed from array of allowed addresses to mint during the private sale
      * @param botv1Contract BOTV contract address from previous deployment, used for migration
      *
-     * Merkle proofs can
      *
      */
     constructor(

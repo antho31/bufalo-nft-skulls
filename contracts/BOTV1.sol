@@ -204,8 +204,6 @@ contract BOTV1 is
      * @param discountListMerkleRoot Merkle root computed from array of eligible addresses for the 50% discount on second token minted
      * @param privateListMerkleRoot Merkle root computed from array of allowed addresses to mint during the private sale
      *
-     * Merkle proofs can
-     *
      */
     constructor(
         address mintCurrency,

@@ -7,7 +7,8 @@ const envs = require("../env.json");
 const { Router } = require("itty-router");
 const { Network } = require("alchemy-sdk");
 
-const { BigNumber } = require("ethers");
+const ethers = require("ethers");
+const { parseUnits, keccak256, toUtf8Bytes } = require("ethers/lib/utils");
 
 // const privateSaleMerkle = require("../data/results/merkleAllowlists/community.json");
 const discountMerkle = require("../data/results/merkleAllowlists/fans.json");
@@ -16,6 +17,10 @@ const bufaMerkle = require("../data/results/metadata/bufaRewardsMerkleData.json"
 
 const mumbaiDeployment = require(`../data/results/deployment/mumbai.json`);
 const polygonDeployment = require(`../data/results/deployment/polygon.json`);
+
+const bufaMusicABI = require("../abis/BUFAMUSIC.json");
+
+const { BigNumber } = ethers;
 
 // Create a new router
 const router = Router();
@@ -100,6 +105,85 @@ router.get("/merkleproofs/:addr", async ({ params: { addr } }) => {
   });
 });
 
+router.post("/musicnftmetadataupdate", async (req) => {
+  try {
+    const {
+      DEPLOYER_PRIVATE_KEY,
+      POLYGON_MAINNET_RPC_PROVIDER
+      // POLYGON_MUMBAI_RPC_PROVIDER
+    } = envs;
+
+    const authHash = keccak256(toUtf8Bytes(req.headers.get("Authorization")));
+
+    const authOK =
+      authHash ===
+      "0xcc97f88dd05fe985eef6cb109a514b3c783fb790a74b7abb7a18b3ae54bcfa54";
+
+    if (authOK) {
+      const {
+        event_type,
+        entity: {
+          id,
+          attributes: { song_title, iswc, supply, bufa_price, mint_active }
+        },
+        previous_entity
+      } = await req.json();
+
+      const { MusicContractAddress } = polygonDeployment;
+      const provider = new ethers.providers.JsonRpcProvider({
+        url: POLYGON_MAINNET_RPC_PROVIDER,
+        skipFetchSetup: true
+      });
+
+      const wallet = new ethers.Wallet(DEPLOYER_PRIVATE_KEY, provider);
+      const contract = new ethers.Contract(
+        MusicContractAddress,
+        bufaMusicABI,
+        wallet
+      );
+
+      if (
+        event_type === "update" &&
+        previous_entity.attributes.song_title === song_title &&
+        previous_entity.attributes.iswc === iswc &&
+        previous_entity.attributes.supply === supply &&
+        previous_entity.attributes.bufa_price === bufa_price &&
+        previous_entity.attributes.mint_active === mint_active
+      ) {
+        return new Response("update without contract call", { status: 200 });
+      } else {
+        const res = await contract.updateTokenParameter(
+          id,
+          song_title,
+          iswc,
+          supply,
+          parseUnits(bufa_price.toString(), "ether").toString(),
+          event_type === "delete" ? false : mint_active,
+          true,
+          {
+            gasPrice: ethers.utils.parseUnits("1000", "gwei").toString(),
+            gasLimit: 501993
+          }
+        );
+
+        console.log(`contract call for ${event_type} OK`, res);
+
+        return new Response(event_type, { status: 201 });
+      }
+    } else {
+      return new Response(
+        `Unauthenticated : ${req.headers.get("Authorization")}`,
+        {
+          status: 403
+        }
+      );
+    }
+  } catch (e) {
+    console.error("error in POST : ", e);
+    return new Response(e, { status: 500 });
+  }
+});
+
 router.get("/musicnftmetadata/:tokenId", async ({ params: { tokenId } }) => {
   try {
     const { DATOCMS_API_KEY } = envs;
@@ -160,7 +244,7 @@ router.get("/musicnftmetadata/:tokenId", async ({ params: { tokenId } }) => {
         //  tokenActive,
         iswc,
         description,
-        depositDate,
+        //  depositDate,
         genre,
         origin,
         visualArt,
@@ -192,7 +276,7 @@ router.get("/musicnftmetadata/:tokenId", async ({ params: { tokenId } }) => {
           }
         ],
         animation_url: audioUrl,
-        description: `${description}. Download the song [here](${audioUrl}).`,
+        description: `${description}`,
         image: coverUrl,
         name: songTitle
       };
@@ -206,11 +290,12 @@ router.get("/musicnftmetadata/:tokenId", async ({ params: { tokenId } }) => {
         }
       });
     } else {
-      new Response("404, not found!", { status: 404 });
+      return new Response("404, musicnftmetadata/:tokenId not found!", {
+        status: 404
+      });
     }
   } catch (e) {
-    console.error(e);
-    new Response(e, { status: 500 });
+    return new Response(e, { status: 500 });
   }
 });
 
@@ -269,11 +354,10 @@ router.get("/musicnfts", async () => {
         }
       });
     } else {
-      new Response("404, not found!", { status: 404 });
+      return new Response("404, no music nfts fetched", { status: 404 });
     }
   } catch (e) {
-    console.error(e);
-    new Response(e, { status: 500 });
+    return new Response(e, { status: 500 });
   }
 });
 
@@ -355,11 +439,10 @@ router.get(
           }
         });
       } catch (e) {
-        console.error(e);
-        new Response(e, { status: 500 });
+        return new Response(e, { status: 500 });
       }
     } else {
-      new Response("404, not found!", { status: 404 });
+      return new Response("404, network/addr not found!", { status: 404 });
     }
   }
 );
