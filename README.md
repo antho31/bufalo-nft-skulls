@@ -26,7 +26,7 @@ All rewards can be claimed with gasless transactions.
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
 | BOTV1         | ERC721A PFP collection, reveal with Chainlink included. Necessary upgrade to BOTV2 to allow contract owner more possibilities                    | [0x1D6F8ff4c5A4588DC95C8E1913E53a5007ad5378](https://polygonscan.com/address/0x1D6F8ff4c5A4588DC95C8E1913E53a5007ad5378) |
 | BOTV2         | ERC721A PFP collection, migration from BOTV1                                                                                                     | [0x1B9d577486D7AF13570F0d521cDDEc083D9F7e14](https://polygonscan.com/address/0x1B9d577486D7AF13570F0d521cDDEc083D9F7e14) |
-| BUFA          | ERC20 tokens as rewards for BOTV NFT collection holders.ERC2612 (gasless approval) implemented                                                   | [0x6a9D0b634AB078E8F26Fb70baE77CBAD9840FfC2](https://polygonscan.com/address/0x6a9D0b634AB078E8F26Fb70baE77CBAD9840FfC2) |
+| BUFA          | ERC20 tokens as rewards for BOTV NFT collection holders. ERC2612 (gasless approval) implemented                                                  | [0x6a9D0b634AB078E8F26Fb70baE77CBAD9840FfC2](https://polygonscan.com/address/0x6a9D0b634AB078E8F26Fb70baE77CBAD9840FfC2) |
 | BUFAMUSIC     | ERC1155 contract, Music NFTs to mint with $BUFA tokens. Give commercial rights on Bufalo's songs. ERC2771 (gasless / native meta tx) implemented | [0x9be332DAbcC32C78c8DB0bb5E2c519592f2342c1](https://polygonscan.com/address/0x9be332DAbcC32C78c8DB0bb5E2c519592f2342c1) |
 
 ## BOTV contract - Core information
@@ -178,15 +178,12 @@ You can fetch `https://bufalo-api.anthonygourraud.workers.dev/musicnfts` to get 
     songTitle: "Bufalo - Saddle Up - BOTV Skull Staking 1",
     supply: 50,
     bufaPrice: 2000,
-    cover: {
-      url: "https://www.datocms-assets.com/98314/1681205215-cover-saddle-up.jpeg"
-    },
-    audioFile: {
-      url: "https://www.datocms-assets.com/98314/1681205221-bufalo-saddle-up-botv-skull-staking-1.wav"
-    },
-    pdfContract: {
-      url: "https://www.datocms-assets.com/98314/1681576307-saddle-up-music-nft-license-agreement.pdf"
-    },
+    audioUrl:
+      "https://bafybeie3bcmcjo762enlzdzzrfmwoa3jclartlgt6kbwzc6up7ykf7ynk4.ipfs.nftstorage.link/ipfs/bafybeie3bcmcjo762enlzdzzrfmwoa3jclartlgt6kbwzc6up7ykf7ynk4/bufalo-saddle-up-botv-skull-staking-1.wav",
+    contractUrl:
+      "https://bafybeie3bcmcjo762enlzdzzrfmwoa3jclartlgt6kbwzc6up7ykf7ynk4.ipfs.nftstorage.link/ipfs/bafybeie3bcmcjo762enlzdzzrfmwoa3jclartlgt6kbwzc6up7ykf7ynk4/saddle-up-music-nft-license-agreement.pdf",
+    coverUrl:
+      "https://bafybeie3bcmcjo762enlzdzzrfmwoa3jclartlgt6kbwzc6up7ykf7ynk4.ipfs.nftstorage.link/ipfs/bafybeie3bcmcjo762enlzdzzrfmwoa3jclartlgt6kbwzc6up7ykf7ynk4/cover-saddle-up.jpeg",
     mintActive: true,
     tokenActive: true,
     iswc: "T-316.218.353.7",

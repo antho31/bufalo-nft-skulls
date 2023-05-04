@@ -202,15 +202,9 @@ router.get("/musicnftmetadata/:tokenId", async ({ params: { tokenId } }) => {
             songTitle
             supply
             bufaPrice
-            cover {
-              url
-            }
-            audioFile {
-              url
-            }
-            pdfContract {
-              url
-            }
+            audioUrl
+            contractUrl
+            coverUrl
             mintActive
             tokenActive
             iswc
@@ -237,9 +231,9 @@ router.get("/musicnftmetadata/:tokenId", async ({ params: { tokenId } }) => {
         songTitle,
         //  supply,
         //  bufaPrice,
-        cover: { url: coverUrl },
-        audioFile: { url: audioUrl },
-        // pdfContract: { url: pdfUrl },
+        audioUrl,
+        //   contractUrl
+        coverUrl,
         //  mintActive,
         //  tokenActive,
         iswc,
@@ -316,16 +310,10 @@ router.get("/musicnfts", async () => {
             id
             songTitle
             supply
-            bufaPrice
-            cover {
-              url
-            }
-            audioFile {
-              url
-            }
-            pdfContract {
-              url
-            }
+            bufaPrice            
+            audioUrl
+            contractUrl
+            coverUrl
             mintActive
             tokenActive
             iswc
