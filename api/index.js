@@ -20,6 +20,8 @@ const polygonDeployment = require(`../data/results/deployment/polygon.json`);
 
 const bufaMusicABI = require("../abis/BUFAMUSIC.json");
 
+const { datocmsIdToUint256 } = require("../utils/convert");
+
 const { BigNumber } = ethers;
 
 // Create a new router
@@ -120,14 +122,24 @@ router.post("/musicnftmetadataupdate", async (req) => {
       "0xcc97f88dd05fe985eef6cb109a514b3c783fb790a74b7abb7a18b3ae54bcfa54";
 
     if (authOK) {
-      const {
+      let {
         event_type,
         entity: {
           id,
-          attributes: { song_title, iswc, supply, bufa_price, mint_active }
+          attributes: {
+            song_title,
+            iswc,
+            supply,
+            bufa_price,
+            mint_active,
+            computed_id
+          }
         },
         previous_entity
       } = await req.json();
+
+      const datocmsId = id;
+      id = datocmsIdToUint256(datocmsId, computed_id);
 
       const { MusicContractAddress } = polygonDeployment;
       const provider = new ethers.providers.JsonRpcProvider({
@@ -161,7 +173,7 @@ router.post("/musicnftmetadataupdate", async (req) => {
           event_type === "delete" ? false : mint_active,
           true,
           {
-            gasPrice: ethers.utils.parseUnits("1000", "gwei").toString(),
+            gasPrice: ethers.utils.parseUnits("3000", "gwei").toString(),
             gasLimit: 501993
           }
         );
@@ -188,6 +200,8 @@ router.get("/musicnftmetadata/:tokenId", async ({ params: { tokenId } }) => {
   try {
     const { DATOCMS_API_KEY } = envs;
 
+    const paramId = tokenId.length > 15 ? "computedId" : "id";
+
     let res = await fetch("https://graphql.datocms.com/", {
       method: "POST",
       headers: {
@@ -197,7 +211,7 @@ router.get("/musicnftmetadata/:tokenId", async ({ params: { tokenId } }) => {
       },
       body: JSON.stringify({
         query: `{
-          allMusicNfts(filter: {  id: { eq: "${tokenId}" }}) {
+          allMusicNfts(filter: {  ${paramId}: { eq: "${tokenId}" }}) {
             id
             songTitle
             supply
@@ -306,7 +320,7 @@ router.get("/musicnfts", async () => {
       },
       body: JSON.stringify({
         query: `{
-          allMusicNfts {
+          allMusicNfts(orderBy: _createdAt_DESC) {
             id
             songTitle
             supply
@@ -323,16 +337,23 @@ router.get("/musicnfts", async () => {
             origin
             visualArt
             commercialRights
+            computedId
+            _createdAt
           }
         }`
       })
     });
     res = await res.json();
-    const {
+    let {
       data: { allMusicNfts }
     } = res;
 
     if (allMusicNfts) {
+      allMusicNfts = allMusicNfts.map((nft) => {
+        nft.id = datocmsIdToUint256(nft.id, nft.computedId);
+        return nft;
+      });
+
       const json = JSON.stringify(allMusicNfts, null, 2);
 
       return new Response(json, {
