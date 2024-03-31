@@ -173,7 +173,7 @@ router.post("/musicnftmetadataupdate", async (req) => {
           event_type === "delete" ? false : mint_active,
           true,
           {
-            gasPrice: ethers.utils.parseUnits("3000", "gwei").toString(),
+            gasPrice: ethers.utils.parseUnits("2000", "gwei").toString(),
             gasLimit: 501993
           }
         );
@@ -320,7 +320,7 @@ router.get("/musicnfts", async () => {
       },
       body: JSON.stringify({
         query: `{
-          allMusicNfts(orderBy: _createdAt_DESC) {
+          allMusicNfts(first:100, orderBy: _createdAt_DESC) {
             id
             songTitle
             supply
